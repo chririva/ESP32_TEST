@@ -26,7 +26,7 @@ src/bootloader_sha.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/sched.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/stdio.h \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/assert.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/string.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/string.h \
@@ -38,7 +38,8 @@ src/bootloader_sha.o: \
  /home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/port/include/esp_mem.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/check_config.h \
- /home/gaetano/esp/esp-idf/components/newlib/include/limits.h
+ /home/gaetano/esp/esp-idf/components/newlib/include/limits.h \
+ /home/gaetano/esp/esp-idf/components/mbedtls/port/include/sha256_alt.h
 
 /home/gaetano/esp/esp-idf/components/bootloader_support/include_bootloader/bootloader_sha.h:
 
@@ -92,7 +93,7 @@ src/bootloader_sha.o: \
 
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/assert.h:
 
@@ -117,4 +118,6 @@ src/bootloader_sha.o: \
 /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/check_config.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/limits.h:
+
+/home/gaetano/esp/esp-idf/components/mbedtls/port/include/sha256_alt.h:
 /home/gaetano/esp/esp-idf/components/bootloader_support/src/bootloader_sha.c:

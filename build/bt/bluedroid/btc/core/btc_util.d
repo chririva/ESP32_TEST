@@ -30,7 +30,7 @@ bluedroid/btc/core/btc_util.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_defs.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_trace.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/log/include/esp_log.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
@@ -105,7 +105,7 @@ bluedroid/btc/core/btc_util.o: \
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_trace.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/log/include/esp_log.h:
 

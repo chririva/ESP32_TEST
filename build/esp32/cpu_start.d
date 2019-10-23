@@ -17,7 +17,7 @@ cpu_start.o: /home/gaetano/esp/esp-idf/components/esp32/cpu_start.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/cdefs.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/string.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_attr.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_err.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdio.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/types.h \
@@ -226,7 +226,7 @@ cpu_start.o: /home/gaetano/esp/esp-idf/components/esp32/cpu_start.c \
 
 /home/gaetano/esp/esp-idf/components/esp32/include/esp_attr.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/esp32/include/esp_err.h:
 

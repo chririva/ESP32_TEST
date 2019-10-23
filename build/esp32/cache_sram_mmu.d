@@ -7,7 +7,7 @@ cache_sram_mmu.o: \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_assert.h \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/ieeefp.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/_ansi.h \
@@ -63,7 +63,7 @@ cache_sram_mmu.o: \
 
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h:
 

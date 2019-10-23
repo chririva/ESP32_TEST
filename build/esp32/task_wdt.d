@@ -24,7 +24,7 @@ task_wdt.o: /home/gaetano/esp/esp-idf/components/esp32/task_wdt.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/alloca.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/string.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/string.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/xtensa/hal.h \
@@ -149,7 +149,7 @@ task_wdt.o: /home/gaetano/esp/esp-idf/components/esp32/task_wdt.c \
 
 /home/gaetano/esp/esp-idf/components/newlib/include/sys/string.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h:
 

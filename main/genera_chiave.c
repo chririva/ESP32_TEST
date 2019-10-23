@@ -381,28 +381,3 @@ exit:
 #endif /* MBEDTLS_PK_WRITE_C && MBEDTLS_PEM_WRITE_C && MBEDTLS_FS_IO &&
         * MBEDTLS_ENTROPY_C && MBEDTLS_CTR_DRBG_C */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

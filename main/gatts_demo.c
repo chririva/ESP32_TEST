@@ -19,13 +19,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/event_groups.h"
 #include "esp_system.h"
 #include "esp_log.h"
 #include "nvs_flash.h"
-#include "nvs.h"
 #include "esp_bt.h"
 
 #include "esp_gap_ble_api.h"
@@ -57,6 +57,9 @@ static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_i
 
 #define PREPARE_BUF_MAX_SIZE 1024
 
+//CHIAVI DEL DISPOSITIVO (IN RAM)
+mbedtls_mpi N_key, P_key, Q_key, D_key, E_key, DP_key, DQ_key, QP_key;
+
 static uint8_t char1_str[] = {0x33,0x33,0x33};
 
 static esp_gatt_char_prop_t a_property = 0;
@@ -73,8 +76,6 @@ static esp_attr_value_t gatts_demo_char1_val =
     .attr_len     = sizeof(char2_str),
     .attr_value   = char2_str,
 };*/
-
-mbedtls_mpi N, P, Q, D, E, DP, DQ, QP;
 
 static uint8_t adv_config_done = 0;
 #define adv_config_flag      (1 << 0)
@@ -461,7 +462,7 @@ static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_i
             ESP_LOGE(GATTS_TAG, "add char descr failed, error code =%x", add_descr_ret);
         }
         break;
-    }mbedtls_mpi_read_file
+    }
     case ESP_GATTS_ADD_CHAR_DESCR_EVT:
         gl_profile_tab[PROFILE_A_APP_ID].descr_handle = param->add_char_descr.attr_handle;
         ESP_LOGI(GATTS_TAG, "ADD_DESCR_EVT, status %d, attr_handle %d, service_handle %d\n",
@@ -543,18 +544,147 @@ static void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_
 }
 
 void ritardo(int secondi){
-	for(;secondi>=0;secondi--){
+	for(;secondi>0;secondi--){
 		vTaskDelay(1000 / portTICK_PERIOD_MS);
 		printf("\n%d",secondi);
 	}
 }
 
+bool carica_chiavi(){
+    // Initialize NVS
+    esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        // NVS partition was truncated and needs to be erased
+        // Retry nvs_flash_init
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        err = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK( err );
+
+    // Open
+    printf("\nOpening Non-Volatile Storage (NVS) handle... ");
+    nvs_handle my_handle;
+    err = nvs_open("stored_keys", NVS_READONLY, &my_handle);
+    if (err != ESP_OK) {
+        printf("Error (%s) opening NVS handle!\n", esp_err_to_name(err));
+        return false;
+    } else {
+        printf("File Aperto con successo.\n");
+        // Read
+        size_t n_N,n_E,n_D,n_P,n_Q,n_DP,n_DQ,n_QP;
+        //Mi interessa solo la dimensione per poter creare array dinamici //TODO: sistemare il return, se fallisce qualcosa deve ritornare false
+		err = nvs_get_str(my_handle, "N", NULL, &n_N); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "E", NULL, &n_E); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "D", NULL, &n_D); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "P", NULL, &n_P); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "Q", NULL, &n_Q); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "DP", NULL, &n_DP); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "DQ", NULL, &n_DQ); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "QP", NULL, &n_QP); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+        char* N_string=malloc(n_N); //TODO: Van tolte dalla memoria
+        char* E_string=malloc(n_E);
+		char* D_string=malloc(n_D);
+		char* P_string=malloc(n_P);
+		char* Q_string=malloc(n_Q);
+		char* DP_string=malloc(n_DP);
+		char* DQ_string=malloc(n_DQ);
+		char* QP_string=malloc(n_QP);
+		//Leggo effettivamente il valore
+		err = nvs_get_str(my_handle, "N", N_string, &n_N); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "E", E_string, &n_E); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "D", D_string, &n_D); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "P", P_string, &n_P); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "Q", Q_string, &n_Q); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "DP", DP_string, &n_DP); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "DQ", DQ_string, &n_DQ); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "QP", QP_string, &n_QP); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		printf("\nLA N CARICATA VALE (string) : %s\n",N_string);
+		printf("\nLA E CARICATA VALE (string) : %s\n",E_string);
+        // Close
+        nvs_close(my_handle);
+        printf("File chiuso.\n");
+
+        //Converto da STRINGA ad MPI
+        //N_key, P_key, Q_key, D_key, E_key, DP_key, DQ_key, QP_key;
+        int error;
+        error = mbedtls_mpi_read_string(&N_key,16,N_string); printf((error != 0) ? "Conversion to MPI Failed!\n" : "Conversion to MPI Done\n");
+        error = mbedtls_mpi_read_string(&E_key,16,E_string); printf((error != 0) ? "Conversion to MPI Failed!\n" : "Conversion to MPI Done\n");
+        error = mbedtls_mpi_read_string(&D_key,16,D_string); printf((error != 0) ? "Conversion to MPI Failed!\n" : "Conversion to MPI Done\n");
+        error = mbedtls_mpi_read_string(&P_key,16,P_string); printf((error != 0) ? "Conversion to MPI Failed!\n" : "Conversion to MPI Done\n");
+        error = mbedtls_mpi_read_string(&Q_key,16,Q_string); printf((error != 0) ? "Conversion to MPI Failed!\n" : "Conversion to MPI Done\n");
+        error = mbedtls_mpi_read_string(&DP_key,16,DP_string); printf((error != 0) ? "Conversion to MPI Failed!\n" : "Conversion to MPI Done\n");
+        error = mbedtls_mpi_read_string(&DQ_key,16,DQ_string); printf((error != 0) ? "Conversion to MPI Failed!\n" : "Conversion to MPI Done\n");
+        error = mbedtls_mpi_read_string(&QP_key,16,QP_string); printf((error != 0) ? "Conversion to MPI Failed!\n" : "Conversion to MPI Done\n");
+        mbedtls_mpi_write_file( "\nNLA N CARICATA VALE (mpi) = " , &N_key , 16, NULL );
+        mbedtls_mpi_write_file( "\nLA E CARICATA VALE (mpi) = " , &E_key , 16, NULL );
+    }
+    return true;
+}
+
+bool cancella_tutto(){
+    // Initialize NVS
+    esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        // NVS partition was truncated and needs to be erased. Retry nvs_flash_init
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        err = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK( err );
+
+    //printf("\nOpening Non-Volatile Storage (NVS) handle... ");
+    nvs_handle my_handle;
+    err = nvs_open("stored_keys", NVS_READONLY, &my_handle);
+    if (err != ESP_OK) {
+        //printf("\nError (%s) opening NVS handle!\n", esp_err_to_name(err));
+    	printf("Non c'è niente da cancellare, il file non esiste");
+        nvs_close(my_handle);
+        return false;
+    }
+    ESP_ERROR_CHECK(nvs_flash_erase());
+    ESP_ERROR_CHECK(nvs_flash_init());
+    return true;
+}
+
 void app_main()
 {
-	//printf("\n\t\t---- CONTO ALLA ROVESCIA ----\n");
-	//ritardo(8);
-    printf("\n\t\t --- ORA GENERO LA CHIAVE --- \n");
-    xTaskCreate(genera_chiave_rsa,"GeneraChiave",64768,NULL,1,NULL);
+	ritardo(20); //TODO: debug. da cancellare
+	/*if(cancella_tutto()){
+		printf("\n\t\t --- HO CANCELLATO TUTTO --- \n");
+		for(int i=10;i>0;i--){
+			vTaskDelay(1000 / portTICK_PERIOD_MS);
+			printf("\nRestart in %d seconds",i);
+		}
+		esp_restart();
+	}
+	else
+		printf("\n\t\t --- CANCELLAZIONE FALLITA --- \n");
+	ritardo(5); //TODO: debug. da cancellare*/
+	printf("\n\t\t --- TENTO DI CARICARE LE CHIAVI DALLA NVS --- \n");
+	if(carica_chiavi())
+		printf("\n\t\t --- CHIAVI CARICATE CON SUCCESSO --- \n");
+	else{
+		printf("\n\t\t --- LE CHIAVI NON SONO IN MEMORIA. GENERO LE CHIAVI --- \n");
+		wait_key_generation=true;
+		xTaskCreate(genera_chiave_rsa,"GeneraChiave",64768,NULL,2,NULL); //TODO: sistemare warning
+		printf("\nAttendo.");
+		while(wait_key_generation){
+			printf(".");
+			vTaskDelay(100 / portTICK_PERIOD_MS);
+		}
+		printf("\nCARICO LE CHIAVI DALLA MEMORIA (per verificare la corretta scrittura delle chiavi in memoria)");
+		if(carica_chiavi()){
+			printf("\n\t\t --- CHIAVI GENERATE, SALVATE E RICARICATE CON SUCCESSO --- \n");
+		}
+		else{
+			printf("\nHO CREATO LE CHIAVI, HO TENTATO DI SALVARLE E NON SONO NEMMENO RIUSCITO A RICARICARLE...");
+			for(int i=10;i>0;i--){
+				vTaskDelay(1000 / portTICK_PERIOD_MS);
+				printf("\nRestart in %d seconds",i);
+			}
+			esp_restart();
+		}
+	}
+	printf("\n\t\t --- AVVIO IL BLUETOOTH E TUTTI I SERVIZI ASSOCIATI --- \n");
     //int exitcode = genera_chiave();
     //printf("\n\t\t EXIT CODE: %d \n",exitcode);
     //ritardo(8);
@@ -569,7 +699,7 @@ void app_main()
     ESP_ERROR_CHECK( ret );
 
     ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT));
-    printf("\n\t\t CIAO \n");
+
     esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
     ret = esp_bt_controller_init(&bt_cfg);
     if (ret) {
@@ -613,6 +743,7 @@ void app_main()
         ESP_LOGE(GATTS_TAG, "set local  MTU failed, error code = %x", local_mtu_ret);
     }
     //vTaskDelay(10000 /portTICK_PERIOD_MS);
-    printf("FINE DEL MAIN.");
+    printf("\nFINE DEL MAIN.");
+    printf("\nHO LANCIATO TUTTI I SERVIZI, PRESTO SARANNO DISPONIBILI");
     return;
 }

@@ -28,7 +28,7 @@ bluedroid/api/esp_bt_device.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/sched.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/stdio.h \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/assert.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/api/include/api/esp_bt_defs.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/api/include/api/esp_bt_main.h \
@@ -170,7 +170,7 @@ bluedroid/api/esp_bt_device.o: \
 
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/assert.h:
 

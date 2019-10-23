@@ -1,7 +1,7 @@
 libsodium/src/libsodium/randombytes/randombytes.o: \
  /home/gaetano/esp/esp-idf/components/libsodium/libsodium/src/libsodium/randombytes/randombytes.c \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/ieeefp.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/_ansi.h \
@@ -36,7 +36,7 @@ libsodium/src/libsodium/randombytes/randombytes.o: \
 
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h:
 

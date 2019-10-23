@@ -16,7 +16,7 @@ bluedroid/stack/btm/btm_ble_bgconn.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/cdefs.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/string.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_trace.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdio.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/types.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/types.h \
@@ -156,7 +156,7 @@ bluedroid/stack/btm/btm_ble_bgconn.o: \
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_trace.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/stdio.h:
 

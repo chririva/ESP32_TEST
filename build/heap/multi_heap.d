@@ -18,7 +18,7 @@ multi_heap.o: /home/gaetano/esp/esp-idf/components/heap/multi_heap.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/alloca.h \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/assert.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/string.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/string.h \
@@ -119,7 +119,7 @@ multi_heap.o: /home/gaetano/esp/esp-idf/components/heap/multi_heap.c \
 
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/assert.h:
 

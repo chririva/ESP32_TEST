@@ -3,7 +3,7 @@ src/bootloader_flash.o: \
  /home/gaetano/esp/esp-idf/components/bootloader_support/include_bootloader/bootloader_flash.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_err.h \
  /home/gaetano/esp/esp-idf/components/spi_flash/include/esp_spi_flash.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/bootloader/../include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/bootloader/../include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/log/include/esp_log.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
@@ -38,7 +38,7 @@ src/bootloader_flash.o: \
 
 /home/gaetano/esp/esp-idf/components/spi_flash/include/esp_spi_flash.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/bootloader/../include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/bootloader/../include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/log/include/esp_log.h:
 

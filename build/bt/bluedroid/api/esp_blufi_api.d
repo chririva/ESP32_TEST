@@ -25,7 +25,7 @@ bluedroid/api/esp_blufi_api.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/sched.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/stdio.h \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/alloca.h \
@@ -174,7 +174,7 @@ bluedroid/api/esp_blufi_api.o: \
 
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h:
 

@@ -40,7 +40,7 @@ src/vfs_fat.o: /home/gaetano/esp/esp-idf/components/fatfs/src/vfs_fat.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/time.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/xtensa/hal.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/xtensa/config/core.h \
@@ -194,7 +194,7 @@ src/vfs_fat.o: /home/gaetano/esp/esp-idf/components/fatfs/src/vfs_fat.c \
 
 /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h:
 

@@ -1,7 +1,7 @@
 genera_chiave.o: \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/main/genera_chiave.c \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/main/genera_chiave.c \
  /home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/port/include/esp_mem.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/ieeefp.h \
@@ -44,8 +44,13 @@ genera_chiave.o: \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/rsa.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/entropy.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/sha512.h \
+ /home/gaetano/esp/esp-idf/components/mbedtls/port/include/sha512_alt.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/ctr_drbg.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/aes.h \
+ /home/gaetano/esp/esp-idf/components/mbedtls/port/include/aes_alt.h \
+ /home/gaetano/esp/esp-idf/components/esp32/include/hwcrypto/aes.h \
+ /home/gaetano/esp/esp-idf/components/esp32/include/esp_types.h \
+ /home/gaetano/esp/esp-idf/components/esp32/include/rom/aes.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h \
@@ -82,7 +87,6 @@ genera_chiave.o: \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_system.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_sleep.h \
  /home/gaetano/esp/esp-idf/components/driver/include/driver/gpio.h \
- /home/gaetano/esp/esp-idf/components/esp32/include/esp_types.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/gpio_reg.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/gpio_struct.h \
@@ -111,7 +115,7 @@ genera_chiave.o: \
 
 /home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/mbedtls/port/include/esp_mem.h:
 
@@ -197,9 +201,19 @@ genera_chiave.o: \
 
 /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/sha512.h:
 
+/home/gaetano/esp/esp-idf/components/mbedtls/port/include/sha512_alt.h:
+
 /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/ctr_drbg.h:
 
 /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/aes.h:
+
+/home/gaetano/esp/esp-idf/components/mbedtls/port/include/aes_alt.h:
+
+/home/gaetano/esp/esp-idf/components/esp32/include/hwcrypto/aes.h:
+
+/home/gaetano/esp/esp-idf/components/esp32/include/esp_types.h:
+
+/home/gaetano/esp/esp-idf/components/esp32/include/rom/aes.h:
 
 /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 
@@ -273,8 +287,6 @@ genera_chiave.o: \
 
 /home/gaetano/esp/esp-idf/components/driver/include/driver/gpio.h:
 
-/home/gaetano/esp/esp-idf/components/esp32/include/esp_types.h:
-
 /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/gpio_reg.h:
 
 /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h:
@@ -324,4 +336,4 @@ genera_chiave.o: \
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/sys/unistd.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/sys/unistd.h:
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/main/./genera_chiave.c:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/main/./genera_chiave.c:

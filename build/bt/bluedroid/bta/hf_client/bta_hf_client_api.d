@@ -18,7 +18,7 @@ bluedroid/bta/hf_client/bta_hf_client_api.o: \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/bta/include/bta/bta_hf_client_api.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/bta/include/bta/bta_api.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_target.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/bt_types.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h \
@@ -144,7 +144,7 @@ bluedroid/bta/hf_client/bta_hf_client_api.o: \
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_target.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/bt_types.h:
 

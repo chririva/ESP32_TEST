@@ -39,7 +39,7 @@ esp_tls.o: /home/gaetano/esp/esp-idf/components/esp-tls/esp_tls.c \
  /home/gaetano/esp/esp-idf/components/vfs/include/sys/ioctl.h \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/sys/select.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_task.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/xtensa/hal.h \
@@ -150,8 +150,12 @@ esp_tls.o: /home/gaetano/esp/esp-idf/components/esp-tls/esp_tls.c \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/ssl.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/entropy.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/sha512.h \
+ /home/gaetano/esp/esp-idf/components/mbedtls/port/include/sha512_alt.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/ctr_drbg.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/aes.h \
+ /home/gaetano/esp/esp-idf/components/mbedtls/port/include/aes_alt.h \
+ /home/gaetano/esp/esp-idf/components/esp32/include/hwcrypto/aes.h \
+ /home/gaetano/esp/esp-idf/components/esp32/include/rom/aes.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/error.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/certs.h \
  /home/gaetano/esp/esp-idf/components/log/include/esp_log.h \
@@ -237,7 +241,7 @@ esp_tls.o: /home/gaetano/esp/esp-idf/components/esp-tls/esp_tls.c \
 
 /home/gaetano/esp/esp-idf/components/esp32/include/esp_task.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h:
 
@@ -459,9 +463,17 @@ esp_tls.o: /home/gaetano/esp/esp-idf/components/esp-tls/esp_tls.c \
 
 /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/sha512.h:
 
+/home/gaetano/esp/esp-idf/components/mbedtls/port/include/sha512_alt.h:
+
 /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/ctr_drbg.h:
 
 /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/aes.h:
+
+/home/gaetano/esp/esp-idf/components/mbedtls/port/include/aes_alt.h:
+
+/home/gaetano/esp/esp-idf/components/esp32/include/hwcrypto/aes.h:
+
+/home/gaetano/esp/esp-idf/components/esp32/include/rom/aes.h:
 
 /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/error.h:
 

@@ -16,7 +16,7 @@ hwcrypto/aes.o: /home/gaetano/esp/esp-idf/components/esp32/hwcrypto/aes.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/string.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/aes.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/port/include/esp_mem.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/stdlib.h \
@@ -25,6 +25,7 @@ hwcrypto/aes.o: /home/gaetano/esp/esp-idf/components/esp32/hwcrypto/aes.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/limits.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h \
+ /home/gaetano/esp/esp-idf/components/mbedtls/port/include/aes_alt.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/hwcrypto/aes.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_types.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/rom/aes.h \
@@ -132,7 +133,7 @@ hwcrypto/aes.o: /home/gaetano/esp/esp-idf/components/esp32/hwcrypto/aes.c \
 
 /home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/mbedtls/port/include/esp_mem.h:
 
@@ -149,6 +150,8 @@ hwcrypto/aes.o: /home/gaetano/esp/esp-idf/components/esp32/hwcrypto/aes.c \
 /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h:
+
+/home/gaetano/esp/esp-idf/components/mbedtls/port/include/aes_alt.h:
 
 /home/gaetano/esp/esp-idf/components/esp32/include/hwcrypto/aes.h:
 
