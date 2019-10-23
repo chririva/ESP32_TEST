@@ -1,0 +1,406 @@
+In archive /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/main/libmain.a:
+
+selfsigned_cert_write.o:     file format elf32-xtensa-le
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .literal.write_certificate 00000024  00000000  00000000  00000034  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .literal.selfsigned_cert_write 000002d4  00000000  00000000  00000058  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  2 .text         00000000  00000000  00000000  0000032c  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  3 .data         00000000  00000000  00000000  0000032c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  4 .bss          00000000  00000000  00000000  0000032c  2**0
+                  ALLOC
+  5 .rodata.str1.4 00000792  00000000  00000000  0000032c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  6 .text.write_certificate 00000074  00000000  00000000  00000ac0  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  7 .text.selfsigned_cert_write 0000085a  00000000  00000000  00000b34  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  8 .debug_frame  00000040  00000000  00000000  00001390  2**2
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+  9 .debug_info   00002224  00000000  00000000  000013d0  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 10 .debug_abbrev 000002a9  00000000  00000000  000035f4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    0000035f  00000000  00000000  0000389d  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 12 .debug_aranges 00000028  00000000  00000000  00003bfc  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 13 .debug_ranges 00000018  00000000  00000000  00003c24  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 14 .debug_line   00000963  00000000  00000000  00003c3c  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 15 .debug_str    000010c8  00000000  00000000  0000459f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 16 .comment      0000003b  00000000  00000000  00005667  2**0
+                  CONTENTS, READONLY
+ 17 .xtensa.info  00000038  00000000  00000000  000056a2  2**0
+                  CONTENTS, READONLY
+ 18 .xt.lit       00000010  00000000  00000000  000056da  2**0
+                  CONTENTS, RELOC, READONLY
+ 19 .xt.prop      00000300  00000000  00000000  000056ea  2**0
+                  CONTENTS, RELOC, READONLY
+
+genera_chiave.o:     file format elf32-xtensa-le
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .literal.dev_random_entropy_poll 00000020  00000000  00000000  00000034  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .literal.salva_chiavi_key 000001bc  00000000  00000000  00000054  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  2 .literal.genera_chiave 000001a4  00000000  00000000  00000210  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  3 .text         00000000  00000000  00000000  000003b4  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  4 .data         00000000  00000000  00000000  000003b4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  5 .bss          00000000  00000000  00000000  000003b4  2**0
+                  ALLOC
+  6 .rodata.str1.4 00000562  00000000  00000000  000003b4  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  7 .text.dev_random_entropy_poll 0000006a  00000000  00000000  00000918  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  8 .text.salva_chiavi_key 000003ae  00000000  00000000  00000984  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  9 .text.genera_chiave 000003f6  00000000  00000000  00000d34  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 10 .bss.QP_string$7875 00000400  00000000  00000000  0000112c  2**2
+                  ALLOC
+ 11 .bss.DQ_string$7874 00000400  00000000  00000000  0000112c  2**2
+                  ALLOC
+ 12 .bss.DP_string$7873 00000400  00000000  00000000  0000112c  2**2
+                  ALLOC
+ 13 .bss.Q_string$7872 00000400  00000000  00000000  0000112c  2**2
+                  ALLOC
+ 14 .bss.P_string$7871 00000400  00000000  00000000  0000112c  2**2
+                  ALLOC
+ 15 .bss.D_string$7870 00000400  00000000  00000000  0000112c  2**2
+                  ALLOC
+ 16 .bss.E_string$7869 00000400  00000000  00000000  0000112c  2**2
+                  ALLOC
+ 17 .bss.N_string$7868 00000400  00000000  00000000  0000112c  2**2
+                  ALLOC
+ 18 .rodata.__func__$7857 00000011  00000000  00000000  0000112c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 19 .debug_frame  0000005c  00000000  00000000  00001140  2**2
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 20 .debug_info   000021b7  00000000  00000000  0000119c  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 21 .debug_abbrev 0000034f  00000000  00000000  00003353  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 22 .debug_loc    00000314  00000000  00000000  000036a2  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 23 .debug_aranges 00000030  00000000  00000000  000039b6  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 24 .debug_ranges 00000038  00000000  00000000  000039e6  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 25 .debug_line   000008a3  00000000  00000000  00003a1e  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 26 .debug_str    00000cbe  00000000  00000000  000042c1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 27 .comment      0000003b  00000000  00000000  00004f7f  2**0
+                  CONTENTS, READONLY
+ 28 .xtensa.info  00000038  00000000  00000000  00004fba  2**0
+                  CONTENTS, READONLY
+ 29 .xt.lit       00000018  00000000  00000000  00004ff2  2**0
+                  CONTENTS, RELOC, READONLY
+ 30 .xt.prop      00000324  00000000  00000000  0000500a  2**0
+                  CONTENTS, RELOC, READONLY
+
+genera_chiave_ECDSA.o:     file format elf32-xtensa-le
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .literal.dump_buf 00000018  00000000  00000000  00000034  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .literal.dump_pubkey 00000010  00000000  00000000  0000004c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  2 .literal.genera_chiave_ECDSA 00000124  00000000  00000000  0000005c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  3 .text         00000000  00000000  00000000  00000180  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  4 .data         00000000  00000000  00000000  00000180  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  5 .bss          00000000  00000000  00000000  00000180  2**0
+                  ALLOC
+  6 .rodata.str1.4 000002b6  00000000  00000000  00000180  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  7 .text.dump_buf 00000044  00000000  00000000  00000438  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  8 .text.dump_pubkey 0000003b  00000000  00000000  0000047c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  9 .text.genera_chiave_ECDSA 000002d3  00000000  00000000  000004b8  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 10 .debug_frame  00000058  00000000  00000000  0000078c  2**2
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 11 .debug_info   00000da1  00000000  00000000  000007e4  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 12 .debug_abbrev 00000225  00000000  00000000  00001585  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .debug_loc    00000166  00000000  00000000  000017aa  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 14 .debug_aranges 00000030  00000000  00000000  00001910  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 15 .debug_ranges 00000020  00000000  00000000  00001940  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 16 .debug_line   0000052e  00000000  00000000  00001960  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 17 .debug_str    00000895  00000000  00000000  00001e8e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 18 .comment      0000003b  00000000  00000000  00002723  2**0
+                  CONTENTS, READONLY
+ 19 .xtensa.info  00000038  00000000  00000000  0000275e  2**0
+                  CONTENTS, READONLY
+ 20 .xt.lit       00000018  00000000  00000000  00002796  2**0
+                  CONTENTS, RELOC, READONLY
+ 21 .xt.prop      00000168  00000000  00000000  000027ae  2**0
+                  CONTENTS, RELOC, READONLY
+
+genera_chiave_rsa.o:     file format elf32-xtensa-le
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .literal.salva_chiavi 000001bc  00000000  00000000  00000034  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .literal.genera_chiave_rsa 000000f0  00000000  00000000  000001f0  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  2 .text         00000000  00000000  00000000  000002e0  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  3 .data         00000000  00000000  00000000  000002e0  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  4 .bss          00000000  00000000  00000000  000002e0  2**0
+                  ALLOC
+  5 .rodata.str1.4 0000042a  00000000  00000000  000002e0  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  6 .text.salva_chiavi 000003ae  00000000  00000000  0000070c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  7 .text.genera_chiave_rsa 000002a7  00000000  00000000  00000abc  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  8 .bss.QP_string$7625 00000400  00000000  00000000  00000d64  2**2
+                  ALLOC
+  9 .bss.DQ_string$7624 00000400  00000000  00000000  00000d64  2**2
+                  ALLOC
+ 10 .bss.DP_string$7623 00000400  00000000  00000000  00000d64  2**2
+                  ALLOC
+ 11 .bss.Q_string$7622 00000400  00000000  00000000  00000d64  2**2
+                  ALLOC
+ 12 .bss.P_string$7621 00000400  00000000  00000000  00000d64  2**2
+                  ALLOC
+ 13 .bss.D_string$7620 00000400  00000000  00000000  00000d64  2**2
+                  ALLOC
+ 14 .bss.E_string$7619 00000400  00000000  00000000  00000d64  2**2
+                  ALLOC
+ 15 .bss.N_string$7618 00000400  00000000  00000000  00000d64  2**2
+                  ALLOC
+ 16 .rodata.__func__$7607 0000000d  00000000  00000000  00000d64  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 17 .debug_frame  00000040  00000000  00000000  00000d74  2**2
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 18 .debug_info   00001b4c  00000000  00000000  00000db4  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 19 .debug_abbrev 0000029c  00000000  00000000  00002900  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 20 .debug_loc    00000261  00000000  00000000  00002b9c  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 21 .debug_aranges 00000028  00000000  00000000  00002dfd  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 22 .debug_ranges 00000018  00000000  00000000  00002e25  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 23 .debug_line   000006fd  00000000  00000000  00002e3d  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 24 .debug_str    00000aa6  00000000  00000000  0000353a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 25 .comment      0000003b  00000000  00000000  00003fe0  2**0
+                  CONTENTS, READONLY
+ 26 .xtensa.info  00000038  00000000  00000000  0000401b  2**0
+                  CONTENTS, READONLY
+ 27 .xt.lit       00000010  00000000  00000000  00004053  2**0
+                  CONTENTS, RELOC, READONLY
+ 28 .xt.prop      00000228  00000000  00000000  00004063  2**0
+                  CONTENTS, RELOC, READONLY
+
+gatts_demo.o:     file format elf32-xtensa-le
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .literal.dev_random_entropy_poll 00000020  00000000  00000000  00000034  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .literal.genera_chiave 000001a4  00000000  00000000  00000054  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  2 .literal.dump_buf 00000018  00000000  00000000  000001f8  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  3 .literal.dump_pubkey 00000010  00000000  00000000  00000210  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  4 .literal.gatts_event_handler 00000014  00000000  00000000  00000220  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  5 .literal.gap_event_handler 00000048  00000000  00000000  00000234  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  6 .literal.salva_chiavi_key 000001bc  00000000  00000000  0000027c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  7 .literal.genera_chiave_ECDSA 00000124  00000000  00000000  00000438  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  8 .literal.salva_chiavi 000001bc  00000000  00000000  0000055c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  9 .literal.genera_chiave_rsa 000000f0  00000000  00000000  00000718  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 10 .literal.write_certificate 00000024  00000000  00000000  00000808  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 11 .literal.selfsigned_cert_write 000002d4  00000000  00000000  0000082c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 12 .literal.example_write_event_env 00000038  00000000  00000000  00000b00  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 13 .literal.example_exec_write_event_env 00000018  00000000  00000000  00000b38  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 14 .literal.gatts_profile_a_event_handler 000001cc  00000000  00000000  00000b50  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 15 .literal.ritardo 0000000c  00000000  00000000  00000d1c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 16 .literal.carica_chiavi 000001ac  00000000  00000000  00000d28  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 17 .literal.cancella_tutto 00000054  00000000  00000000  00000ed4  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 18 .literal.app_main 00000120  00000000  00000000  00000f28  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 19 .text         00000000  00000000  00000000  00001048  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 20 .data         00000000  00000000  00000000  00001048  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+ 21 .bss          00000000  00000000  00000000  00001048  2**0
+                  ALLOC
+ 22 .rodata.str1.4 00001ced  00000000  00000000  00001048  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 23 .text.dev_random_entropy_poll 0000006a  00000000  00000000  00002d38  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 24 .text.genera_chiave 000003f6  00000000  00000000  00002da4  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 25 .text.dump_buf 00000044  00000000  00000000  0000319c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 26 .text.dump_pubkey 0000003b  00000000  00000000  000031e0  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 27 .text.gatts_event_handler 00000081  00000000  00000000  0000321c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 28 .text.gap_event_handler 000000e3  00000000  00000000  000032a0  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 29 .rodata.gap_event_handler 00000054  00000000  00000000  00003384  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+ 30 .text.salva_chiavi_key 000003ae  00000000  00000000  000033d8  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 31 .text.genera_chiave_ECDSA 000002d3  00000000  00000000  00003788  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 32 .text.salva_chiavi 000003ae  00000000  00000000  00003a5c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 33 .text.genera_chiave_rsa 000002a7  00000000  00000000  00003e0c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 34 .text.write_certificate 00000074  00000000  00000000  000040b4  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 35 .text.selfsigned_cert_write 0000085e  00000000  00000000  00004128  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 36 .text.example_write_event_env 00000103  00000000  00000000  00004988  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 37 .text.example_exec_write_event_env 00000048  00000000  00000000  00004a8c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 38 .text.gatts_profile_a_event_handler 00000658  00000000  00000000  00004ad4  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 39 .rodata.gatts_profile_a_event_handler 00000040  00000000  00000000  0000512c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+ 40 .text.ritardo 00000023  00000000  00000000  0000516c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 41 .text.carica_chiavi 00000441  00000000  00000000  00005190  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 42 .text.cancella_tutto 000000b4  00000000  00000000  000055d4  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 43 .rodata       0000001c  00000000  00000000  00005688  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 44 .text.app_main 0000027c  00000000  00000000  000056a4  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+ 45 .rodata.__func__$9442 00000009  00000000  00000000  00005920  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 46 .rodata.__func__$9430 0000000f  00000000  00000000  0000592c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 47 .rodata.__func__$9406 0000000e  00000000  00000000  0000593c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 48 .bss.QP_string$9100 00000400  00000000  00000000  0000594c  2**2
+                  ALLOC
+ 49 .bss.DQ_string$9099 00000400  00000000  00000000  0000594c  2**2
+                  ALLOC
+ 50 .bss.DP_string$9098 00000400  00000000  00000000  0000594c  2**2
+                  ALLOC
+ 51 .bss.Q_string$9097 00000400  00000000  00000000  0000594c  2**2
+                  ALLOC
+ 52 .bss.P_string$9096 00000400  00000000  00000000  0000594c  2**2
+                  ALLOC
+ 53 .bss.D_string$9095 00000400  00000000  00000000  0000594c  2**2
+                  ALLOC
+ 54 .bss.E_string$9094 00000400  00000000  00000000  0000594c  2**2
+                  ALLOC
+ 55 .bss.N_string$9093 00000400  00000000  00000000  0000594c  2**2
+                  ALLOC
+ 56 .rodata.__func__$9082 0000000d  00000000  00000000  0000594c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 57 .bss.QP_string$8960 00000400  00000000  00000000  0000595c  2**2
+                  ALLOC
+ 58 .bss.DQ_string$8959 00000400  00000000  00000000  0000595c  2**2
+                  ALLOC
+ 59 .bss.DP_string$8958 00000400  00000000  00000000  0000595c  2**2
+                  ALLOC
+ 60 .bss.Q_string$8957 00000400  00000000  00000000  0000595c  2**2
+                  ALLOC
+ 61 .bss.P_string$8956 00000400  00000000  00000000  0000595c  2**2
+                  ALLOC
+ 62 .bss.D_string$8955 00000400  00000000  00000000  0000595c  2**2
+                  ALLOC
+ 63 .bss.E_string$8954 00000400  00000000  00000000  0000595c  2**2
+                  ALLOC
+ 64 .bss.N_string$8953 00000400  00000000  00000000  0000595c  2**2
+                  ALLOC
+ 65 .rodata.__func__$8942 00000011  00000000  00000000  0000595c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 66 .bss.a_prepare_write_env 00000008  00000000  00000000  00005970  2**2
+                  ALLOC
+ 67 .data.gl_profile_tab 00000050  00000000  00000000  00005970  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
+ 68 .data.adv_params 00000020  00000000  00000000  000059c0  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+ 69 .data.scan_rsp_data 0000002c  00000000  00000000  000059e0  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
+ 70 .data.adv_data 0000002c  00000000  00000000  00005a0c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
+ 71 .data.adv_service_uuid128 00000010  00000000  00000000  00005a38  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+ 72 .bss.adv_config_done 00000001  00000000  00000000  00005a48  2**0
+                  ALLOC
+ 73 .data.gatts_demo_char1_val 00000008  00000000  00000000  00005a48  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
+ 74 .bss.a_property 00000001  00000000  00000000  00005a50  2**0
+                  ALLOC
+ 75 .data.char1_str 00000003  00000000  00000000  00005a50  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+ 76 .debug_frame  000001dc  00000000  00000000  00005a54  2**2
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 77 .debug_info   0000893a  00000000  00000000  00005c30  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 78 .debug_abbrev 00000503  00000000  00000000  0000e56a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 79 .debug_loc    000011b9  00000000  00000000  0000ea6d  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 80 .debug_aranges 000000b0  00000000  00000000  0000fc26  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 81 .debug_ranges 000000d0  00000000  00000000  0000fcd6  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 82 .debug_line   000021e2  00000000  00000000  0000fda6  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 83 .debug_str    00003f27  00000000  00000000  00011f88  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 84 .comment      0000003b  00000000  00000000  00015eaf  2**0
+                  CONTENTS, READONLY
+ 85 .xtensa.info  00000038  00000000  00000000  00015eea  2**0
+                  CONTENTS, READONLY
+ 86 .xt.lit       00000098  00000000  00000000  00015f22  2**0
+                  CONTENTS, RELOC, READONLY
+ 87 .xt.prop      000012fc  00000000  00000000  00015fba  2**0
+                  CONTENTS, RELOC, READONLY
