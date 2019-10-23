@@ -13,7 +13,7 @@ xtensa_context.o: \
  /home/gaetano/esp/esp-idf/components/esp32/include/xtensa/corebits.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/xtensa/config/system.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/xtensa_context.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/xtensa/xtruntime-frames.h \
@@ -47,7 +47,7 @@ xtensa_context.o: \
 
 /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h:
 

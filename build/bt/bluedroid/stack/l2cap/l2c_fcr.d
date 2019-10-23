@@ -24,7 +24,7 @@ bluedroid/stack/l2cap/l2c_fcr.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/string.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/string.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_trace.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/bt_types.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h \
@@ -158,7 +158,7 @@ bluedroid/stack/l2cap/l2c_fcr.o: \
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_trace.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/bt_types.h:
 

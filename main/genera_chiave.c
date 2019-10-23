@@ -191,22 +191,16 @@ static int write_private_key( mbedtls_pk_context *key, const char *output_file )
     return( 0 );
 }
 
-//int main( int argc, char *argv[] )
 void genera_chiave()
 {
     int ret = 1;
     int exit_code = MBEDTLS_EXIT_FAILURE;
     mbedtls_pk_context key;
     char buf[1024];
-    int i;
-    char *p, *q;
     mbedtls_mpi N, P, Q, D, E, DP, DQ, QP;
     mbedtls_entropy_context entropy;
     mbedtls_ctr_drbg_context ctr_drbg;
     const char *pers = "gen_key";
-#if defined(MBEDTLS_ECP_C)
-    const mbedtls_ecp_curve_info *curve_info;
-#endif
 
     /*
      * Set to sane values
@@ -220,67 +214,12 @@ void genera_chiave()
     mbedtls_ctr_drbg_init( &ctr_drbg );
     memset( buf, 0, sizeof( buf ) );
 
-
-
     opt.type                = DFL_TYPE;
     opt.rsa_keysize         = DFL_RSA_KEYSIZE;
     opt.ec_curve            = DFL_EC_CURVE;
     opt.filename            = DFL_FILENAME;
     opt.format              = DFL_FORMAT;
     opt.use_dev_random      = DFL_USE_DEV_RANDOM;
-
-    /*
-    for( i = 1; i < argc; i++ )
-    {
-        p = argv[i];
-        if( ( q = strchr( p, '=' ) ) == NULL )
-            goto usage;
-        *q++ = '\0';
-
-        if( strcmp( p, "type" ) == 0 )
-        {
-            if( strcmp( q, "rsa" ) == 0 )
-                opt.type = MBEDTLS_PK_RSA;
-            else if( strcmp( q, "ec" ) == 0 )
-                opt.type = MBEDTLS_PK_ECKEY;
-            else
-                goto usage;
-        }
-        else if( strcmp( p, "format" ) == 0 )
-        {
-            if( strcmp( q, "pem" ) == 0 )
-                opt.format = FORMAT_PEM;
-            else if( strcmp( q, "der" ) == 0 )
-                opt.format = FORMAT_DER;
-            else
-                goto usage;
-        }
-        else if( strcmp( p, "rsa_keysize" ) == 0 )
-        {
-            opt.rsa_keysize = atoi( q );
-            if( opt.rsa_keysize < 1024 ||
-                opt.rsa_keysize > MBEDTLS_MPI_MAX_BITS )
-                goto usage;
-        }
-#if defined(MBEDTLS_ECP_C)
-        else if( strcmp( p, "ec_curve" ) == 0 )
-        {
-            if( ( curve_info = mbedtls_ecp_curve_info_from_name( q ) ) == NULL )
-                goto usage;
-            opt.ec_curve = curve_info->grp_id;
-        }
-#endif
-        else if( strcmp( p, "filename" ) == 0 )
-            opt.filename = q;
-        else if( strcmp( p, "use_dev_random" ) == 0 )
-        {
-            opt.use_dev_random = atoi( q );
-            if( opt.use_dev_random < 0 || opt.use_dev_random > 1 )
-                goto usage;
-        }
-        else
-            goto usage;
-    }*/
 
     mbedtls_printf( "\n  . Seeding the random number generator..." );
     fflush( stdout );

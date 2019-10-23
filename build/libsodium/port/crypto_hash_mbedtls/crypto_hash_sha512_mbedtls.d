@@ -22,7 +22,7 @@ port/crypto_hash_mbedtls/crypto_hash_sha512_mbedtls.o: \
  /home/gaetano/esp/esp-idf/components/libsodium/libsodium/src/libsodium/include/sodium/export.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/sha512.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/port/include/esp_mem.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/check_config.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/limits.h \
@@ -73,7 +73,7 @@ port/crypto_hash_mbedtls/crypto_hash_sha512_mbedtls.o: \
 
 /home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/mbedtls/port/include/esp_mem.h:
 

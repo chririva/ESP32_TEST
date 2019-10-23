@@ -3,7 +3,7 @@ src/bootloader_clock.o: \
  /home/gaetano/esp/esp-idf/components/esp32/include/rom/uart.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_types.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_attr.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/bootloader/../include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/bootloader/../include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_assert.h \
@@ -34,7 +34,7 @@ src/bootloader_clock.o: \
 
 /home/gaetano/esp/esp-idf/components/esp32/include/esp_attr.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/bootloader/../include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/bootloader/../include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h:
 

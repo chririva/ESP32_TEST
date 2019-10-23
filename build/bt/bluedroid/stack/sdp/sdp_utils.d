@@ -23,7 +23,7 @@ bluedroid/stack/sdp/sdp_utils.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h \
  /home/gaetano/esp/esp-idf/components/heap/include/multi_heap.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_defs.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_trace.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdio.h \
@@ -96,7 +96,7 @@ bluedroid/stack/sdp/sdp_utils.o: \
 
 /home/gaetano/esp/esp-idf/components/heap/include/multi_heap.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_defs.h:
 

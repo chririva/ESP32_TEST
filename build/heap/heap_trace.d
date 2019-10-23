@@ -18,7 +18,7 @@ heap_trace.o: /home/gaetano/esp/esp-idf/components/heap/heap_trace.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/syslimits.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/endian.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/param.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/heap/include/esp_heap_trace.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h \
@@ -126,7 +126,7 @@ heap_trace.o: /home/gaetano/esp/esp-idf/components/heap/heap_trace.c \
 
 /home/gaetano/esp/esp-idf/components/newlib/include/machine/param.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/heap/include/esp_heap_trace.h:
 

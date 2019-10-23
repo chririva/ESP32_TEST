@@ -16,7 +16,7 @@ hwcrypto/aes.o: /home/gaetano/esp/esp-idf/components/esp32/hwcrypto/aes.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/string.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/aes.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/port/include/esp_mem.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/stdlib.h \
@@ -132,7 +132,7 @@ hwcrypto/aes.o: /home/gaetano/esp/esp-idf/components/esp32/hwcrypto/aes.c \
 
 /home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/mbedtls/port/include/esp_mem.h:
 

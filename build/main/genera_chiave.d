@@ -1,7 +1,7 @@
 genera_chiave.o: \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/main/genera_chiave.c \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/main/genera_chiave.c \
  /home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/port/include/esp_mem.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/ieeefp.h \
@@ -111,7 +111,7 @@ genera_chiave.o: \
 
 /home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/mbedtls/port/include/esp_mem.h:
 
@@ -324,4 +324,4 @@ genera_chiave.o: \
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/sys/unistd.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/sys/unistd.h:
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/main/./genera_chiave.c:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/main/./genera_chiave.c:

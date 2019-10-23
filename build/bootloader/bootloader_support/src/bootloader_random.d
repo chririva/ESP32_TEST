@@ -18,7 +18,7 @@ src/bootloader_random.o: \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/dport_reg.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/dport_access.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_attr.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/bootloader/../include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/bootloader/../include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_dport_access.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/uart_reg.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/xtensa/xtruntime.h \
@@ -67,7 +67,7 @@ src/bootloader_random.o: \
 
 /home/gaetano/esp/esp-idf/components/esp32/include/esp_attr.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/bootloader/../include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/bootloader/../include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/esp32/include/esp_dport_access.h:
 

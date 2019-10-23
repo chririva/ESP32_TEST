@@ -10,7 +10,7 @@ src/ff.o: /home/gaetano/esp/esp-idf/components/fatfs/src/ff.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/syslimits.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/endian.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/param.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/reent.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/_ansi.h \
@@ -112,7 +112,7 @@ src/ff.o: /home/gaetano/esp/esp-idf/components/fatfs/src/ff.c \
 
 /home/gaetano/esp/esp-idf/components/newlib/include/machine/param.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 

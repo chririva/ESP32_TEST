@@ -25,7 +25,7 @@ modbus/mb.o: /home/gaetano/esp/esp-idf/components/freemodbus/modbus/mb.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_assert.h \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/assert.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/uart_struct.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_err.h \
@@ -163,7 +163,7 @@ modbus/mb.o: /home/gaetano/esp/esp-idf/components/freemodbus/modbus/mb.c \
 
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/assert.h:
 

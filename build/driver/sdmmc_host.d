@@ -11,7 +11,7 @@ sdmmc_host.o: /home/gaetano/esp/esp-idf/components/driver/sdmmc_host.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/_default_types.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_assert.h \
@@ -122,7 +122,7 @@ sdmmc_host.o: /home/gaetano/esp/esp-idf/components/driver/sdmmc_host.c \
 
 /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h:
 

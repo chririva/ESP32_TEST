@@ -17,7 +17,7 @@ bluedroid/osi/osi.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/_types.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/lock.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/xtensa/hal.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/xtensa/config/core.h \
@@ -119,7 +119,7 @@ bluedroid/osi/osi.o: \
 
 /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h:
 

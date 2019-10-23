@@ -24,7 +24,7 @@ bluedroid/stack/sdp/sdp_server.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/alloca.h \
  /home/gaetano/esp/esp-idf/components/heap/include/esp_heap_caps.h \
  /home/gaetano/esp/esp-idf/components/heap/include/multi_heap.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/btu.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_target.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/dyn_mem.h \
@@ -98,7 +98,7 @@ bluedroid/stack/sdp/sdp_server.o: \
 
 /home/gaetano/esp/esp-idf/components/heap/include/multi_heap.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/btu.h:
 

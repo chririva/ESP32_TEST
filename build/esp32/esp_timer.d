@@ -22,7 +22,7 @@ esp_timer.o: /home/gaetano/esp/esp-idf/components/esp32/esp_timer.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_attr.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_err.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdio.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/types.h \
@@ -139,7 +139,7 @@ esp_timer.o: /home/gaetano/esp/esp-idf/components/esp32/esp_timer.c \
 
 /home/gaetano/esp/esp-idf/components/esp32/include/esp_attr.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/esp32/include/esp_err.h:
 

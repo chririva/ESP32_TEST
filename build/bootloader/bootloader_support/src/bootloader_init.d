@@ -1,7 +1,7 @@
 src/bootloader_init.o: \
  /home/gaetano/esp/esp-idf/components/bootloader_support/src/bootloader_init.c \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_attr.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/bootloader/../include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/bootloader/../include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/log/include/esp_log.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
@@ -64,7 +64,7 @@ src/bootloader_init.o: \
 
 /home/gaetano/esp/esp-idf/components/esp32/include/esp_attr.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST1/build/bootloader/../include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST2/build/bootloader/../include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/log/include/esp_log.h:
 
