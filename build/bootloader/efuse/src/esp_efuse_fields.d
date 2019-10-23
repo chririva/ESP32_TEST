@@ -3,7 +3,7 @@ src/esp_efuse_fields.o: \
  /home/gaetano/esp/esp-idf/components/efuse/include/esp_efuse.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_err.h \
  /home/gaetano/esp/esp-idf/components/log/include/esp_log.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/bootloader/../include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/bootloader/../include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_assert.h \
@@ -23,7 +23,7 @@ src/esp_efuse_fields.o: \
 
 /home/gaetano/esp/esp-idf/components/log/include/esp_log.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/bootloader/../include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/bootloader/../include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h:
 

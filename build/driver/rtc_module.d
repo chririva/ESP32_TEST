@@ -23,7 +23,7 @@ rtc_module.o: /home/gaetano/esp/esp-idf/components/driver/rtc_module.c \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_assert.h \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/assert.h \
  /home/gaetano/esp/esp-idf/components/log/include/esp_log.h \
  /home/gaetano/esp/esp-idf/components/log/include/esp_log_internal.h \
@@ -152,7 +152,7 @@ rtc_module.o: /home/gaetano/esp/esp-idf/components/driver/rtc_module.c \
 
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/assert.h:
 

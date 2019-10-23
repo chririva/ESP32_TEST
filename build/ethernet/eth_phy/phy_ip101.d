@@ -5,7 +5,7 @@ eth_phy/phy_ip101.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/_default_types.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/features.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_assert.h \
@@ -48,7 +48,7 @@ eth_phy/phy_ip101.o: \
 
 /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h:
 

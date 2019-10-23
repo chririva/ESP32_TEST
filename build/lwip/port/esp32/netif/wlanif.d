@@ -34,7 +34,7 @@ port/esp32/netif/wlanif.o: \
  /home/gaetano/esp/esp-idf/components/vfs/include/sys/ioctl.h \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/sys/select.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_task.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/xtensa/hal.h \
@@ -219,7 +219,7 @@ port/esp32/netif/wlanif.o: \
 
 /home/gaetano/esp/esp-idf/components/esp32/include/esp_task.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h:
 

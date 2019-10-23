@@ -31,7 +31,7 @@ lib/http_auth.o: \
  /home/gaetano/esp/esp-idf/components/esp32/include/rom/queue.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_err.h \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/assert.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_interface.h \
  /home/gaetano/esp/esp-idf/components/lwip/lwip/src/include/lwip/ip_addr.h \
@@ -198,7 +198,7 @@ lib/http_auth.o: \
 
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/assert.h:
 

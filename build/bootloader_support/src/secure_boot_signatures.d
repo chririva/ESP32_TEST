@@ -1,6 +1,6 @@
 src/secure_boot_signatures.o: \
  /home/gaetano/esp/esp-idf/components/bootloader_support/src/secure_boot_signatures.c \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/bootloader_support/include_bootloader/bootloader_flash.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/_default_types.h \
@@ -47,7 +47,7 @@ src/secure_boot_signatures.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/endian.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/param.h
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/bootloader_support/include_bootloader/bootloader_flash.h:
 

@@ -1,5 +1,5 @@
 spiram_psram.o: /home/gaetano/esp/esp-idf/components/esp32/spiram_psram.c \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/string.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/_ansi.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/newlib.h \
@@ -80,7 +80,7 @@ spiram_psram.o: /home/gaetano/esp/esp-idf/components/esp32/spiram_psram.c \
  /home/gaetano/esp/esp-idf/components/bootloader_support/include/esp_image_format.h \
  /home/gaetano/esp/esp-idf/components/bootloader_support/include/esp_flash_partitions.h
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/string.h:
 

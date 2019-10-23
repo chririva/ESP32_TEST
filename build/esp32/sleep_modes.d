@@ -11,7 +11,7 @@ sleep_modes.o: /home/gaetano/esp/esp-idf/components/esp32/sleep_modes.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/endian.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/param.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_attr.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_sleep.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/_default_types.h \
@@ -141,7 +141,7 @@ sleep_modes.o: /home/gaetano/esp/esp-idf/components/esp32/sleep_modes.c \
 
 /home/gaetano/esp/esp-idf/components/esp32/include/esp_attr.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/esp32/include/esp_sleep.h:
 

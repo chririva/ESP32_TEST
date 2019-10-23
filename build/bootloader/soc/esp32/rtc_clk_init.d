@@ -8,7 +8,7 @@ esp32/rtc_clk_init.o: \
  /home/gaetano/esp/esp-idf/components/esp32/include/rom/uart.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_types.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_attr.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/bootloader/../include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/bootloader/../include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/uart_reg.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/rom/gpio.h \
@@ -59,7 +59,7 @@ esp32/rtc_clk_init.o: \
 
 /home/gaetano/esp/esp-idf/components/esp32/include/esp_attr.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/bootloader/../include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/bootloader/../include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/uart_reg.h:
 

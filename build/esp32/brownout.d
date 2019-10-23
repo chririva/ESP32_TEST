@@ -22,7 +22,7 @@ brownout.o: /home/gaetano/esp/esp-idf/components/esp32/brownout.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/alloca.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_assert.h \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h \
@@ -126,7 +126,7 @@ brownout.o: /home/gaetano/esp/esp-idf/components/esp32/brownout.c \
 
 /home/gaetano/esp/esp-idf/components/newlib/include/alloca.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h:
 

@@ -1,7 +1,7 @@
 genera_chiave.o: \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/main/genera_chiave.c \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/main/genera_chiave.c \
  /home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/mbedtls/port/include/esp_mem.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/ieeefp.h \
@@ -107,6 +107,19 @@ genera_chiave.o: \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/event_groups.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/timers.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/task.h \
+ /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/x509.h \
+ /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/asn1.h \
+ /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/pk.h \
+ /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/x509_crt.h \
+ /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/x509.h \
+ /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/x509_crl.h \
+ /home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/bignum.h \
+ /home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/bignum.h \
+ /home/gaetano/esp/esp-idf/components/nvs_flash/include/nvs_flash.h \
+ /home/gaetano/esp/esp-idf/components/nvs_flash/include/nvs.h \
+ /home/gaetano/esp/esp-idf/components/spi_flash/include/esp_partition.h \
+ /home/gaetano/esp/esp-idf/components/spi_flash/include/esp_spi_flash.h \
+ /home/gaetano/esp/esp-idf/components/nvs_flash/include/nvs.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/string.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/string.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/unistd.h \
@@ -115,7 +128,7 @@ genera_chiave.o: \
 
 /home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/esp_config.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/mbedtls/port/include/esp_mem.h:
 
@@ -327,6 +340,32 @@ genera_chiave.o: \
 
 /home/gaetano/esp/esp-idf/components/freertos/include/freertos/task.h:
 
+/home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/x509.h:
+
+/home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/asn1.h:
+
+/home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/pk.h:
+
+/home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/x509_crt.h:
+
+/home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/x509.h:
+
+/home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/x509_crl.h:
+
+/home/gaetano/esp/esp-idf/components/mbedtls/port/include/mbedtls/bignum.h:
+
+/home/gaetano/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/bignum.h:
+
+/home/gaetano/esp/esp-idf/components/nvs_flash/include/nvs_flash.h:
+
+/home/gaetano/esp/esp-idf/components/nvs_flash/include/nvs.h:
+
+/home/gaetano/esp/esp-idf/components/spi_flash/include/esp_partition.h:
+
+/home/gaetano/esp/esp-idf/components/spi_flash/include/esp_spi_flash.h:
+
+/home/gaetano/esp/esp-idf/components/nvs_flash/include/nvs.h:
+
 /home/gaetano/esp/esp-idf/components/newlib/include/string.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/sys/string.h:
@@ -336,4 +375,4 @@ genera_chiave.o: \
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/sys/unistd.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/sys/unistd.h:
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/main/./genera_chiave.c:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/main/./genera_chiave.c:

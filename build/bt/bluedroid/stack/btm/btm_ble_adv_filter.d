@@ -16,7 +16,7 @@ bluedroid/stack/btm/btm_ble_adv_filter.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/cdefs.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/string.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_target.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/bt_types.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h \
@@ -153,7 +153,7 @@ bluedroid/stack/btm/btm_ble_adv_filter.o: \
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_target.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/bt_types.h:
 

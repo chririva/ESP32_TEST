@@ -1,5 +1,5 @@
 stack_check.o: /home/gaetano/esp/esp-idf/components/esp32/stack_check.c \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_system.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/_default_types.h \
@@ -58,7 +58,7 @@ stack_check.o: /home/gaetano/esp/esp-idf/components/esp32/stack_check.c \
  /home/gaetano/esp/esp-idf/components/esp32/include/xtensa/config/core-matmap.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/touch_channel.h
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/esp32/include/esp_system.h:
 

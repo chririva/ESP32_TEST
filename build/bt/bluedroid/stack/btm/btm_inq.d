@@ -26,7 +26,7 @@ bluedroid/stack/btm/btm_inq.o: \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_timer.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_err.h \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/alloca.h \
@@ -174,7 +174,7 @@ bluedroid/stack/btm/btm_inq.o: \
 
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h:
 

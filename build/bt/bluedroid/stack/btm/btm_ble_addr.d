@@ -20,7 +20,7 @@ bluedroid/stack/btm/btm_ble_addr.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/hcimsgs.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_target.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/dyn_mem.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_trace.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdio.h \
@@ -167,7 +167,7 @@ bluedroid/stack/btm/btm_ble_addr.o: \
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_target.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/dyn_mem.h:
 

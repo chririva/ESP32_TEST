@@ -25,7 +25,7 @@ esp_event.o: /home/gaetano/esp/esp-idf/components/esp_event/esp_event.c \
  /home/gaetano/esp/esp-idf/components/log/include/esp_log.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_assert.h \
@@ -181,7 +181,7 @@ esp_event.o: /home/gaetano/esp/esp-idf/components/esp_event/esp_event.c \
 
 /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h:
 

@@ -2,7 +2,7 @@ src/flash_qio_mode.o: \
  /home/gaetano/esp/esp-idf/components/bootloader_support/src/flash_qio_mode.c \
  /home/gaetano/esp/esp-idf/components/bootloader_support/include_bootloader/flash_qio_mode.h \
  /home/gaetano/esp/esp-idf/components/log/include/esp_log.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/bootloader/../include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/bootloader/../include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_assert.h \
@@ -20,7 +20,7 @@ src/flash_qio_mode.o: \
 
 /home/gaetano/esp/esp-idf/components/log/include/esp_log.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/bootloader/../include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/bootloader/../include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/esp32/include/rom/ets_sys.h:
 

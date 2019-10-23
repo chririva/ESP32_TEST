@@ -36,6 +36,7 @@
 #include "genera_chiave.c"
 #include "genera_chiave_ECDSA.c"
 #include "genera_chiave_rsa.c"
+#include "selfsigned_cert_write.c"
 
 #include "sdkconfig.h"
 
@@ -581,7 +582,7 @@ bool carica_chiavi(){
 		err = nvs_get_str(my_handle, "DP", NULL, &n_DP); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
 		err = nvs_get_str(my_handle, "DQ", NULL, &n_DQ); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
 		err = nvs_get_str(my_handle, "QP", NULL, &n_QP); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-        char* N_string=malloc(n_N); //TODO: Van tolte dalla memoria
+        char* N_string=malloc(n_N);
         char* E_string=malloc(n_E);
 		char* D_string=malloc(n_D);
 		char* P_string=malloc(n_P);
@@ -617,6 +618,12 @@ bool carica_chiavi(){
         error = mbedtls_mpi_read_string(&QP_key,16,QP_string); printf((error != 0) ? "Conversion to MPI Failed!\n" : "Conversion to MPI Done\n");
         mbedtls_mpi_write_file( "\nNLA N CARICATA VALE (mpi) = " , &N_key , 16, NULL );
         mbedtls_mpi_write_file( "\nLA E CARICATA VALE (mpi) = " , &E_key , 16, NULL );
+
+        //LIBERO LA MEMORIA //TODO: liberare memoria
+        /*free(&N_string); free(&E_string); free(&D_string);
+        free(&P_string); free(&Q_string); free(&DP_string);
+        free(&DQ_string); free(&QP_string);*/
+
     }
     return true;
 }
@@ -659,6 +666,15 @@ void app_main()
 	else
 		printf("\n\t\t --- CANCELLAZIONE FALLITA --- \n");
 	ritardo(5); //TODO: debug. da cancellare*/
+
+	wait_key_gen=true;
+	xTaskCreate(genera_chiave,"GeneraChiave",64768,NULL,2,NULL); //TODO: sistemare warning
+	printf("\nAttendo.");
+	while(wait_key_gen){
+		printf(".");
+		vTaskDelay(100 / portTICK_PERIOD_MS);
+	}
+/*
 	printf("\n\t\t --- TENTO DI CARICARE LE CHIAVI DALLA NVS --- \n");
 	if(carica_chiavi())
 		printf("\n\t\t --- CHIAVI CARICATE CON SUCCESSO --- \n");
@@ -683,7 +699,7 @@ void app_main()
 			}
 			esp_restart();
 		}
-	}
+	}*/
 	printf("\n\t\t --- AVVIO IL BLUETOOTH E TUTTI I SERVIZI ASSOCIATI --- \n");
     //int exitcode = genera_chiave();
     //printf("\n\t\t EXIT CODE: %d \n",exitcode);

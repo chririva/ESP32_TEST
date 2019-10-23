@@ -1,7 +1,7 @@
 bluedroid/bta/dm/bta_dm_cfg.o: \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/bta/dm/bta_dm_cfg.c \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_target.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/bt_types.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/_default_types.h \
@@ -111,7 +111,7 @@ bluedroid/bta/dm/bta_dm_cfg.o: \
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_target.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/bt_types.h:
 

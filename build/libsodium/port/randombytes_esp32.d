@@ -27,7 +27,7 @@ port/randombytes_esp32.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/reent.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/stdio.h \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/stdlib.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/alloca.h \
@@ -117,7 +117,7 @@ port/randombytes_esp32.o: \
 
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/stdlib.h:
 

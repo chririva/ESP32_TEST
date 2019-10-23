@@ -23,7 +23,7 @@ bluedroid/btc/profile/std/gap/btc_gap_ble.o: \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/_intsup.h \
  /home/gaetano/esp/esp-idf/components/heap/include/multi_heap.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/bt_types.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_defs.h \
  /home/gaetano/esp/esp-idf/components/bt/bluedroid/common/include/common/bt_trace.h \
@@ -171,7 +171,7 @@ bluedroid/btc/profile/std/gap/btc_gap_ble.o: \
 
 /home/gaetano/esp/esp-idf/components/heap/include/multi_heap.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/bt/bluedroid/stack/include/stack/bt_types.h:
 

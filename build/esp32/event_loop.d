@@ -26,7 +26,7 @@ event_loop.o: /home/gaetano/esp/esp-idf/components/esp32/event_loop.c \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/sched.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/stdio.h \
  /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/assert.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_wifi.h \
  /home/gaetano/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h \
@@ -189,7 +189,7 @@ event_loop.o: /home/gaetano/esp/esp-idf/components/esp32/event_loop.c \
 
 /home/gaetano/esp/esp-idf/components/newlib/platform_include/assert.h:
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/assert.h:
 

@@ -1,5 +1,5 @@
 int_wdt.o: /home/gaetano/esp/esp-idf/components/esp32/int_wdt.c \
- /home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h \
+ /home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/machine/_default_types.h \
  /home/gaetano/esp/esp-idf/components/newlib/include/sys/features.h \
@@ -90,7 +90,7 @@ int_wdt.o: /home/gaetano/esp/esp-idf/components/esp32/int_wdt.c \
  /home/gaetano/esp/esp-idf/components/soc/esp32/include/soc/periph_defs.h \
  /home/gaetano/esp/esp-idf/components/esp32/include/esp_int_wdt.h
 
-/home/gaetano/eclipse-workspace/gatts_demo_TEST4/build/include/sdkconfig.h:
+/home/gaetano/eclipse-workspace/gatts_demo_TEST5/build/include/sdkconfig.h:
 
 /home/gaetano/esp/esp-idf/components/newlib/include/stdint.h:
 
