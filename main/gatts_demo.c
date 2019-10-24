@@ -60,6 +60,7 @@ static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_i
 
 //CHIAVI DEL DISPOSITIVO (IN RAM)
 mbedtls_mpi N_key, P_key, Q_key, D_key, E_key, DP_key, DQ_key, QP_key;
+mbedtls_pk_context key_key;
 
 static uint8_t char1_str[] = {0x33,0x33,0x33};
 
@@ -572,7 +573,7 @@ bool carica_chiavi(){
     } else {
         printf("File Aperto con successo.\n");
         // Read
-        size_t n_N,n_E,n_D,n_P,n_Q,n_DP,n_DQ,n_QP;
+        size_t n_N,n_E,n_D,n_P,n_Q,n_DP,n_DQ,n_QP,n_key;
         //Mi interessa solo la dimensione per poter creare array dinamici //TODO: sistemare il return, se fallisce qualcosa deve ritornare false
 		err = nvs_get_str(my_handle, "N", NULL, &n_N); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
 		err = nvs_get_str(my_handle, "E", NULL, &n_E); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
@@ -582,6 +583,7 @@ bool carica_chiavi(){
 		err = nvs_get_str(my_handle, "DP", NULL, &n_DP); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
 		err = nvs_get_str(my_handle, "DQ", NULL, &n_DQ); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
 		err = nvs_get_str(my_handle, "QP", NULL, &n_QP); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "KEY", NULL, &n_key); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
         char* N_string=malloc(n_N);
         char* E_string=malloc(n_E);
 		char* D_string=malloc(n_D);
@@ -590,6 +592,7 @@ bool carica_chiavi(){
 		char* DP_string=malloc(n_DP);
 		char* DQ_string=malloc(n_DQ);
 		char* QP_string=malloc(n_QP);
+		char* key_string=malloc(n_key);
 		//Leggo effettivamente il valore
 		err = nvs_get_str(my_handle, "N", N_string, &n_N); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
 		err = nvs_get_str(my_handle, "E", E_string, &n_E); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
@@ -599,8 +602,16 @@ bool carica_chiavi(){
 		err = nvs_get_str(my_handle, "DP", DP_string, &n_DP); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
 		err = nvs_get_str(my_handle, "DQ", DQ_string, &n_DQ); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
 		err = nvs_get_str(my_handle, "QP", QP_string, &n_QP); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		err = nvs_get_str(my_handle, "KEY", key_string, &n_key); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
 		printf("\nLA N CARICATA VALE (string) : %s\n",N_string);
 		printf("\nLA E CARICATA VALE (string) : %s\n",E_string);
+		printf("\nLA D CARICATA VALE (string) : %s\n",D_string);
+		printf("\nLA P CARICATA VALE (string) : %s\n",P_string);
+		printf("\nLA Q CARICATA VALE (string) : %s\n",Q_string);
+		printf("\nLA DP CARICATA VALE (string) : %s\n",DP_string);
+		printf("\nLA DQ CARICATA VALE (string) : %s\n",DQ_string);
+		printf("\nLA QP CARICATA VALE (string) : %s\n",QP_string);
+		printf("\nLA KEY CARICATA VALE (string) : %s\n",key_string);
         // Close
         nvs_close(my_handle);
         printf("File chiuso.\n");
@@ -616,8 +627,11 @@ bool carica_chiavi(){
         error = mbedtls_mpi_read_string(&DP_key,16,DP_string); printf((error != 0) ? "Conversion to MPI Failed!\n" : "Conversion to MPI Done\n");
         error = mbedtls_mpi_read_string(&DQ_key,16,DQ_string); printf((error != 0) ? "Conversion to MPI Failed!\n" : "Conversion to MPI Done\n");
         error = mbedtls_mpi_read_string(&QP_key,16,QP_string); printf((error != 0) ? "Conversion to MPI Failed!\n" : "Conversion to MPI Done\n");
-        mbedtls_mpi_write_file( "\nNLA N CARICATA VALE (mpi) = " , &N_key , 16, NULL );
-        mbedtls_mpi_write_file( "\nLA E CARICATA VALE (mpi) = " , &E_key , 16, NULL );
+        mbedtls_pk_init(&key_key);
+        error = mbedtls_pk_parse_key( &key_key, (unsigned char*)key_string, n_key,NULL,0); printf((error != 0) ? "Conversion to PK Failed!\n" : "Conversion to PK Done\n");
+
+        //mbedtls_mpi_write_file( "\nNLA N CARICATA VALE (mpi) = " , &N_key , 16, NULL );
+        //mbedtls_mpi_write_file( "\nLA E CARICATA VALE (mpi) = " , &E_key , 16, NULL );
 
         //LIBERO LA MEMORIA //TODO: liberare memoria
         /*free(&N_string); free(&E_string); free(&D_string);
@@ -667,23 +681,23 @@ void app_main()
 		printf("\n\t\t --- CANCELLAZIONE FALLITA --- \n");
 	ritardo(5); //TODO: debug. da cancellare*/
 
-	wait_key_gen=true;
+	/*wait_key_gen=true;
 	xTaskCreate(genera_chiave,"GeneraChiave",64768,NULL,2,NULL); //TODO: sistemare warning
 	printf("\nAttendo.");
 	while(wait_key_gen){
 		printf(".");
 		vTaskDelay(100 / portTICK_PERIOD_MS);
-	}
-/*
+	}*/
+
 	printf("\n\t\t --- TENTO DI CARICARE LE CHIAVI DALLA NVS --- \n");
 	if(carica_chiavi())
 		printf("\n\t\t --- CHIAVI CARICATE CON SUCCESSO --- \n");
 	else{
 		printf("\n\t\t --- LE CHIAVI NON SONO IN MEMORIA. GENERO LE CHIAVI --- \n");
-		wait_key_generation=true;
-		xTaskCreate(genera_chiave_rsa,"GeneraChiave",64768,NULL,2,NULL); //TODO: sistemare warning
+		wait_key_gen=true;
+		xTaskCreate(genera_chiave,"GeneraChiave",64768,NULL,2,NULL); //TODO: sistemare warning
 		printf("\nAttendo.");
-		while(wait_key_generation){
+		while(wait_key_gen){
 			printf(".");
 			vTaskDelay(100 / portTICK_PERIOD_MS);
 		}
@@ -699,7 +713,18 @@ void app_main()
 			}
 			esp_restart();
 		}
-	}*/
+	}
+
+	//GENERA SELF CERTIFICATE
+	printf("\n\n\t\t --- GENERA SELF CERTIFICATE --- \\nn");
+	wait_self_cert_generation=true;
+	xTaskCreate(selfsigned_cert_write,"GeneraSelfCert",64768,NULL,2,NULL); //TODO: sistemare warning
+	printf("\nAttendo.");
+	while(wait_self_cert_generation){
+		printf(".");
+		vTaskDelay(100 / portTICK_PERIOD_MS);
+	}
+
 	printf("\n\t\t --- AVVIO IL BLUETOOTH E TUTTI I SERVIZI ASSOCIATI --- \n");
     //int exitcode = genera_chiave();
     //printf("\n\t\t EXIT CODE: %d \n",exitcode);

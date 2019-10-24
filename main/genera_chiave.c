@@ -160,7 +160,7 @@ struct options
     int use_dev_random;         /* use /dev/random as entropy source    */
 } opt;
 
-bool salva_chiavi_key(const mbedtls_pk_context *key, const mbedtls_mpi *N, const mbedtls_mpi *P, const mbedtls_mpi *Q,
+bool salva_chiavi_key(mbedtls_pk_context *key, const mbedtls_mpi *N, const mbedtls_mpi *P, const mbedtls_mpi *Q,
 				  const mbedtls_mpi *D, const mbedtls_mpi *E, const mbedtls_mpi *DP,
 				  const mbedtls_mpi *DQ, const mbedtls_mpi *QP){
 
@@ -184,9 +184,11 @@ bool salva_chiavi_key(const mbedtls_pk_context *key, const mbedtls_mpi *N, const
         printf("\nFile Aperto con successo.\n");
 
 		//CONVERTO TUTTI I mbedtls_mpi IN STRINGHE PER IL SALVATAGGIO SU FILE.
-		size_t n_N,n_E,n_D,n_P,n_Q,n_DP,n_DQ,n_QP;
+		size_t n_N,n_E,n_D,n_P,n_Q,n_DP,n_DQ,n_QP,n_key;
 		//TODO: Ottimizzare il consumo della memoria di questi vettori
-		static char N_string[1024],E_string[1024],D_string[1024],P_string[1024],Q_string[1024],DP_string[1024],DQ_string[1024],QP_string[1024];
+		static char N_string[520],E_string[10],D_string[520],P_string[260],
+					Q_string[260],DP_string[260],DQ_string[260],QP_string[260];
+		unsigned char key_string[1700];
 		memset(N_string, 0, sizeof(N_string));
 		memset(E_string, 0, sizeof(E_string));
 		memset(D_string, 0, sizeof(D_string));
@@ -195,6 +197,7 @@ bool salva_chiavi_key(const mbedtls_pk_context *key, const mbedtls_mpi *N, const
 		memset(DP_string, 0, sizeof(DP_string));
 		memset(DQ_string, 0, sizeof(DQ_string));
 		memset(QP_string, 0, sizeof(QP_string));
+		memset(key_string, 0, sizeof(key_string));
 		mbedtls_mpi_write_string(N, 16, N_string, sizeof(N_string)-1, &n_N);
 		mbedtls_mpi_write_string(E, 16, E_string, sizeof(E_string)-1, &n_E);
 		mbedtls_mpi_write_string(D, 16, D_string, sizeof(D_string)-1, &n_D);
@@ -203,6 +206,9 @@ bool salva_chiavi_key(const mbedtls_pk_context *key, const mbedtls_mpi *N, const
 		mbedtls_mpi_write_string(DP, 16, DP_string, sizeof(DP_string)-1, &n_DP);
 		mbedtls_mpi_write_string(DQ, 16, DQ_string, sizeof(DQ_string)-1, &n_DQ);
 		mbedtls_mpi_write_string(QP, 16, QP_string, sizeof(QP_string)-1, &n_QP);
+		if(mbedtls_pk_write_key_pem( key, key_string, sizeof(key_string) ) != 0 )
+		     printf("\nPROBLEMONE");
+		n_key = strlen( (char *) key_string );
 
 		//STAMPE
 		printf("\nN_lenght: %d",n_N);
@@ -221,18 +227,19 @@ bool salva_chiavi_key(const mbedtls_pk_context *key, const mbedtls_mpi *N, const
 		printf("\nDQ_value: %s \n",DQ_string);
 		printf("\nQP_lenght: %d",n_QP);
 		printf("\nQP_value: %s \n",QP_string);
-
+        printf("\nkey_length: %d",n_key);
+        printf("\nkey_value: %s",key_string);
 		// Write
 		printf("Writing values in NVS ... ");
-		err = nvs_set_str(my_handle, "N", N_string); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-		err = nvs_set_str(my_handle, "E", E_string); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-		err = nvs_set_str(my_handle, "D", D_string); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-		err = nvs_set_str(my_handle, "P", P_string); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-		err = nvs_set_str(my_handle, "Q", Q_string); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-		err = nvs_set_str(my_handle, "DP", DP_string); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-		err = nvs_set_str(my_handle, "DQ", DQ_string); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-		err = nvs_set_str(my_handle, "QP", QP_string); printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-
+		err = nvs_set_str(my_handle, "N", N_string); printf((err != ESP_OK) ? "N:Failed!\n" : "N:Done\n");
+		err = nvs_set_str(my_handle, "E", E_string); printf((err != ESP_OK) ? "E:Failed!\n" : "E:Done\n");
+		err = nvs_set_str(my_handle, "D", D_string); printf((err != ESP_OK) ? "D:Failed!\n" : "D:Done\n");
+		err = nvs_set_str(my_handle, "P", P_string); printf((err != ESP_OK) ? "P:Failed!\n" : "P:Done\n");
+		err = nvs_set_str(my_handle, "Q", Q_string); printf((err != ESP_OK) ? "Q:Failed!\n" : "Q:Done\n");
+		err = nvs_set_str(my_handle, "DP", DP_string); printf((err != ESP_OK) ? "DP:Failed!\n" : "DP:Done\n");
+		err = nvs_set_str(my_handle, "DQ", DQ_string); printf((err != ESP_OK) ? "DQ:Failed!\n" : "DQ:Done\n");
+		err = nvs_set_str(my_handle, "QP", QP_string); printf((err != ESP_OK) ? "QP:Failed!\n" : "QP:Done\n");
+		err = nvs_set_str(my_handle, "KEY", (char*)key_string); printf((err != ESP_OK) ? "KEY:Failed!\n" : "KEY:Done\n");
 		// Commit written value.
 		// After setting any values, nvs_commit() must be called to ensure changes are written
 		// to flash storage. Implementations may write to storage at other times,
@@ -392,12 +399,6 @@ void genera_chiave()
         }
 
         printf("\n - Le chiavi sono state generate con successo.\n");
-        printf("\n - SALVO LE CHIAVI IN MEMORIA.\n");
-
-        /*if(salva_chiavi_key(&key,&N,&P,&Q,&D,&E,&DP,&DQ,&QP))
-        	printf("\n - Le chiavi sono state salvate in un posto sicuro.\n");
-    	else
-    		printf("\n - Non sono riuscito a salvare le chiavi.\n");*/
 
         mbedtls_mpi_write_file( "N:  ",  &N,  16, NULL );
         mbedtls_mpi_write_file( "E:  ",  &E,  16, NULL );
@@ -407,6 +408,7 @@ void genera_chiave()
         mbedtls_mpi_write_file( "DP: ",  &DP, 16, NULL );
         mbedtls_mpi_write_file( "DQ:  ", &DQ, 16, NULL );
         mbedtls_mpi_write_file( "QP:  ", &QP, 16, NULL );
+
         //stampo la key
         int rett;
         unsigned char output_buf[16000];
@@ -422,6 +424,12 @@ void genera_chiave()
         }
         printf("\n La key pem vale: %s",output_buf);
         printf("\n La sua lunghezza vale: %d",len);
+
+        printf("\n - ORA SALVO LE CHIAVI IN MEMORIA.\n");
+        if(salva_chiavi_key(&key,&N,&P,&Q,&D,&E,&DP,&DQ,&QP))
+        	printf("\n - Le chiavi sono state salvate in un posto sicuro.\n");
+    	else
+    		printf("\n - Non sono riuscito a salvare le chiavi.\n");
     }
     else
 //#endif
