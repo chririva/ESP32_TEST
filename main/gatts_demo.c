@@ -37,6 +37,7 @@
 #include "genera_chiave_ECDSA.c"
 #include "genera_chiave_rsa.c"
 #include "selfsigned_cert_write.c"
+#include "device_cert_write.c"
 
 #include "sdkconfig.h"
 
@@ -60,7 +61,17 @@ static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_i
 
 //CHIAVI DEL DISPOSITIVO (IN RAM)
 mbedtls_mpi N_key, P_key, Q_key, D_key, E_key, DP_key, DQ_key, QP_key;
-mbedtls_pk_context key_key;
+mbedtls_pk_context key_key, device_pub_key;
+mbedtls_x509_crt self_certificate;
+unsigned char device_pub_key_string[] =  "-----BEGIN PUBLIC KEY-----\n"\
+							    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgWTNaKWbQDwUWDNr1WyU\n"\
+								"j+2cnJlDEjtttythL3p8soP3bYstEqA5dQWWMoBa4NrUHqnyXnyxSwC88YWVUEpU\n"\
+								"jQWWZjB2V2NdbpUNtj59P0Hj2JM9QKQgj/ErjCvzI3EXBbN/ObLJifpP6iVVpOus\n"\
+								"+7Ns2rRvg9KqPsSB3D9Vbzeg7t2Lxj38xjKMM8OXER5VHUHmGx1Iq91pK/a8eXqI\n"\
+								"SIEepirh1HaodByDoAdCnYewV75NmmhiOpewdeEcnBRidGVSFE+p4HsDF9B8oW6C\n"\
+								"AdJ/AJkiujiNp9n5SNu2amD0e4p7xDey453X6FBBh+dct2Mz6mf0zez7bzDeiPCa\n"\
+								"PwIDAQAB\n"\
+								"-----END PUBLIC KEY-----";
 
 static uint8_t char1_str[] = {0x33,0x33,0x33};
 
@@ -630,6 +641,26 @@ bool carica_chiavi(){
         mbedtls_pk_init(&key_key);
         error = mbedtls_pk_parse_key( &key_key, (unsigned char*)key_string, n_key,NULL,0); printf((error != 0) ? "Conversion to PK Failed!\n" : "Conversion to PK Done\n");
 
+        //TODO: Da togliere! beginning
+        mbedtls_pk_init(&device_pub_key);
+        int lung = sizeof(device_pub_key_string);
+        printf("\n STAMPO LA CHIAVE PRIMA DI PRINTARLA..");
+        printf("\n La pub_key pem vale: %s",device_pub_key_string);
+        printf("\n La sua lunghezza vale: %d\n",lung);
+        fflush( stdout );
+        error = mbedtls_pk_parse_public_key( &device_pub_key, (unsigned char*)device_pub_key_string, lung); printf((error != 0) ? "Conversion to PK Failed!\n" : "Conversion to PK Done\n");
+        //TODO: Da togliere! end
+
+        unsigned char output_buf[1800];
+        size_t len = 0;
+
+        memset(output_buf, 0, 1800);
+		if( mbedtls_pk_write_pubkey_pem( &key_key, output_buf, 1800 ) != 0 )
+			printf("\nPROBLEMONEE");
+        len = strlen( (char *) output_buf );
+        printf("\n La pub_key pem vale: %s",output_buf);
+        printf("\n La sua lunghezza vale: %d",len);
+
         //mbedtls_mpi_write_file( "\nNLA N CARICATA VALE (mpi) = " , &N_key , 16, NULL );
         //mbedtls_mpi_write_file( "\nLA E CARICATA VALE (mpi) = " , &E_key , 16, NULL );
 
@@ -665,6 +696,7 @@ bool cancella_tutto(){
     ESP_ERROR_CHECK(nvs_flash_init());
     return true;
 }
+
 
 void app_main()
 {
@@ -718,12 +750,23 @@ void app_main()
 	//GENERA SELF CERTIFICATE
 	printf("\n\n\t\t --- GENERA SELF CERTIFICATE --- \\nn");
 	wait_self_cert_generation=true;
-	xTaskCreate(selfsigned_cert_write,"GeneraSelfCert",64768,NULL,2,NULL); //TODO: sistemare warning
+	xTaskCreate(selfsigned_cert_write,"GeneraSelfCert",32768,NULL,2,NULL);
 	printf("\nAttendo.");
 	while(wait_self_cert_generation){
 		printf(".");
 		vTaskDelay(100 / portTICK_PERIOD_MS);
 	}
+
+	//DEVICE CERT WRITE
+	printf("\n\n\t\t --- GENERA DEVICE CERT WRITE --- \\nn");
+	wait_device_cert_write=true;
+	xTaskCreate(device_cert_write,"DeviceCertWrite",32768,NULL,2,NULL); //TODO: sistemare warning
+	printf("\nAttendo.");
+	while(wait_device_cert_write){
+		printf(".");
+		vTaskDelay(100 / portTICK_PERIOD_MS);
+	}
+
 
 	printf("\n\t\t --- AVVIO IL BLUETOOTH E TUTTI I SERVIZI ASSOCIATI --- \n");
     //int exitcode = genera_chiave();

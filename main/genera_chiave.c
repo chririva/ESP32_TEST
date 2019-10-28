@@ -185,9 +185,8 @@ bool salva_chiavi_key(mbedtls_pk_context *key, const mbedtls_mpi *N, const mbedt
 
 		//CONVERTO TUTTI I mbedtls_mpi IN STRINGHE PER IL SALVATAGGIO SU FILE.
 		size_t n_N,n_E,n_D,n_P,n_Q,n_DP,n_DQ,n_QP,n_key;
-		//TODO: Ottimizzare il consumo della memoria di questi vettori
-		static char N_string[520],E_string[10],D_string[520],P_string[260],
-					Q_string[260],DP_string[260],DQ_string[260],QP_string[260];
+		static char N_string[520],E_string[10],D_string[520],P_string[500],
+					Q_string[500],DP_string[500],DQ_string[500],QP_string[500];
 		unsigned char key_string[1700];
 		memset(N_string, 0, sizeof(N_string));
 		memset(E_string, 0, sizeof(E_string));
@@ -255,45 +254,6 @@ bool salva_chiavi_key(mbedtls_pk_context *key, const mbedtls_mpi *N, const mbedt
 	return true;
 }
 
-/*static int write_private_key( mbedtls_pk_context *key, const char *output_file )
-{
-	printf("\nRICHIAMO: write_private_key\n");
-    int ret;
-    FILE *f;
-    unsigned char output_buf[16000];
-    unsigned char *c = output_buf;
-    size_t len = 0;
-
-    memset(output_buf, 0, 16000);
-    if( opt.format == FORMAT_PEM )
-    {
-        if( ( ret = mbedtls_pk_write_key_pem( key, output_buf, 16000 ) ) != 0 )
-            return( ret );
-
-        len = strlen( (char *) output_buf );
-    }
-    else
-    {
-        if( ( ret = mbedtls_pk_write_key_der( key, output_buf, 16000 ) ) < 0 )
-            return( ret );
-
-        len = ret;
-        c = output_buf + sizeof(output_buf) - len;
-    }
-
-    if( ( f = fopen( output_file, "wb" ) ) == NULL )
-        return( -1 );
-
-    if( fwrite( c, 1, len, f ) != len )
-    {
-        fclose( f );
-        return( -1 );
-    }
-
-    fclose( f );
-
-    return( 0 );
-}*/
 
 void genera_chiave()
 {
@@ -411,19 +371,26 @@ void genera_chiave()
 
         //stampo la key
         int rett;
-        unsigned char output_buf[16000];
-        size_t len = 0;
+        unsigned char output_buf[16000],output_buf2[16000];
+        size_t len = 0,len2 = 0;
 
         memset(output_buf, 0, 16000);
+        memset(output_buf2, 0, 16000);
         if( opt.format == FORMAT_PEM )
         {
             if( ( rett = mbedtls_pk_write_key_pem( &key, output_buf, 16000 ) ) != 0 )
-                printf("\nPROBLEMONE");
+                printf("\nPROBLEMONE1");
+            if( ( rett = mbedtls_pk_write_pubkey_pem( &key, output_buf2, 16000 ) ) != 0 )
+                printf("\nPROBLEMONE2");
 
             len = strlen( (char *) output_buf );
+            len2 = strlen( (char *) output_buf2 );
         }
         printf("\n La key pem vale: %s",output_buf);
         printf("\n La sua lunghezza vale: %d",len);
+
+        printf("\n La pubkey pem vale: %s",output_buf2);
+        printf("\n La sua lunghezza vale: %d",len2);
 
         printf("\n - ORA SALVO LE CHIAVI IN MEMORIA.\n");
         if(salva_chiavi_key(&key,&N,&P,&Q,&D,&E,&DP,&DQ,&QP))
