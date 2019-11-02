@@ -1,30 +1,9 @@
 /*
- * device_cert_write.c
+ * master_cert_write.c
  *
- *
+ * Certificate generation and signing
  */
 
-
-/*
- *  Certificate generation and signing
- *
- *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- *  This file is part of mbed TLS (https://tls.mbed.org)
- */
 
 #if !defined(MBEDTLS_CONFIG_FILE)
 #include "mbedtls/config.h"
@@ -61,18 +40,16 @@ int main( void )
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/event_groups.h"
-#include "mbedtls/x509_crt.h"
-#include "mbedtls/x509_csr.h"
-#include "mbedtls/entropy.h"
-#include "mbedtls/ctr_drbg.h"
-#include "mbedtls/md.h"
-#include "mbedtls/error.h"
-extern mbedtls_pk_context key_key,device_pub_key;
-extern mbedtls_x509_crt self_certificate;
+#include "nvs.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-bool wait_device_cert_write;
+#include "master_cert_write.h"
+
+bool wait_master_cert_write;
+extern mbedtls_pk_context key_key,master_pub_key;
+extern mbedtls_x509_crt self_certificate;
+extern mbedtls_x509_crt master_certificate;
 
 #if defined(MBEDTLS_X509_CSR_PARSE_C)
 #define USAGE_CSR                                                           \
@@ -83,29 +60,28 @@ bool wait_device_cert_write;
 #define USAGE_CSR ""
 #endif /* MBEDTLS_X509_CSR_PARSE_C */
 
-#define DFL_ISSUER_CRT          ""
-#define DFL_REQUEST_FILE        ""
-#define DFL_SUBJECT_KEY         "subject.key"
-#define DFL_ISSUER_KEY          "ca.key"
-#define DFL_SUBJECT_PWD         ""
-#define DFL_ISSUER_PWD          ""
-#define DFL_OUTPUT_FILENAME     "cert.crt"
-#define DFL_SUBJECT_NAME        "CN=Cert,O=Comelit,C=IT"
-#define DFL_ISSUER_NAME         "CN=CA,O=Comelit,C=IT"
-#define DFL_NOT_BEFORE          "20000101000000"
-#define DFL_NOT_AFTER           "20501231235959"
-#define DFL_SERIAL              "1"
-#define DFL_SELFSIGN            0
-#define DFL_IS_CA               1 //0 default (1 = capable of signing other certificates)
-#define DFL_MAX_PATHLEN         -1 //-1 default
-#define DFL_KEY_USAGE           0
-#define DFL_NS_CERT_TYPE        0
-#define DFL_VERSION             3
-#define DFL_AUTH_IDENT          1
-#define DFL_SUBJ_IDENT          1
-#define DFL_CONSTRAINTS         1
-#define DFL_DIGEST              MBEDTLS_MD_SHA256
-
+#define DFL_ISSUER_CRT_D         ""
+#define DFL_REQUEST_FILE_D        ""
+#define DFL_SUBJECT_KEY_D         "subject.key"
+#define DFL_ISSUER_KEY_D          "ca.key"
+#define DFL_SUBJECT_PWD_D         ""
+#define DFL_ISSUER_PWD_D          ""
+#define DFL_OUTPUT_FILENAME_D     "cert.crt"
+#define DFL_SUBJECT_NAME_D        "CN=Cert,O=Comelit,C=IT"
+#define DFL_ISSUER_NAME_D         "CN=CA,O=Comelit,C=IT"
+#define DFL_NOT_BEFORE_D          "20000101000000"
+#define DFL_NOT_AFTER_D           "20501231235959"
+#define DFL_SERIAL_D              "1"
+#define DFL_SELFSIGN_D            0
+#define DFL_IS_CA_D               1 //0 default (1 = capable of signing other certificates)
+#define DFL_MAX_PATHLEN_D         -1 //-1 default
+#define DFL_KEY_USAGE_D           0
+#define DFL_NS_CERT_TYPE_D        0
+#define DFL_VERSION_D             3
+#define DFL_AUTH_IDENT_D          1
+#define DFL_SUBJ_IDENT_D          1
+#define DFL_CONSTRAINTS_D         1
+#define DFL_DIGEST_D              MBEDTLS_MD_SHA256
 
 
 /*
@@ -137,9 +113,7 @@ struct opttions2
     unsigned char ns_cert_type; /* NS cert type                         */
 } optt2;
 
-int write_certificate2( mbedtls_x509write_cert *crt, const char *output_file,
-                       int (*f_rng)(void *, unsigned char *, size_t),
-                       void *p_rng )
+int write_certificate2( mbedtls_x509write_cert *crt, int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
 {
     int ret;
     //FILE *f;
@@ -152,19 +126,30 @@ int write_certificate2( mbedtls_x509write_cert *crt, const char *output_file,
 
     len = strlen( (char *) output_buf );
 
-    printf("\nCERTIFICATO: %s",output_buf);
-    printf("\nDIMENSIONE DEL CERTIFICATO: %d",len);
+    printf("\nDIMENSIONE DEL MASTER_CERTIFICATE: %d",len);
+    printf("\nMASTER_CERTIFICATE: %s",output_buf);
+
+    //LO CARICO DIRETTAMENTE NELLA RAM IN FORMATO mbedtls_x509_crt
+    if( ( ret = mbedtls_x509_crt_parse(&master_certificate, output_buf, sizeof(output_buf)) ) != 0 ){
+        printf("\nNon sono riuscito a caricare il CRT nella RAM");
+        return( ret );
+    }
+    else{
+    	printf("\nCRT caricato in RAM!");
+    	return( ret );
+    }
 
     return( 0 );
 }
 
-void device_cert_write( void)
+void master_cert_write( void *param )
 {
+	(void)param;
     int ret = 1, exit_code = MBEDTLS_EXIT_FAILURE;
-    mbedtls_x509_crt *issuer_crt = &self_certificate;
+    //mbedtls_x509_crt *issuer_crt = &self_certificate;
     mbedtls_pk_context loaded_issuer_key, loaded_subject_key;
     mbedtls_pk_context *issuer_key = &key_key,
-                *subject_key = &device_pub_key;
+                *subject_key = &master_pub_key;
     char buf[1024];
 #if defined(MBEDTLS_X509_CSR_PARSE_C)
     mbedtls_x509_csr csr;
@@ -191,31 +176,31 @@ void device_cert_write( void)
     memset( buf, 0, 1024 );
 
     //CARICO IL SELF CERTIFICATE - inizio
-
+    //TODO: caricare il self certificate
     //CARICO IL SELF CERTIFICATE - fine
 
-    optt2.issuer_crt          = DFL_ISSUER_CRT;
-    optt2.request_file        = DFL_REQUEST_FILE;
-    optt2.subject_key         = DFL_SUBJECT_KEY;
-    optt2.issuer_key          = DFL_ISSUER_KEY;
-    optt2.subject_pwd         = DFL_SUBJECT_PWD;
-    optt2.issuer_pwd          = DFL_ISSUER_PWD;
-    optt2.output_file         = DFL_OUTPUT_FILENAME;
-    optt2.subject_name        = DFL_SUBJECT_NAME;
-    optt2.issuer_name         = DFL_ISSUER_NAME;
-    optt2.not_before          = DFL_NOT_BEFORE;
-    optt2.not_after           = DFL_NOT_AFTER;
-    optt2.serial              = DFL_SERIAL;
-    optt2.selfsign            = DFL_SELFSIGN;
-    optt2.is_ca               = DFL_IS_CA;
-    optt2.max_pathlen         = DFL_MAX_PATHLEN;
-    optt2.key_usage           = DFL_KEY_USAGE;
-    optt2.ns_cert_type        = DFL_NS_CERT_TYPE;
-    optt2.version             = DFL_VERSION - 1;
-    optt2.md                  = DFL_DIGEST;
-    optt2.subject_identifier   = DFL_SUBJ_IDENT;
-    optt2.authority_identifier = DFL_AUTH_IDENT;
-    optt2.basic_constraints    = DFL_CONSTRAINTS;
+    optt2.issuer_crt          = DFL_ISSUER_CRT_D;
+    optt2.request_file        = DFL_REQUEST_FILE_D;
+    optt2.subject_key         = DFL_SUBJECT_KEY_D;
+    optt2.issuer_key          = DFL_ISSUER_KEY_D;
+    optt2.subject_pwd         = DFL_SUBJECT_PWD_D;
+    optt2.issuer_pwd          = DFL_ISSUER_PWD_D;
+    optt2.output_file         = DFL_OUTPUT_FILENAME_D;
+    optt2.subject_name        = DFL_SUBJECT_NAME_D;
+    optt2.issuer_name         = DFL_ISSUER_NAME_D;
+    optt2.not_before          = DFL_NOT_BEFORE_D;
+    optt2.not_after           = DFL_NOT_AFTER_D;
+    optt2.serial              = DFL_SERIAL_D;
+    optt2.selfsign            = DFL_SELFSIGN_D;
+    optt2.is_ca               = DFL_IS_CA_D;
+    optt2.max_pathlen         = DFL_MAX_PATHLEN_D;
+    optt2.key_usage           = DFL_KEY_USAGE_D;
+    optt2.ns_cert_type        = DFL_NS_CERT_TYPE_D;
+    optt2.version             = DFL_VERSION_D - 1;
+    optt2.md                  = DFL_DIGEST_D;
+    optt2.subject_identifier   = DFL_SUBJ_IDENT_D;
+    optt2.authority_identifier = DFL_AUTH_IDENT_D;
+    optt2.basic_constraints    = DFL_CONSTRAINTS_D;
 
 
     /*
@@ -248,108 +233,6 @@ void device_cert_write( void)
 
     mbedtls_printf( " ok\n" );
 
-    // Parse issuer certificate if present
-    //
-    /*if( !optt2.selfsign && strlen( optt2.issuer_crt ) )
-    {*/
-        /*
-         * 1.0.a. Load the certificates
-         */
-       /* mbedtls_printf( "  . Loading the issuer certificate ..." );
-        fflush( stdout );
-
-        if( ( ret = mbedtls_x509_crt_parse_file( &issuer_crt, optt2.issuer_crt ) ) != 0 )
-        {
-            mbedtls_strerror( ret, buf, 1024 );
-            mbedtls_printf( " failed\n  !  mbedtls_x509_crt_parse_file "
-                            "returned -0x%04x - %s\n\n", -ret, buf );
-            goto exit;
-        }
-
-        ret = mbedtls_x509_dn_gets( issuer_name, sizeof(issuer_name),
-                                 &issuer_crt.subject );
-        if( ret < 0 )
-        {
-            mbedtls_strerror( ret, buf, 1024 );
-            mbedtls_printf( " failed\n  !  mbedtls_x509_dn_gets "
-                            "returned -0x%04x - %s\n\n", -ret, buf );
-            goto exit;
-        }
-
-        optt2.issuer_name = issuer_name;
-
-        mbedtls_printf( " ok\n" );
-    }*/
-
-/*#if defined(MBEDTLS_X509_CSR_PARSE_C)
-    // Parse certificate request if present
-    //
-    if( !optt2.selfsign && strlen( optt2.request_file ) )
-    {*/
-        /*
-         * 1.0.b. Load the CSR
-         */
-        /*mbedtls_printf( "  . Loading the certificate request ..." );
-        fflush( stdout );
-
-        if( ( ret = mbedtls_x509_csr_parse_file( &csr, optt2.request_file ) ) != 0 )
-        {
-            mbedtls_strerror( ret, buf, 1024 );
-            mbedtls_printf( " failed\n  !  mbedtls_x509_csr_parse_file "
-                            "returned -0x%04x - %s\n\n", -ret, buf );
-            goto exit;
-        }
-
-        ret = mbedtls_x509_dn_gets( subject_name, sizeof(subject_name),
-                                 &csr.subject );
-        if( ret < 0 )
-        {
-            mbedtls_strerror( ret, buf, 1024 );
-            mbedtls_printf( " failed\n  !  mbedtls_x509_dn_gets "
-                            "returned -0x%04x - %s\n\n", -ret, buf );
-            goto exit;
-        }
-
-        optt2.subject_name = subject_name;
-        subject_key = &csr.pk;
-
-        mbedtls_printf( " ok\n" );
-    }*/
-//#endif /* MBEDTLS_X509_CSR_PARSE_C */
-
-    /*
-     * 1.1. Load the keys
-     */
-    /*if( !optt2.selfsign && !strlen( optt2.request_file ) )
-    {
-        mbedtls_printf( "  . Loading the subject key ..." );
-        fflush( stdout );
-
-        ret = mbedtls_pk_parse_keyfile( &loaded_subject_key, optt2.subject_key,
-                                 optt2.subject_pwd );
-        if( ret != 0 )
-        {
-            mbedtls_strerror( ret, buf, 1024 );
-            mbedtls_printf( " failed\n  !  mbedtls_pk_parse_keyfile "
-                            "returned -0x%04x - %s\n\n", -ret, buf );
-            goto exit;
-        }
-
-        mbedtls_printf( " ok\n" );
-    }*/
-
-    /*mbedtls_printf( "  . Loading the issuer key ..." );
-    fflush( stdout );
-
-    ret = mbedtls_pk_parse_keyfile( &loaded_issuer_key, optt2.issuer_key,
-                             optt2.issuer_pwd );
-    if( ret != 0 )
-    {
-        mbedtls_strerror( ret, buf, 1024 );
-        mbedtls_printf( " failed\n  !  mbedtls_pk_parse_keyfile "
-                        "returned -x%02x - %s\n\n", -ret, buf );
-        goto exit;
-    }*/
 
     // Check if key and issuer certificate match
     //
@@ -517,7 +400,7 @@ void device_cert_write( void)
     mbedtls_printf( "  . Writing the certificate..." );
     fflush( stdout );
 
-    if( ( ret = write_certificate2( &crt, optt2.output_file, mbedtls_ctr_drbg_random, &ctr_drbg ) ) != 0 )
+    if( ( ret = write_certificate2( &crt, mbedtls_ctr_drbg_random, &ctr_drbg ) ) != 0 )
     {
         mbedtls_strerror( ret, buf, 1024 );
         mbedtls_printf( " failed\n  !  write_certificate -0x%04x - %s\n\n",
@@ -533,7 +416,7 @@ exit:
 #if defined(MBEDTLS_X509_CSR_PARSE_C)
     mbedtls_x509_csr_free( &csr );
 #endif /* MBEDTLS_X509_CSR_PARSE_C */
-    mbedtls_x509_crt_free( &issuer_crt );
+    //mbedtls_x509_crt_free( &issuer_crt );
     mbedtls_x509write_crt_free( &crt );
     mbedtls_pk_free( &loaded_subject_key );
     mbedtls_pk_free( &loaded_issuer_key );
@@ -541,8 +424,8 @@ exit:
     mbedtls_ctr_drbg_free( &ctr_drbg );
     mbedtls_entropy_free( &entropy );
 
-    printf("EXIT CODE DEVICE CERT WRITE: %d",exit_code);
-    wait_device_cert_write=false;
+    printf("EXIT CODE DEVICE MASTER WRITE: %d",exit_code);
+    wait_master_cert_write=false;
     vTaskDelete(NULL);
 }
 #endif /* MBEDTLS_X509_CRT_WRITE_C && MBEDTLS_X509_CRT_PARSE_C &&
