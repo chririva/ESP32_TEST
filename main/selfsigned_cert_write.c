@@ -1,30 +1,9 @@
 /*
  * selfsigned_cert_write.c
  *
- *
+ * Certificate generation and signing
  */
 
-
-/*
- *  Certificate generation and signing
- *
- *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- *  This file is part of mbed TLS (https://tls.mbed.org)
- */
 
 #if !defined(MBEDTLS_CONFIG_FILE)
 #include "mbedtls/config.h"
@@ -61,19 +40,16 @@ void selfsigned_cert_write( void )
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/event_groups.h"
-#include "mbedtls/x509_crt.h"
-#include "mbedtls/x509_csr.h"
-#include "mbedtls/entropy.h"
-#include "mbedtls/ctr_drbg.h"
-#include "mbedtls/md.h"
-#include "mbedtls/error.h"
 #include "nvs.h"
-extern mbedtls_pk_context key_key;
-extern mbedtls_x509_crt self_certificate;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "selfsigned_cert_write.h"
+
+
 bool wait_self_cert_generation;
+extern mbedtls_pk_context key_key;
+extern mbedtls_x509_crt self_certificate;
 
 #if defined(MBEDTLS_X509_CSR_PARSE_C)
 #define USAGE_CSR                                                           \
@@ -84,28 +60,28 @@ bool wait_self_cert_generation;
 #define USAGE_CSR ""
 #endif /* MBEDTLS_X509_CSR_PARSE_C */
 
-#define DFL_ISSUER_CRT          ""
-#define DFL_REQUEST_FILE        ""
-#define DFL_SUBJECT_KEY         "subject.key"
-#define DFL_ISSUER_KEY          "ca.key"
-#define DFL_SUBJECT_PWD         ""
-#define DFL_ISSUER_PWD          ""
-#define DFL_OUTPUT_FILENAME     "cert.crt"
-#define DFL_SUBJECT_NAME        "CN=Cert,O=Comelit,C=IT"
-#define DFL_ISSUER_NAME         "CN=CA,O=Comelit,C=IT"
-#define DFL_NOT_BEFORE          "20000101000000"
-#define DFL_NOT_AFTER           "20501231235959"
-#define DFL_SERIAL              "1"
-#define DFL_SELFSIGN            1 //0 default
-#define DFL_IS_CA               1 //0 default (1 = capable of signing other certificates)
-#define DFL_MAX_PATHLEN         -1 //-1 default
-#define DFL_KEY_USAGE           0
-#define DFL_NS_CERT_TYPE        0
-#define DFL_VERSION             3
-#define DFL_AUTH_IDENT          1
-#define DFL_SUBJ_IDENT          1
-#define DFL_CONSTRAINTS         1
-#define DFL_DIGEST              MBEDTLS_MD_SHA256
+#define DFL_ISSUER_CRT_S          ""
+#define DFL_REQUEST_FILE_S        ""
+#define DFL_SUBJECT_KEY_S         "subject.key"
+#define DFL_ISSUER_KEY_S          "ca.key"
+#define DFL_SUBJECT_PWD_S         ""
+#define DFL_ISSUER_PWD_S          ""
+#define DFL_OUTPUT_FILENAME_S     "cert.crt"
+#define DFL_SUBJECT_NAME_S        "CN=Cert,O=Comelit,C=IT"
+#define DFL_ISSUER_NAME_S         "CN=CA,O=Comelit,C=IT"
+#define DFL_NOT_BEFORE_S          "20000101000000"
+#define DFL_NOT_AFTER_S           "20501231235959"
+#define DFL_SERIAL_S              "1"
+#define DFL_SELFSIGN_S            1 //0 default
+#define DFL_IS_CA_S               1 //0 default (1 = capable of signing other certificates)
+#define DFL_MAX_PATHLEN_S         -1 //-1 default
+#define DFL_KEY_USAGE_S           0
+#define DFL_NS_CERT_TYPE_S        0
+#define DFL_VERSION_S             3
+#define DFL_AUTH_IDENT_S          1
+#define DFL_SUBJ_IDENT_S          1
+#define DFL_CONSTRAINTS_S         1
+#define DFL_DIGEST_S              MBEDTLS_MD_SHA256
 
 
 #if defined(MBEDTLS_CHECK_PARAMS)
@@ -149,13 +125,9 @@ struct opttions
     unsigned char ns_cert_type; /* NS cert type                         */
 } optt;
 
-//TODO: da sostituire con il salvataggio in nvs??
-int write_certificate( mbedtls_x509write_cert *crt, const char *output_file,
-                       int (*f_rng)(void *, unsigned char *, size_t),
-                       void *p_rng )
+int write_certificate( mbedtls_x509write_cert *crt, int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
 {
     int ret;
-    //FILE *f;
     unsigned char output_buf[4096];
     size_t len = 0;
 
@@ -165,10 +137,14 @@ int write_certificate( mbedtls_x509write_cert *crt, const char *output_file,
 
     len = strlen( (char *) output_buf );
 
-    printf("\nCERTIFICATO: %s",output_buf);
-    printf("\nDIMENSIONE DEL CERTIFICATO: %d",len);
+    printf("\nDIMENSIONE DEL SELF_CERTIFICATE: %d",len);
+    printf("\nSELF_CERTIFICATE: %s",output_buf);
 
-    //LO CARICO DIRETTAMENTE NELLA RAM IN FORMATO mbedtls_x509_crt, VISTO CHE MI SERVE
+    //SALVO SELF CERTIFICATE - inizio
+    //TODO: salvare il self certificate
+    //SALVO IL SELF CERTIFICATE - fine
+
+    //LO CARICO DIRETTAMENTE NELLA RAM IN FORMATO mbedtls_x509_crt
     if( ( ret = mbedtls_x509_crt_parse(&self_certificate, output_buf, sizeof(output_buf)) ) != 0 ){
         printf("\nNon sono riuscito a caricare il CRT nella RAM");
         return( ret );
@@ -182,8 +158,9 @@ int write_certificate( mbedtls_x509write_cert *crt, const char *output_file,
     return( 0 );
 }
 
-void selfsigned_cert_write( void )
+void selfsigned_cert_write( void *param)
 {
+	(void)param;
     int ret = 1, exit_code = MBEDTLS_EXIT_FAILURE;
     mbedtls_x509_crt issuer_crt;
     mbedtls_pk_context loaded_issuer_key, loaded_subject_key;
@@ -213,28 +190,28 @@ void selfsigned_cert_write( void )
     mbedtls_x509_crt_init( &issuer_crt );
     memset( buf, 0, 1024 );
 
-    optt.issuer_crt          = DFL_ISSUER_CRT;
-    optt.request_file        = DFL_REQUEST_FILE;
-    optt.subject_key         = DFL_SUBJECT_KEY;
-    optt.issuer_key          = DFL_ISSUER_KEY;
-    optt.subject_pwd         = DFL_SUBJECT_PWD;
-    optt.issuer_pwd          = DFL_ISSUER_PWD;
-    optt.output_file         = DFL_OUTPUT_FILENAME;
-    optt.subject_name        = DFL_SUBJECT_NAME;
-    optt.issuer_name         = DFL_ISSUER_NAME;
-    optt.not_before          = DFL_NOT_BEFORE;
-    optt.not_after           = DFL_NOT_AFTER;
-    optt.serial              = DFL_SERIAL;
-    optt.selfsign            = DFL_SELFSIGN;
-    optt.is_ca               = DFL_IS_CA;
-    optt.max_pathlen         = DFL_MAX_PATHLEN;
-    optt.key_usage           = DFL_KEY_USAGE;
-    optt.ns_cert_type        = DFL_NS_CERT_TYPE;
-    optt.version             = DFL_VERSION - 1;
-    optt.md                  = DFL_DIGEST;
-    optt.subject_identifier   = DFL_SUBJ_IDENT;
-    optt.authority_identifier = DFL_AUTH_IDENT;
-    optt.basic_constraints    = DFL_CONSTRAINTS;
+    optt.issuer_crt          = DFL_ISSUER_CRT_S;
+    optt.request_file        = DFL_REQUEST_FILE_S;
+    optt.subject_key         = DFL_SUBJECT_KEY_S;
+    optt.issuer_key          = DFL_ISSUER_KEY_S;
+    optt.subject_pwd         = DFL_SUBJECT_PWD_S;
+    optt.issuer_pwd          = DFL_ISSUER_PWD_S;
+    optt.output_file         = DFL_OUTPUT_FILENAME_S;
+    optt.subject_name        = DFL_SUBJECT_NAME_S;
+    optt.issuer_name         = DFL_ISSUER_NAME_S;
+    optt.not_before          = DFL_NOT_BEFORE_S;
+    optt.not_after           = DFL_NOT_AFTER_S;
+    optt.serial              = DFL_SERIAL_S;
+    optt.selfsign            = DFL_SELFSIGN_S;
+    optt.is_ca               = DFL_IS_CA_S;
+    optt.max_pathlen         = DFL_MAX_PATHLEN_S;
+    optt.key_usage           = DFL_KEY_USAGE_S;
+    optt.ns_cert_type        = DFL_NS_CERT_TYPE_S;
+    optt.version             = DFL_VERSION_S - 1;
+    optt.md                  = DFL_DIGEST_S;
+    optt.subject_identifier   = DFL_SUBJ_IDENT_S;
+    optt.authority_identifier = DFL_AUTH_IDENT_S;
+    optt.basic_constraints    = DFL_CONSTRAINTS_S;
 
     /*
      * 0. Seed the PRNG
@@ -421,7 +398,7 @@ void selfsigned_cert_write( void )
     mbedtls_printf( "  . Writing the certificate..." );
     fflush( stdout );
 
-    if( ( ret = write_certificate( &crt, optt.output_file, mbedtls_ctr_drbg_random, &ctr_drbg ) ) != 0 )
+    if( ( ret = write_certificate( &crt, mbedtls_ctr_drbg_random, &ctr_drbg ) ) != 0 )
     {
         mbedtls_strerror( ret, buf, 1024 );
         mbedtls_printf( " failed\n  !  write_certificate -0x%04x - %s\n\n",

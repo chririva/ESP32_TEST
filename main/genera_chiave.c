@@ -1,7 +1,7 @@
 /*
+ *  genera_chiave.c
+ *
  *  Key generation application
- *
- *
  *
  */
 
@@ -255,8 +255,9 @@ bool salva_chiavi_key(mbedtls_pk_context *key, const mbedtls_mpi *N, const mbedt
 }
 
 
-void genera_chiave()
+void genera_chiave( void *param)
 {
+	(void)param;
     int ret = 1;
     int exit_code = MBEDTLS_EXIT_FAILURE;
     mbedtls_pk_context key;
