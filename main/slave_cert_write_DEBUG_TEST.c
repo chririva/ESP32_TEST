@@ -69,7 +69,7 @@ extern mbedtls_x509_crt slave_certificate;
 #define DFL_OUTPUT_FILENAME_D     "cert.crt"
 #define DFL_SUBJECT_NAME_D        "CN=Cert,O=Comelit,C=IT"
 #define DFL_ISSUER_NAME_D         "CN=CA,O=Comelit,C=IT"
-#define DFL_NOT_BEFORE_D          "20100101000000"
+#define DFL_NOT_BEFORE_D          "19690101000000"
 #define DFL_NOT_AFTER_D           "20251231235959"
 #define DFL_SERIAL_D              "1"
 #define DFL_SELFSIGN_D            0
@@ -399,7 +399,7 @@ void slave_cert_write( void *param )
     mbedtls_printf( "  . Writing the certificate..." );
     fflush( stdout );
 
-    if( ( ret = write_certificate2( &crt, mbedtls_ctr_drbg_random, &ctr_drbg ) ) != 0 )
+    if( ( ret = write_certificate3( &crt, mbedtls_ctr_drbg_random, &ctr_drbg ) ) != 0 )
     {
         mbedtls_strerror( ret, buf, 1024 );
         mbedtls_printf( " failed\n  !  write_certificate -0x%04x - %s\n\n",

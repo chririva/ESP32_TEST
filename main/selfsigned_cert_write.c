@@ -69,7 +69,7 @@ extern mbedtls_x509_crt self_certificate;
 #define DFL_OUTPUT_FILENAME_S     "cert.crt"
 #define DFL_SUBJECT_NAME_S        "CN=Cert,O=Comelit,C=IT"
 #define DFL_ISSUER_NAME_S         "CN=CA,O=Comelit,C=IT"
-#define DFL_NOT_BEFORE_S          "20000101000000"
+#define DFL_NOT_BEFORE_S          "19690101000000"
 #define DFL_NOT_AFTER_S           "20501231235959"
 #define DFL_SERIAL_S              "1"
 #define DFL_SELFSIGN_S            1 //0 default

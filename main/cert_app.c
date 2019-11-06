@@ -52,18 +52,22 @@ void main( void )
 #include <stdlib.h>
 #include <string.h>
 #include "cert_app.h"
-bool wait_cert_app;
+bool wait_cert_app_master;
+bool wait_cert_app_slave;
+extern mbedtls_x509_crt self_certificate;
+extern mbedtls_x509_crt slave_certificate;
+extern mbedtls_x509_crt master_certificate;
 
  //prototipi statici
 static void my_debug( void *ctx, int level, const char *file, int line, const char *str );
 static int my_verify( void *data, mbedtls_x509_crt *crt, int depth, uint32_t *flags );
-
+static int cert_app(mbedtls_x509_crt *certificate_to_validate);
 
 #define MODE_NONE               0
 #define MODE_FILE               1
 #define MODE_SSL                2
 
-#define DFL_MODE                MODE_NONE
+#define DFL_MODE                MODE_FILE
 #define DFL_FILENAME            "cert.crt"
 #define DFL_CA_FILE             ""
 #define DFL_CRL_FILE            ""
@@ -73,8 +77,6 @@ static int my_verify( void *data, mbedtls_x509_crt *crt, int depth, uint32_t *fl
 #define DFL_DEBUG_LEVEL         0
 #define DFL_PERMISSIVE          0
 
-//ca_file: The single file containing the top-level CA(s) you fully trust
-//crl_file: The single CRL file you want to use
 
 /*
  * global options
@@ -120,9 +122,33 @@ static int my_verify( void *data, mbedtls_x509_crt *crt, int depth, uint32_t *fl
     return( 0 );
 }
 
-void cert_app( void *param )
-{
+void cert_app_master_certificate(void *param){
 	(void)param;
+	if(cert_app(&master_certificate)!=0){
+		printf("\n -> Certificato Master: Non Valido");
+	}
+	else{
+		printf("\n -> Certificato Master: Valido");
+	}
+    wait_cert_app_master=false;
+    vTaskDelete(NULL);
+}
+
+void cert_app_slave_certificate(void *param){
+	(void)param;
+	if(cert_app(&slave_certificate)!=0){
+		printf("\n -> Certificato Slave: Non Valido");
+	}
+	else{
+		printf("\n -> Certificato Slave: Valido");
+	}
+    wait_cert_app_slave=false;
+    vTaskDelete(NULL);
+}
+
+static int cert_app(mbedtls_x509_crt *certificate_to_validate)
+{
+
     int ret = 1;
     int exit_code = MBEDTLS_EXIT_FAILURE;
     mbedtls_net_context server_fd;
@@ -131,12 +157,12 @@ void cert_app( void *param )
     mbedtls_ctr_drbg_context ctr_drbg;
     mbedtls_ssl_context ssl;
     mbedtls_ssl_config conf;
-    mbedtls_x509_crt cacert=&self_certificate;
-    mbedtls_x509_crl cacrl=&slave_certificate;
-    //int i, j;
+    mbedtls_x509_crt cacert=self_certificate;
+    mbedtls_x509_crt crt=*certificate_to_validate;
+    mbedtls_x509_crt *cur = certificate_to_validate;
+    mbedtls_x509_crl cacrl;
     uint32_t flags;
     int verify = 1;
-    //char *p, *q;
     const char *pers = "cert_app";
 
     /*
@@ -146,7 +172,7 @@ void cert_app( void *param )
     mbedtls_ctr_drbg_init( &ctr_drbg );
     mbedtls_ssl_init( &ssl );
     mbedtls_ssl_config_init( &conf );
-    mbedtls_x509_crt_init( &cacert );
+    //mbedtls_x509_crt_init( &cacert );
 #if defined(MBEDTLS_X509_CRL_PARSE_C)
     mbedtls_x509_crl_init( &cacrl );
 #else
@@ -166,77 +192,9 @@ void cert_app( void *param )
     optt4.permissive          = DFL_PERMISSIVE;
 
 
-    /*
-     * 1.1. Load the trusted CA
-     */
-    /*mbedtls_printf( "  . Loading the CA root certificate ..." );
-    fflush( stdout );
-
-    if( strlen( optt4.ca_path ) )
-    {
-        if( ( ret = mbedtls_x509_crt_parse_path( &cacert, optt4.ca_path ) ) < 0 )
-        {
-            mbedtls_printf( " failed\n  !  mbedtls_x509_crt_parse_path returned -0x%x\n\n", -ret );
-            goto exit;
-        }
-
-        verify = 1;
-    }*/
-    /*else if( strlen( optt4.ca_file ) )
-    {
-        if( ( ret = mbedtls_x509_crt_parse_file( &cacert, optt4.ca_file ) ) < 0 )
-        {
-            mbedtls_printf( " failed\n  !  mbedtls_x509_crt_parse_file returned -0x%x\n\n", -ret );
-            goto exit;
-        }
-
-        verify = 1;
-    }
-
-    mbedtls_printf( " ok (%d skipped)\n", ret );*/
-
-//#if defined(MBEDTLS_X509_CRL_PARSE_C)
-    /*if( strlen( optt4.crl_file ) )
-    {
-        if( ( ret = mbedtls_x509_crl_parse_file( &cacrl, optt4.crl_file ) ) != 0 )
-        {
-            mbedtls_printf( " failed\n  !  mbedtls_x509_crl_parse returned -0x%x\n\n", -ret );
-            goto exit;
-        }
-
-        verify = 1;
-    }*/
-//#endif
-
     if( optt4.mode == MODE_FILE )
     {
-        mbedtls_x509_crt crt;
-        mbedtls_x509_crt *cur = &crt;
-        mbedtls_x509_crt_init( &crt );
-
-        /*
-         * 1.1. Load the certificate(s)
-         */
-        mbedtls_printf( "\n  . Loading the certificate(s) ..." );
-        fflush( stdout );
-
-        ret = mbedtls_x509_crt_parse_file( &crt, optt4.filename );
-
-        if( ret < 0 )
-        {
-            mbedtls_printf( " failed\n  !  mbedtls_x509_crt_parse_file returned %d\n\n", ret );
-            mbedtls_x509_crt_free( &crt );
-            goto exit;
-        }
-
-        if( optt4.permissive == 0 && ret > 0 )
-        {
-            mbedtls_printf( " failed\n  !  mbedtls_x509_crt_parse failed to parse %d certificates\n\n", ret );
-            mbedtls_x509_crt_free( &crt );
-            goto exit;
-        }
-
-        mbedtls_printf( " ok\n" );
+        //mbedtls_x509_crt_init( &crt );
 
         /*
          * 1.2 Print the certificate(s)
@@ -244,8 +202,7 @@ void cert_app( void *param )
         while( cur != NULL )
         {
             mbedtls_printf( "  . Peer certificate information    ...\n" );
-            ret = mbedtls_x509_crt_info( (char *) buf, sizeof( buf ) - 1, "      ",
-                                 cur );
+            ret = mbedtls_x509_crt_info( (char *) buf, sizeof( buf ) - 1, "      ", cur );
             if( ret == -1 )
             {
                 mbedtls_printf( " failed\n  !  mbedtls_x509_crt_info returned %d\n\n", ret );
@@ -265,8 +222,7 @@ void cert_app( void *param )
         {
             mbedtls_printf( "  . Verifying X.509 certificate..." );
 
-            if( ( ret = mbedtls_x509_crt_verify( &crt, &cacert, &cacrl, NULL, &flags,
-                                         my_verify, NULL ) ) != 0 )
+            if( ( ret = mbedtls_x509_crt_verify( &crt, &cacert, &cacrl, NULL, &flags, my_verify, NULL ) ) != 0 )
             {
                 char vrfy_buf[512];
 
@@ -374,12 +330,9 @@ void cert_app( void *param )
         /*
          * 5. Print the certificate
          */
-#if !defined(MBEDTLS_SSL_KEEP_PEER_CERTIFICATE)
-        mbedtls_printf( "  . Peer certificate information    ... skipped\n" );
-#else
+
         mbedtls_printf( "  . Peer certificate information    ...\n" );
-        ret = mbedtls_x509_crt_info( (char *) buf, sizeof( buf ) - 1, "      ",
-                                     mbedtls_ssl_get_peer_cert( &ssl ) );
+        ret = mbedtls_x509_crt_info( (char *) buf, sizeof( buf ) - 1, "      ",ssl.session->peer_cert );
         if( ret == -1 )
         {
             mbedtls_printf( " failed\n  !  mbedtls_x509_crt_info returned %d\n\n", ret );
@@ -387,7 +340,6 @@ void cert_app( void *param )
         }
 
         mbedtls_printf( "%s\n", buf );
-#endif /* MBEDTLS_SSL_KEEP_PEER_CERTIFICATE */
 
         mbedtls_ssl_close_notify( &ssl );
 
@@ -409,8 +361,7 @@ exit:
     mbedtls_entropy_free( &entropy );
 
     printf("EXIT CERT APP: %d",exit_code);
-    wait_cert_app=false;
-    vTaskDelete(NULL);
+    return(exit_code);
 }
 #endif /* MBEDTLS_BIGNUM_C && MBEDTLS_ENTROPY_C && MBEDTLS_SSL_TLS_C &&
           MBEDTLS_SSL_CLI_C && MBEDTLS_NET_C && MBEDTLS_RSA_C &&
