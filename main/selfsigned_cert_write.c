@@ -74,7 +74,7 @@ extern mbedtls_x509_crt self_certificate;
 #define DFL_SERIAL_S              "1"
 #define DFL_SELFSIGN_S            1 //0 default
 #define DFL_IS_CA_S               1 //0 default (1 = capable of signing other certificates)
-#define DFL_MAX_PATHLEN_S         -1 //-1 default
+#define DFL_MAX_PATHLEN_S         2 //-1 default
 #define DFL_KEY_USAGE_S           0
 #define DFL_NS_CERT_TYPE_S        0
 #define DFL_VERSION_S             3

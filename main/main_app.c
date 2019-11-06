@@ -5,11 +5,9 @@
  */
 
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/event_groups.h"
@@ -17,7 +15,6 @@
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "esp_bt.h"
-
 #include "esp_gap_ble_api.h"
 #include "esp_gatts_api.h"
 #include "esp_bt_defs.h"
@@ -29,6 +26,7 @@
 #include "selfsigned_cert_write.h"
 #include "master_cert_write.h"
 #include "slave_cert_write_DEBUG_TEST.h"
+#include "cert_app.h"
 
 #include "sdkconfig.h"
 
@@ -132,6 +130,9 @@ unsigned char slave_priv_key_string[] =  "-----BEGIN RSA PRIVATE KEY-----\n"\
 							    "MWgsI/f1pwoDydVGEegldWHdY/X6EeGB1n9JFPO7XJR/VdOuWUeSUiVIaJW9ROmG\n"\
 								"Eu90pcvHiqpfvpbf2950NP0eyUlUvjCeRewspt5buxwo4jKWfVEjbA==\n"\
 								"-----END RSA PRIVATE KEY-----"; //TODO: Ricevere la vera chiave
+
+
+
 
 static uint8_t char1_str[] = {0x33,0x33,0x33};
 
@@ -711,17 +712,16 @@ bool carica_chiavi(){
         //printf("\n La sua lunghezza vale: %d\n",lung);
         fflush( stdout );
         error = mbedtls_pk_parse_public_key( &master_pub_key, (unsigned char*)master_pub_key_string, sizeof(master_pub_key_string)); printf((error != 0) ? "Conversion to PK Failed!\n" : "Conversion to PK Done\n");
-        error = mbedtls_pk_parse_public_key( &master_priv_key, (unsigned char*)master_priv_key_string, sizeof(master_priv_key_string)); printf((error != 0) ? "Conversion to PK Failed!\n" : "Conversion to PK Done\n");
+        error = mbedtls_pk_parse_key( &master_priv_key, (unsigned char*)master_priv_key_string, sizeof(master_priv_key_string),NULL,0); printf((error != 0) ? "Conversion to PK Failed!\n" : "Conversion to PK Done\n");
         error = mbedtls_pk_parse_public_key( &slave_pub_key, (unsigned char*)slave_pub_key_string, sizeof(slave_pub_key_string)); printf((error != 0) ? "Conversion to PK Failed!\n" : "Conversion to PK Done\n");
-        error = mbedtls_pk_parse_public_key( &slave_priv_key, (unsigned char*)slave_priv_key_string, sizeof(slave_priv_key_string)); printf((error != 0) ? "Conversion to PK Failed!\n" : "Conversion to PK Done\n");
-        printf("\n\n\n - - - - CARICO LE CHIAVI DI MASTER E SLAVE - - - - \n\n\n");
-        error = mbedtls_pk_check_pair(&master_pub_key, &master_priv_key); printf((error != 0) ? "\nCoppia chiave privata/pubblica OK\n" : "\nCoppia chiave privata/pubblica NON VALIDA\n");
-        error = mbedtls_pk_check_pair(&slave_pub_key, &slave_priv_key); printf((error != 0) ? "\nCoppia chiave privata/pubblica OK\n" : "\nCoppia chiave privata/pubblica NON VALIDA\n");
+        error = mbedtls_pk_parse_key( &slave_priv_key, (unsigned char*)slave_priv_key_string, sizeof(slave_priv_key_string),NULL,0); printf((error != 0) ? "Conversion to PK Failed!\n" : "Conversion to PK Done\n");
+        printf("\n\n\n - - - - CONTROLLO LE CHIAVI DI MASTER E SLAVE - - - - \n\n\n");
+        error = mbedtls_pk_check_pair(&master_pub_key, &master_priv_key); printf((error != 0) ? "\nCoppia chiave privata/pubblica NON VALIDA\n" : "\nCoppia chiave privata/pubblica OK\n");
+        error = mbedtls_pk_check_pair(&slave_pub_key, &slave_priv_key); printf((error != 0) ? "\nCoppia chiave privata/pubblica NON VALIDA\n" : "\nCoppia chiave privata/pubblica OK\n");
         //TODO: DA TOGLIERE: EMULO LE CHIAVI PRIVATE E PUBBLICHE! end
 
         unsigned char output_buf[1800];
         size_t len = 0;
-
         memset(output_buf, 0, 1800);
 		if( mbedtls_pk_write_pubkey_pem( &key_key, output_buf, 1800 ) != 0 )
 			printf("\nPROBLEMONEE");
@@ -845,6 +845,15 @@ void app_main()
 		vTaskDelay(100 / portTICK_PERIOD_MS);
 	}
 
+	//VERIFICO LA CATENA.
+	printf("\n\n\t\t --- VERIFICO CERTIFICATO --- \n\n");
+	wait_cert_app=true;
+	xTaskCreate(cert_app,"CertApp",32768,NULL,2,NULL);
+	printf("\nAttendo.");
+	while(wait_cert_app){
+		printf(".");
+		vTaskDelay(100 / portTICK_PERIOD_MS);
+	}
 
 	printf("\n\t\t --- AVVIO IL BLUETOOTH E TUTTI I SERVIZI ASSOCIATI --- \n");
     //int exitcode = genera_chiave();

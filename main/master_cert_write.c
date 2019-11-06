@@ -47,7 +47,7 @@ int main( void )
 #include "master_cert_write.h"
 
 bool wait_master_cert_write;
-extern mbedtls_pk_context key_key,master_pub_key;
+extern mbedtls_pk_context key_key, master_pub_key;
 extern mbedtls_x509_crt self_certificate;
 extern mbedtls_x509_crt master_certificate;
 
@@ -74,7 +74,7 @@ extern mbedtls_x509_crt master_certificate;
 #define DFL_SERIAL_D              "1"
 #define DFL_SELFSIGN_D            0
 #define DFL_IS_CA_D               1 //0 default (1 = capable of signing other certificates)
-#define DFL_MAX_PATHLEN_D         -1 //-1 default
+#define DFL_MAX_PATHLEN_D         1 //-1 default
 #define DFL_KEY_USAGE_D           0
 #define DFL_NS_CERT_TYPE_D        0
 #define DFL_VERSION_D             3
@@ -147,9 +147,9 @@ void master_cert_write( void *param )
 	(void)param;
     int ret = 1, exit_code = MBEDTLS_EXIT_FAILURE;
     //mbedtls_x509_crt *issuer_crt = &self_certificate;
-    mbedtls_pk_context loaded_issuer_key, loaded_subject_key;
-    mbedtls_pk_context *issuer_key = &key_key,
-                *subject_key = &master_pub_key;
+    //mbedtls_pk_context loaded_issuer_key, loaded_subject_key;
+    mbedtls_pk_context *issuer_key = &key_key;
+    mbedtls_pk_context *subject_key = &master_pub_key;
     char buf[1024];
 #if defined(MBEDTLS_X509_CSR_PARSE_C)
     mbedtls_x509_csr csr;
@@ -164,8 +164,8 @@ void master_cert_write( void *param )
      * Set to sane values
      */
     mbedtls_x509write_crt_init( &crt );
-    mbedtls_pk_init( &loaded_issuer_key );
-    mbedtls_pk_init( &loaded_subject_key );
+    //mbedtls_pk_init( &loaded_issuer_key );
+    //mbedtls_pk_init( &loaded_subject_key );
     mbedtls_mpi_init( &serial );
     mbedtls_ctr_drbg_init( &ctr_drbg );
     mbedtls_entropy_init( &entropy );
@@ -245,11 +245,11 @@ void master_cert_write( void *param )
 
     mbedtls_printf( " ok\n" );
 
-    if( optt2.selfsign )
+    /*if( optt2.selfsign )
     {
         optt2.subject_name = optt2.issuer_name;
         subject_key = issuer_key;
-    }
+    }*/
 
     mbedtls_x509write_crt_set_subject_key( &crt, subject_key );
     mbedtls_x509write_crt_set_issuer_key( &crt, issuer_key );
@@ -260,16 +260,14 @@ void master_cert_write( void *param )
     if( ( ret = mbedtls_x509write_crt_set_subject_name( &crt, optt2.subject_name ) ) != 0 )
     {
         mbedtls_strerror( ret, buf, 1024 );
-        mbedtls_printf( " failed\n  !  mbedtls_x509write_crt_set_subject_name "
-                        "returned -0x%04x - %s\n\n", -ret, buf );
+        mbedtls_printf( " failed\n  !  mbedtls_x509write_crt_set_subject_name returned -0x%04x - %s\n\n", -ret, buf );
         goto exit;
     }
 
     if( ( ret = mbedtls_x509write_crt_set_issuer_name( &crt, optt2.issuer_name ) ) != 0 )
     {
         mbedtls_strerror( ret, buf, 1024 );
-        mbedtls_printf( " failed\n  !  mbedtls_x509write_crt_set_issuer_name "
-                        "returned -0x%04x - %s\n\n", -ret, buf );
+        mbedtls_printf( " failed\n  !  mbedtls_x509write_crt_set_issuer_name returned -0x%04x - %s\n\n", -ret, buf );
         goto exit;
     }
 
@@ -283,8 +281,7 @@ void master_cert_write( void *param )
     if( ret != 0 )
     {
         mbedtls_strerror( ret, buf, 1024 );
-        mbedtls_printf( " failed\n  !  mbedtls_x509write_crt_set_serial "
-                        "returned -0x%04x - %s\n\n", -ret, buf );
+        mbedtls_printf( " failed\n  !  mbedtls_x509write_crt_set_serial returned -0x%04x - %s\n\n", -ret, buf );
         goto exit;
     }
 
@@ -292,8 +289,7 @@ void master_cert_write( void *param )
     if( ret != 0 )
     {
         mbedtls_strerror( ret, buf, 1024 );
-        mbedtls_printf( " failed\n  !  mbedtls_x509write_crt_set_validity "
-                        "returned -0x%04x - %s\n\n", -ret, buf );
+        mbedtls_printf( " failed\n  !  mbedtls_x509write_crt_set_validity returned -0x%04x - %s\n\n", -ret, buf );
         goto exit;
     }
 
@@ -310,8 +306,7 @@ void master_cert_write( void *param )
         if( ret != 0 )
         {
             mbedtls_strerror( ret, buf, 1024 );
-            mbedtls_printf( " failed\n  !  x509write_crt_set_basic_contraints "
-                            "returned -0x%04x - %s\n\n", -ret, buf );
+            mbedtls_printf( " failed\n  !  x509write_crt_set_basic_contraints returned -0x%04x - %s\n\n", -ret, buf );
             goto exit;
         }
 
@@ -329,8 +324,7 @@ void master_cert_write( void *param )
         if( ret != 0 )
         {
             mbedtls_strerror( ret, buf, 1024 );
-            mbedtls_printf( " failed\n  !  mbedtls_x509write_crt_set_subject"
-                            "_key_identifier returned -0x%04x - %s\n\n",
+            mbedtls_printf( " failed\n  !  mbedtls_x509write_crt_set_subject_key_identifier returned -0x%04x - %s\n\n",
                             -ret, buf );
             goto exit;
         }
@@ -418,13 +412,13 @@ exit:
 #endif /* MBEDTLS_X509_CSR_PARSE_C */
     //mbedtls_x509_crt_free( &issuer_crt );
     mbedtls_x509write_crt_free( &crt );
-    mbedtls_pk_free( &loaded_subject_key );
-    mbedtls_pk_free( &loaded_issuer_key );
+    //mbedtls_pk_free( &loaded_subject_key );
+    //mbedtls_pk_free( &loaded_issuer_key );
     mbedtls_mpi_free( &serial );
     mbedtls_ctr_drbg_free( &ctr_drbg );
     mbedtls_entropy_free( &entropy );
 
-    printf("EXIT CODE DEVICE MASTER WRITE: %d",exit_code);
+    printf("EXIT CODE MASTER CERT WRITE: %d",exit_code);
     wait_master_cert_write=false;
     vTaskDelete(NULL);
 }

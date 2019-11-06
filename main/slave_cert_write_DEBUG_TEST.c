@@ -48,7 +48,6 @@ int main( void )
 
 bool wait_slave_cert_write;
 extern mbedtls_pk_context master_priv_key, slave_pub_key;
-//extern mbedtls_x509_crt self_certificate;
 extern mbedtls_x509_crt master_certificate;
 extern mbedtls_x509_crt slave_certificate;
 
@@ -148,9 +147,9 @@ void slave_cert_write( void *param )
 	(void)param;
     int ret = 1, exit_code = MBEDTLS_EXIT_FAILURE;
     //mbedtls_x509_crt *issuer_crt = &self_certificate;
-    mbedtls_pk_context loaded_issuer_key, loaded_subject_key;
-    mbedtls_pk_context *issuer_key = &master_priv_key,
-                *subject_key = &slave_pub_key;
+    //mbedtls_pk_context loaded_issuer_key, loaded_subject_key;
+    mbedtls_pk_context *issuer_key = &master_priv_key;
+    mbedtls_pk_context *subject_key = &slave_pub_key;
     char buf[1024];
 #if defined(MBEDTLS_X509_CSR_PARSE_C)
     mbedtls_x509_csr csr;
@@ -165,8 +164,8 @@ void slave_cert_write( void *param )
      * Set to sane values
      */
     mbedtls_x509write_crt_init( &crt );
-    mbedtls_pk_init( &loaded_issuer_key );
-    mbedtls_pk_init( &loaded_subject_key );
+    //mbedtls_pk_init( &loaded_issuer_key );
+    //mbedtls_pk_init( &loaded_subject_key );
     mbedtls_mpi_init( &serial );
     mbedtls_ctr_drbg_init( &ctr_drbg );
     mbedtls_entropy_init( &entropy );
@@ -227,8 +226,7 @@ void slave_cert_write( void *param )
     if( ( ret = mbedtls_mpi_read_string( &serial, 10, optt3.serial ) ) != 0 )
     {
         mbedtls_strerror( ret, buf, 1024 );
-        mbedtls_printf( " failed\n  !  mbedtls_mpi_read_string "
-                        "returned -0x%04x - %s\n\n", -ret, buf );
+        mbedtls_printf( " failed\n  !  mbedtls_mpi_read_string returned -0x%04x - %s\n\n", -ret, buf );
         goto exit;
     }
 
@@ -246,11 +244,11 @@ void slave_cert_write( void *param )
 
     mbedtls_printf( " ok\n" );
 
-    if( optt3.selfsign )
+    /*if( optt3.selfsign )
     {
         optt3.subject_name = optt3.issuer_name;
         subject_key = issuer_key;
-    }
+    }*/
 
     mbedtls_x509write_crt_set_subject_key( &crt, subject_key );
     mbedtls_x509write_crt_set_issuer_key( &crt, issuer_key );
@@ -419,8 +417,8 @@ exit:
 #endif /* MBEDTLS_X509_CSR_PARSE_C */
     //mbedtls_x509_crt_free( &issuer_crt );
     mbedtls_x509write_crt_free( &crt );
-    mbedtls_pk_free( &loaded_subject_key );
-    mbedtls_pk_free( &loaded_issuer_key );
+    //mbedtls_pk_free( &loaded_subject_key );
+    //mbedtls_pk_free( &loaded_issuer_key );
     mbedtls_mpi_free( &serial );
     mbedtls_ctr_drbg_free( &ctr_drbg );
     mbedtls_entropy_free( &entropy );
