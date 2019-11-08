@@ -26,6 +26,8 @@
 #include "selfsigned_cert_write.h"
 #include "master_cert_write.h"
 #include "slave_cert_write_DEBUG_TEST.h"
+#include "random_challenge_sign_TEST.h"
+#include "random_challenge_verify.h"
 #include "cert_app.h"
 #include <time.h>
 #include <sys/time.h>
@@ -133,6 +135,9 @@ unsigned char slave_priv_key_string[] =  "-----BEGIN RSA PRIVATE KEY-----\n"\
 							    "MWgsI/f1pwoDydVGEegldWHdY/X6EeGB1n9JFPO7XJR/VdOuWUeSUiVIaJW9ROmG\n"\
 								"Eu90pcvHiqpfvpbf2950NP0eyUlUvjCeRewspt5buxwo4jKWfVEjbA==\n"\
 								"-----END RSA PRIVATE KEY-----"; //TODO: Ricevere la vera chiave
+
+char rand_challenge_str[] =  "una stringa da generare random";
+unsigned char rand_challenge_firmato[MBEDTLS_MPI_MAX_SIZE];
 
 bool wait_cert_app_master;
 bool wait_cert_app_slave;
@@ -954,7 +959,27 @@ void app_main()
     }
     else{
     	printf("\n -> I certificati sono stati approvati.");
+    	printf("\n\n----------------------------------------------------------------------\n");
+    	printf("\n\n\t ----- RANDOM CHALLENGE ----- \n\n");
     	printf("\n -> Avvio il Random Challenge");
+    	if(random_challenge_sign()==0){
+    		printf("\n -> random firmato.");
+    		printf("\n -> Ora verifico la firma");
+    		if(random_challenge_verify()==0){
+    			printf("\n -> Firma del random challenge verificata.");
+    			printf("\n\n\n------------------------------------------------------------------------------------------------\n"\
+    					"------------------------------------------------------------------------------------------------\n"\
+						"-------------------------------------------APRO LA PORTA----------------------------------------\n"\
+						"------------------------------------------------------------------------------------------------\n"\
+						"------------------------------------------------------------------------------------------------\n\n\n");
+    		}
+    		else{
+    			printf("\n -> Firma del random non verificata.");
+    		}
+    	}
+    	else{
+    		printf("\n -> Firma del random fallita.");
+    	}
     }
 
 	printf("\n\n----------------------------------------------------------------------\n");
