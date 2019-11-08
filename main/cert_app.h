@@ -19,8 +19,6 @@
 #include "mbedtls/md.h"
 #include "mbedtls/error.h"
 
-extern bool wait_cert_app_master;
-extern bool wait_cert_app_slave;
 
 void cert_app_master_certificate(void *param);
 void cert_app_slave_certificate(void *param);

@@ -6,6 +6,7 @@
 #ifndef MAIN_SLAVE_CERT_WRITE_DEBUG_TEST_H_
 #define MAIN_SLAVE_CERT_WRITE_DEBUG_TEST_H_
 
+#include "mbedtls/x509.h"
 #include "mbedtls/x509_crt.h"
 #include "mbedtls/x509_csr.h"
 #include "mbedtls/entropy.h"

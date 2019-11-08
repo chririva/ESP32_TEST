@@ -67,10 +67,10 @@ extern mbedtls_x509_crt slave_certificate;
 #define DFL_SUBJECT_PWD_D         ""
 #define DFL_ISSUER_PWD_D          ""
 #define DFL_OUTPUT_FILENAME_D     "cert.crt"
-#define DFL_SUBJECT_NAME_D        "CN=Cert,O=Comelit,C=IT"
+#define DFL_SUBJECT_NAME_D        "CN=CA,O=Comelit,C=IT"
 #define DFL_ISSUER_NAME_D         "CN=CA,O=Comelit,C=IT"
 #define DFL_NOT_BEFORE_D          "19690101000000"
-#define DFL_NOT_AFTER_D           "20251231235959"
+#define DFL_NOT_AFTER_D           "20201231235959"
 #define DFL_SERIAL_D              "1"
 #define DFL_SELFSIGN_D            0
 #define DFL_IS_CA_D               0 //0 default (1 = capable of signing other certificates)
@@ -201,7 +201,6 @@ void slave_cert_write( void *param )
     optt3.subject_identifier   = DFL_SUBJ_IDENT_D;
     optt3.authority_identifier = DFL_AUTH_IDENT_D;
     optt3.basic_constraints    = DFL_CONSTRAINTS_D;
-
 
     /*
      * 0. Seed the PRNG

@@ -6,6 +6,7 @@
 #ifndef MAIN_MASTER_CERT_WRITE_H_
 #define MAIN_MASTER_CERT_WRITE_H_
 
+#include "mbedtls/x509.h"
 #include "mbedtls/x509_crt.h"
 #include "mbedtls/x509_csr.h"
 #include "mbedtls/entropy.h"

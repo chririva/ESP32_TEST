@@ -52,16 +52,18 @@ void main( void )
 #include <stdlib.h>
 #include <string.h>
 #include "cert_app.h"
-bool wait_cert_app_master;
-bool wait_cert_app_slave;
+extern bool wait_cert_app_master;
+extern bool wait_cert_app_slave;
+extern bool master_cert_validity;
+extern bool slave_cert_validity;
 extern mbedtls_x509_crt self_certificate;
 extern mbedtls_x509_crt slave_certificate;
 extern mbedtls_x509_crt master_certificate;
 
  //prototipi statici
-static void my_debug( void *ctx, int level, const char *file, int line, const char *str );
+//static void my_debug( void *ctx, int level, const char *file, int line, const char *str );
 static int my_verify( void *data, mbedtls_x509_crt *crt, int depth, uint32_t *flags );
-static int cert_app(mbedtls_x509_crt *certificate_to_validate);
+static int cert_app(mbedtls_x509_crt *certificate_to_validate, mbedtls_x509_crt *certificate_CA);
 
 #define MODE_NONE               0
 #define MODE_FILE               1
@@ -94,13 +96,13 @@ struct options4
     int permissive;             /* permissive parsing                   */
 } optt4;
 
-static void my_debug( void *ctx, int level, const char *file, int line, const char *str )
+/*static void my_debug( void *ctx, int level, const char *file, int line, const char *str )
 {
     ((void) level);
 
     mbedtls_fprintf( (FILE *) ctx, "%s:%04d: %s", file, line, str );
     fflush(  (FILE *) ctx  );
-}
+}*/
 
 static int my_verify( void *data, mbedtls_x509_crt *crt, int depth, uint32_t *flags )
 {
@@ -124,29 +126,35 @@ static int my_verify( void *data, mbedtls_x509_crt *crt, int depth, uint32_t *fl
 
 void cert_app_master_certificate(void *param){
 	(void)param;
-	if(cert_app(&master_certificate)!=0){
+	if(cert_app(&master_certificate,&self_certificate)!=0){
 		printf("\n -> Certificato Master: Non Valido");
+		master_cert_validity = false;
 	}
 	else{
 		printf("\n -> Certificato Master: Valido");
+		master_cert_validity = true;
 	}
+	fflush(stdout);
     wait_cert_app_master=false;
     vTaskDelete(NULL);
 }
 
 void cert_app_slave_certificate(void *param){
 	(void)param;
-	if(cert_app(&slave_certificate)!=0){
+	if(cert_app(&slave_certificate,&master_certificate)!=0){
 		printf("\n -> Certificato Slave: Non Valido");
+		slave_cert_validity = false;
 	}
 	else{
 		printf("\n -> Certificato Slave: Valido");
+		slave_cert_validity = true;
 	}
+	fflush(stdout);
     wait_cert_app_slave=false;
     vTaskDelete(NULL);
 }
 
-static int cert_app(mbedtls_x509_crt *certificate_to_validate)
+static int cert_app(mbedtls_x509_crt *certificate_to_validate, mbedtls_x509_crt *certificate_CA)
 {
 
     int ret = 1;
@@ -157,13 +165,13 @@ static int cert_app(mbedtls_x509_crt *certificate_to_validate)
     mbedtls_ctr_drbg_context ctr_drbg;
     mbedtls_ssl_context ssl;
     mbedtls_ssl_config conf;
-    mbedtls_x509_crt cacert=self_certificate;
+    mbedtls_x509_crt cacert=*certificate_CA;
     mbedtls_x509_crt crt=*certificate_to_validate;
     mbedtls_x509_crt *cur = certificate_to_validate;
     mbedtls_x509_crl cacrl;
     uint32_t flags;
     int verify = 1;
-    const char *pers = "cert_app";
+    //const char *pers = "cert_app";
 
     /*
      * Set to sane values
@@ -206,7 +214,7 @@ static int cert_app(mbedtls_x509_crt *certificate_to_validate)
             if( ret == -1 )
             {
                 mbedtls_printf( " failed\n  !  mbedtls_x509_crt_info returned %d\n\n", ret );
-                mbedtls_x509_crt_free( &crt );
+                //mbedtls_x509_crt_free( &crt );
                 goto exit;
             }
 
@@ -231,19 +239,20 @@ static int cert_app(mbedtls_x509_crt *certificate_to_validate)
                 mbedtls_x509_crt_verify_info( vrfy_buf, sizeof( vrfy_buf ), "  ! ", flags );
 
                 mbedtls_printf( "%s\n", vrfy_buf );
+                goto exit;
             }
             else
                 mbedtls_printf( " ok\n" );
         }
 
-        mbedtls_x509_crt_free( &crt );
+        //mbedtls_x509_crt_free( &crt );
     }
-    else if( optt4.mode == MODE_SSL )
-    {
+    /*else if( optt4.mode == MODE_SSL )
+    {*/
         /*
          * 1. Initialize the RNG and the session data
          */
-        mbedtls_printf( "\n  . Seeding the random number generator..." );
+       /* mbedtls_printf( "\n  . Seeding the random number generator..." );
         fflush( stdout );
 
         mbedtls_entropy_init( &entropy );
@@ -255,17 +264,16 @@ static int cert_app(mbedtls_x509_crt *certificate_to_validate)
             goto ssl_exit;
         }
 
-        mbedtls_printf( " ok\n" );
-
+        mbedtls_printf( " ok\n" );*/
+/*
 #if defined(MBEDTLS_DEBUG_C)
         mbedtls_debug_set_threshold( optt4.debug_level );
 #endif
-
+*/
         /*
          * 2. Start the connection
          */
-        mbedtls_printf( "  . SSL connection to tcp/%s/%s...", optt4.server_name,
-                                                              optt4.server_port );
+        /*mbedtls_printf( "  . SSL connection to tcp/%s/%s...", optt4.server_name, optt4.server_port );
         fflush( stdout );
 
         if( ( ret = mbedtls_net_connect( &server_fd, optt4.server_name,
@@ -273,12 +281,12 @@ static int cert_app(mbedtls_x509_crt *certificate_to_validate)
         {
             mbedtls_printf( " failed\n  ! mbedtls_net_connect returned %d\n\n", ret );
             goto ssl_exit;
-        }
+        }*/
 
         /*
          * 3. Setup stuff
          */
-        if( ( ret = mbedtls_ssl_config_defaults( &conf,
+        /*if( ( ret = mbedtls_ssl_config_defaults( &conf,
                         MBEDTLS_SSL_IS_CLIENT,
                         MBEDTLS_SSL_TRANSPORT_STREAM,
                         MBEDTLS_SSL_PRESET_DEFAULT ) ) != 0 )
@@ -311,12 +319,12 @@ static int cert_app(mbedtls_x509_crt *certificate_to_validate)
             goto ssl_exit;
         }
 
-        mbedtls_ssl_set_bio( &ssl, &server_fd, mbedtls_net_send, mbedtls_net_recv, NULL );
+        mbedtls_ssl_set_bio( &ssl, &server_fd, mbedtls_net_send, mbedtls_net_recv, NULL );*/
 
         /*
          * 4. Handshake
          */
-        while( ( ret = mbedtls_ssl_handshake( &ssl ) ) != 0 )
+        /*while( ( ret = mbedtls_ssl_handshake( &ssl ) ) != 0 )
         {
             if( ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE )
             {
@@ -325,13 +333,13 @@ static int cert_app(mbedtls_x509_crt *certificate_to_validate)
             }
         }
 
-        mbedtls_printf( " ok\n" );
+        mbedtls_printf( " ok\n" );*/
 
         /*
          * 5. Print the certificate
          */
 
-        mbedtls_printf( "  . Peer certificate information    ...\n" );
+        /*mbedtls_printf( "  . Peer certificate information    ...\n" );
         ret = mbedtls_x509_crt_info( (char *) buf, sizeof( buf ) - 1, "      ",ssl.session->peer_cert );
         if( ret == -1 )
         {
@@ -346,14 +354,14 @@ static int cert_app(mbedtls_x509_crt *certificate_to_validate)
 ssl_exit:
         mbedtls_ssl_free( &ssl );
         mbedtls_ssl_config_free( &conf );
-    }
+    }*/
 
     exit_code = MBEDTLS_EXIT_SUCCESS;
 
 exit:
 
     mbedtls_net_free( &server_fd );
-    mbedtls_x509_crt_free( &cacert );
+    //mbedtls_x509_crt_free( &cacert );
 #if defined(MBEDTLS_X509_CRL_PARSE_C)
     mbedtls_x509_crl_free( &cacrl );
 #endif

@@ -134,7 +134,9 @@ unsigned char slave_priv_key_string[] =  "-----BEGIN RSA PRIVATE KEY-----\n"\
 								"Eu90pcvHiqpfvpbf2950NP0eyUlUvjCeRewspt5buxwo4jKWfVEjbA==\n"\
 								"-----END RSA PRIVATE KEY-----"; //TODO: Ricevere la vera chiave
 
-
+bool wait_cert_app_master;
+bool wait_cert_app_slave;
+bool master_cert_validity, slave_cert_validity;
 
 
 static uint8_t char1_str[] = {0x33,0x33,0x33};
@@ -276,7 +278,7 @@ static void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param
         adv_config_done &= (~scan_rsp_config_flag);
         if (adv_config_done==0){
             esp_ble_gap_start_advertising(&adv_params);
-        }
+        }master_cert_validity
         break;
 #else
     case ESP_GAP_BLE_ADV_DATA_SET_COMPLETE_EVT:
@@ -628,6 +630,12 @@ void ritardo(int secondi){
 	}
 }
 
+void print_available_ram(){
+    uint freeRAM = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
+	printf("\n\n ---> FREE RAM IS: %d.\n\n", freeRAM);
+	fflush(stdout);
+}
+
 bool carica_chiavi(){
     // Initialize NVS
     esp_err_t err = nvs_flash_init();
@@ -661,15 +669,15 @@ bool carica_chiavi(){
 		err = nvs_get_str(my_handle, "DQ", NULL, &n_DQ); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
 		err = nvs_get_str(my_handle, "QP", NULL, &n_QP); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
 		err = nvs_get_str(my_handle, "KEY", NULL, &n_key); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-        char* N_string=malloc(n_N);
-        char* E_string=malloc(n_E);
-		char* D_string=malloc(n_D);
-		char* P_string=malloc(n_P);
-		char* Q_string=malloc(n_Q);
-		char* DP_string=malloc(n_DP);
-		char* DQ_string=malloc(n_DQ);
-		char* QP_string=malloc(n_QP);
-		char* key_string=malloc(n_key);
+        char* N_string=pvPortMalloc(n_N);
+        char* E_string=pvPortMalloc(n_E);
+		char* D_string=pvPortMalloc(n_D);
+		char* P_string=pvPortMalloc(n_P);
+		char* Q_string=pvPortMalloc(n_Q);
+		char* DP_string=pvPortMalloc(n_DP);
+		char* DQ_string=pvPortMalloc(n_DQ);
+		char* QP_string=pvPortMalloc(n_QP);
+		char* key_string=pvPortMalloc(n_key);
 		//Leggo effettivamente il valore
 		printf("\n -> Carico le chiavi in formato string");
 		err = nvs_get_str(my_handle, "N", N_string, &n_N); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
@@ -747,14 +755,16 @@ bool carica_chiavi(){
         error = mbedtls_pk_parse_public_key( &slave_pub_key, (unsigned char*)slave_pub_key_string, sizeof(slave_pub_key_string)); printf((error != 0) ? "\n   -> Conversion to PK Failed!" : "\n   -> Conversion to PK Done");
         error = mbedtls_pk_parse_key( &slave_priv_key, (unsigned char*)slave_priv_key_string, sizeof(slave_priv_key_string),NULL,0); printf((error != 0) ? "\n   -> Conversion to PK Failed!" : "\n   -> Conversion to PK Done");
         printf("\n -> Verifico la coppia chiave pubblica/privata di master e slave");
-        error = mbedtls_pk_check_pair(&master_pub_key, &master_priv_key); printf((error != 0) ? "\n   -> Coppia chiave privata/pubblica NON VALIDA\n" : "\n   -> Coppia chiave privata/pubblica OK\n");
-        error = mbedtls_pk_check_pair(&slave_pub_key, &slave_priv_key); printf((error != 0) ? "\n   -> Coppia chiave privata/pubblica NON VALIDA\n" : "\n   -> Coppia chiave privata/pubblica OK\n");
+        error = mbedtls_pk_check_pair(&master_pub_key, &master_priv_key); printf((error != 0) ? "\n   -> Coppia chiave privata/pubblica NON VALIDA" : "\n   -> Coppia chiave privata/pubblica OK");
+        error = mbedtls_pk_check_pair(&slave_pub_key, &slave_priv_key); printf((error != 0) ? "\n   -> Coppia chiave privata/pubblica NON VALIDA" : "\n   -> Coppia chiave privata/pubblica OK");
         //TODO: DA TOGLIERE: EMULO LE CHIAVI PRIVATE E PUBBLICHE! end
 
-        //LIBERO LA MEMORIA //TODO: liberare memoria
-        /*free(&N_string); free(&E_string); free(&D_string);
-        free(&P_string); free(&Q_string); free(&DP_string);
-        free(&DQ_string); free(&QP_string);*/
+
+        //LIBERO LA MEMORIA
+        vPortFree(N_string); vPortFree(E_string); vPortFree(D_string);
+        vPortFree(P_string); vPortFree(Q_string); vPortFree(DP_string);
+        vPortFree(DQ_string); vPortFree(QP_string); vPortFree(key_string);
+
     }
     return true;
 }
@@ -795,27 +805,52 @@ void print_date_time(){
 	printf("\n -> The current date/time is: %s", strftime_buf);
 	printf("\ntime - end\n\n");
 }
+void print_all_certificates(){
+	printf("\n\n\t ----- PRINTO TUTTI I CERTIFICATI ----- \n\n");
+
+	unsigned char buf[1024];
+	int ret2;
+    mbedtls_printf( "  . Peer certificate information    ...\n" );
+    ret2 = mbedtls_x509_crt_info( (char *) buf, sizeof( buf ) - 1, "      ", &self_certificate );
+    if( ret2 == -1 )
+        mbedtls_printf( " failed\n  !  mbedtls_x509_crt_info returned %d\n\n", ret2 );
+    printf( "\nSELF CERT:\n%s\n", buf );
+    ret2 = mbedtls_x509_crt_info( (char *) buf, sizeof( buf ) - 1, "      ", &master_certificate );
+    if( ret2 == -1 )
+        mbedtls_printf( " failed\n  !  mbedtls_x509_crt_info returned %d\n\n", ret2 );
+    printf( "\nMASTER CERT:\n%s\n", buf );
+    ret2 = mbedtls_x509_crt_info( (char *) buf, sizeof( buf ) - 1, "      ", &slave_certificate );
+    if( ret2 == -1 )
+        mbedtls_printf( " failed\n  !  mbedtls_x509_crt_info returned %d\n\n", ret2 );
+    printf( "\nSLAVE CERT:\n%s\n", buf );
+}
 
 bool verifica_certificati(){
+	master_cert_validity = false;
+	slave_cert_validity = false;
+
+	//print_all_certificates();
 	wait_cert_app_master=true;
-	//wait_cert_app_slave=true;
-	xTaskCreate(cert_app_master_certificate,"CertAppMaster",16384,NULL,3,NULL);
-	//xTaskCreate(cert_app_slave_certificate,"CertAppSlave",8192,NULL,3,NULL);
-	printf("\n -> Attendo..\n");
+	xTaskCreate(cert_app_master_certificate,"CertAppMaster",8000,NULL,3,NULL);
+	printf("\n -> Attendi, verifica del Master Certificate..\n");
 	while(wait_cert_app_master){
 		vTaskDelay(100 / portTICK_PERIOD_MS);
 	}
-	/*wait_cert_app_slave=true;
-	xTaskCreate(cert_app_slave_certificate,"CertAppSlave",16384,NULL,3,NULL);
-	printf("\n -> Attendo..\n");
+
+	vTaskDelay(100 / portTICK_PERIOD_MS);
+	//print_all_certificates();
+	wait_cert_app_slave=true;
+	xTaskCreate(cert_app_slave_certificate,"CertAppSlave",8000,NULL,3,NULL);
+	printf("\n -> Attendi, verifica dello Slave Certificate..\n");
 	while(wait_cert_app_slave){
 		vTaskDelay(100 / portTICK_PERIOD_MS);
-	}*/
-	return true; //TODO: sistemare
+	}
+	return master_cert_validity & slave_cert_validity; //TODO: sistemare
 }
 
 void app_main()
 {
+	print_available_ram();
 	print_date_time();
 	ritardo(5); //TODO: debug. da cancellare
 	/*if(cancella_tutto()){
@@ -870,76 +905,60 @@ void app_main()
 	}
 
 	printf("\n\n----------------------------------------------------------------------\n");
-
+	print_available_ram();
 	//GENERA SELF CERTIFICATE
 	printf("\n\n\t --- GENERA SELF CERTIFICATE --- \n\n");
 	wait_self_cert_generation=true;
 	xTaskCreate(selfsigned_cert_write,"GeneraSelfCert",32768,NULL,2,NULL);
 	printf("\n -> Attendo..\n");
-	while(wait_self_cert_generation){
+	do{
 		//printf(".");
 		vTaskDelay(100 / portTICK_PERIOD_MS);
-	}
+	}while(wait_self_cert_generation);
 
 	printf("\n\n----------------------------------------------------------------------\n");
-
+	print_available_ram();
 	//MASTER CERT WRITE
 	printf("\n\n\t --- GENERA MASTER CERT WRITE --- \n\n");
 	wait_master_cert_write=true;
 	xTaskCreate(master_cert_write,"MasterCertWrite",32768,NULL,2,NULL);
 	printf("\n -> Attendo..\n");
-	while(wait_master_cert_write){
+	do{
 		//printf(".");
 		vTaskDelay(100 / portTICK_PERIOD_MS);
-	}
+	}while(wait_master_cert_write);
 
 	printf("\n\n----------------------------------------------------------------------\n");
-
+	print_available_ram();
 	//SLAVE CERT WRITE
 	printf("\n\n\t --- GENERA SLAVE CERT WRITE --- \n\n");
 	wait_slave_cert_write=true;
 	xTaskCreate(slave_cert_write,"SlaveCertWrite",32768,NULL,2,NULL);
 	printf("\n -> Attendo..\n");
-	while(wait_slave_cert_write){
+	do{
 		//printf(".");
 		vTaskDelay(100 / portTICK_PERIOD_MS);
-	}
+	}while(wait_slave_cert_write);
 
 	printf("\n\n----------------------------------------------------------------------\n");
-
+	print_available_ram();
 	//VERIFICO LA CATENA.
-	printf("\n\n\t ----- PRINTO TUTTI I CERTIFICATI ----- \n\n");
-
-	unsigned char buf[1024];
-	int ret2;
-    mbedtls_printf( "  . Peer certificate information    ...\n" );
-    ret2 = mbedtls_x509_crt_info( (char *) buf, sizeof( buf ) - 1, "      ", &self_certificate );
-    if( ret2 == -1 )
-        mbedtls_printf( " failed\n  !  mbedtls_x509_crt_info returned %d\n\n", ret2 );
-    printf( "\nSELF CERT:\n%s\n", buf );
-    ret2 = mbedtls_x509_crt_info( (char *) buf, sizeof( buf ) - 1, "      ", &master_certificate );
-    if( ret2 == -1 )
-        mbedtls_printf( " failed\n  !  mbedtls_x509_crt_info returned %d\n\n", ret2 );
-    printf( "\nMASTER CERT:\n%s\n", buf );
-    ret2 = mbedtls_x509_crt_info( (char *) buf, sizeof( buf ) - 1, "      ", &slave_certificate );
-    if( ret2 == -1 )
-        mbedtls_printf( " failed\n  !  mbedtls_x509_crt_info returned %d\n\n", ret2 );
-    printf( "\nSLAVE CERT:\n%s\n", buf );
+	//print_all_certificates();
 
     printf("\n\n----------------------------------------------------------------------\n");
 
 	//VERIFICO LA CATENA.
 	printf("\n\n\t ----- VERIFICO CERTIFICATI ----- \n\n");
     if(!verifica_certificati()){
-    	printf(" -> I certificati non sono stati approvati.");
+    	printf("\n -> I certificati non sono stati approvati.");
     }
     else{
-    	printf(" -> I certificati sono stati approvati.");
-    	printf(" -> Avvio il Random Challenge");
+    	printf("\n -> I certificati sono stati approvati.");
+    	printf("\n -> Avvio il Random Challenge");
     }
 
 	printf("\n\n----------------------------------------------------------------------\n");
-
+	print_available_ram();
 	printf("\n\t --- AVVIO IL BLUETOOTH E TUTTI I SERVIZI ASSOCIATI --- \n");
     //int exitcode = genera_chiave();
     //printf("\n\t\t EXIT CODE: %d \n",exitcode);
