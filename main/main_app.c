@@ -14,24 +14,25 @@
 #include "esp_system.h"
 #include "esp_log.h"
 #include "nvs_flash.h"
-//#include "esp_bt.h"
-//#include "esp_gap_ble_api.h"
-//#include "esp_gatts_api.h"
-//#include "esp_bt_defs.h"
-//#include "esp_bt_main.h"
-//#include "esp_gatt_common_api.h"
+#include <time.h>
+#include <sys/time.h>
+
 #include "genera_chiave.c"
-//#include "genera_chiave_ECDSA.c"
-//#include "genera_chiave_rsa.c"
 #include "selfsigned_cert_write.h"
 #include "master_cert_write.h"
 #include "slave_cert_write_DEBUG_TEST.h"
 #include "random_challenge_sign_TEST.h"
 #include "random_challenge_verify.h"
 #include "cert_app.h"
+
+#include "esp_bt.h"
+#include "esp_gap_ble_api.h"
+#include "esp_gatts_api.h"
+#include "esp_bt_defs.h"
+#include "esp_bt_main.h"
+#include "esp_gatt_common_api.h"
 #include "ble_server.h"
-#include <time.h>
-#include <sys/time.h>
+//#include "ble.c"
 
 
 #include "sdkconfig.h"
@@ -356,6 +357,69 @@ bool verifica_certificati(){
 	return master_cert_validity & slave_cert_validity; //TODO: sistemare
 }
 
+void ble_init(){
+    esp_err_t ret;
+    // Initialize NVS. (Non-volatile storage)
+    ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK( ret );
+
+    ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT));
+
+    esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
+    ret = esp_bt_controller_init(&bt_cfg);
+    if (ret) {
+        ESP_LOGE(GATTS_TAG, "%s initialize controller failed: %s\n", __func__, esp_err_to_name(ret));
+        return;
+    }
+
+    ret = esp_bt_controller_enable(ESP_BT_MODE_BLE); //Bluetooth parte in modalità solo BLE. ESP_BT_MODE_BTDM: Dual mode (BLE + BT Classic)
+    if (ret) {
+        ESP_LOGE(GATTS_TAG, "%s enable controller failed: %s\n", __func__, esp_err_to_name(ret));
+        return;
+    }
+    ret = esp_bluedroid_init();
+    if (ret) {
+        ESP_LOGE(GATTS_TAG, "%s init bluetooth failed: %s\n", __func__, esp_err_to_name(ret));
+        return;
+    }
+    ret = esp_bluedroid_enable();
+    if (ret) {
+        ESP_LOGE(GATTS_TAG, "%s enable bluetooth failed: %s\n", __func__, esp_err_to_name(ret));
+        return;
+    }
+
+    ret = esp_ble_gatts_register_callback(gatts_event_handler);
+    if (ret){
+        ESP_LOGE(GATTS_TAG, "gatts register error, error code = %x", ret);
+        return;
+    }
+    ret = esp_ble_gap_register_callback(gap_event_handler);
+    if (ret){
+        ESP_LOGE(GATTS_TAG, "gap register error, error code = %x", ret);
+        return;
+    }
+    /*ret = esp_ble_gatts_app_register(0);
+    if (ret){
+        ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
+        return;
+    }*/
+    printf("\nREGISTRO APP 2\n");
+    ret = esp_ble_gatts_app_register(0x55);
+    if (ret){
+        ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
+        return;
+    }
+    printf("\nFINE REGISTRAZIONE APP 2\n");
+    esp_err_t local_mtu_ret = esp_ble_gatt_set_local_mtu(500);
+    if (local_mtu_ret){
+        ESP_LOGE(GATTS_TAG, "set local  MTU failed, error code = %x", local_mtu_ret);
+    }
+}
+
 void app_main()
 {
 	print_available_ram();
@@ -383,7 +447,7 @@ void app_main()
 
 	printf("\n\n------------------------------------------------------------------------------------------\n");
 
-	printf("\n\t ----- TENTO DI CARICARE LE CHIAVI DALLA NVS -----\n");
+	/*printf("\n\t ----- TENTO DI CARICARE LE CHIAVI DALLA NVS -----\n");
 	if(carica_chiavi())
 		printf("\n -> Chiavi caricate con successo \n");
 	else{
@@ -483,12 +547,13 @@ void app_main()
     	else{
     		printf("\n -> Firma del random fallita.");
     	}
-    }
+    }*/
 
 	printf("\n\n----------------------------------------------------------------------\n");
 	print_available_ram();
 	printf("\n\t --- AVVIO IL BLUETOOTH E TUTTI I SERVIZI ASSOCIATI --- \n");
-	gatts_init_values();
+	ble_init();
+	fflush(stdout);
 	printf("\nFINE DEL MAIN.");
     //printf("\nHO LANCIATO TUTTI I SERVIZI, PRESTO SARANNO DISPONIBILI");
     return;
