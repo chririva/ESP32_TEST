@@ -429,6 +429,7 @@ void app_main()
 {
 	print_available_ram();
 	print_date_time();
+	fgetc(stdin);
 	ritardo(5); //TODO: debug. da cancellare
 	/*if(cancella_tutto()){
 		printf("\n\t\t --- HO CANCELLATO TUTTO --- \n");
