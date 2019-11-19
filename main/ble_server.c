@@ -107,12 +107,34 @@ static esp_ble_adv_params_t adv_params = {
  * afterwards.
  */
 void gaps_init() {
-	esp_err_t ret;
+	/*esp_err_t ret;
 	//sprintf(device_name, BLE_DEVICE_NAME, *gatts_char[GATTS_BUTTON_NUMBER_CHAR_POS].char_val->attr_value); // copy configured button number into the device name
 	esp_ble_gap_set_device_name(DEVICE_NAME);
 
 	ret=esp_ble_gap_config_adv_data(&adv_data);
 	ESP_LOGI(GATTS_TAG, "esp_ble_gap_config_adv_data %d", ret);
+	*/
+
+    //aggiunto io inizio
+		printf("\nroba aggiunta io");
+		esp_err_t set_dev_name_ret = esp_ble_gap_set_device_name(DEVICE_NAME);
+     if (set_dev_name_ret){
+         ESP_LOGE(GATTS_TAG, "set device name failed, error code = %x", set_dev_name_ret);
+     }
+     //config adv data
+     esp_err_t ret = esp_ble_gap_config_adv_data(&adv_data);
+     if (ret){
+         ESP_LOGE(GATTS_TAG, "config adv data failed, error code = %x", ret);
+     }
+     adv_config_done |= adv_config_flag;
+     //config scan response data
+     ret = esp_ble_gap_config_adv_data(&scan_rsp_data);
+     if (ret){
+         ESP_LOGE(GATTS_TAG, "config scan response data failed, error code = %x", ret);
+     }
+     adv_config_done |= scan_rsp_config_flag;
+     //aggiunto io fine
+
 }
 
 /* In server (config) mode, this function is called whenever the ESP32
@@ -443,25 +465,7 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 		}
 
 		ESP_LOGI(GATTS_TAG, "ble_service_uuid128[0] %d, gatts_service[param].uuid128[0] %d, gatts_service[ble_pos].uuid128[0] %d", ble_service_uuid128[0], gatts_service[param->reg.app_id].service_id.id.uuid.uuid.uuid128[0], gatts_service[ble_add_service_pos].service_id.id.uuid.uuid.uuid128[0]);
-       //aggiunto io inizio
-		printf("\nroba aggiunta io");
-		esp_err_t set_dev_name_ret = esp_ble_gap_set_device_name(DEVICE_NAME);
-        if (set_dev_name_ret){
-            ESP_LOGE(GATTS_TAG, "set device name failed, error code = %x", set_dev_name_ret);
-        }
-        //config adv data
-        esp_err_t ret = esp_ble_gap_config_adv_data(&adv_data);
-        if (ret){
-            ESP_LOGE(GATTS_TAG, "config adv data failed, error code = %x", ret);
-        }
-        adv_config_done |= adv_config_flag;
-        //config scan response data
-        ret = esp_ble_gap_config_adv_data(&scan_rsp_data);
-        if (ret){
-            ESP_LOGE(GATTS_TAG, "config scan response data failed, error code = %x", ret);
-        }
-        adv_config_done |= scan_rsp_config_flag;
-        //aggiunto io fine
+
 		esp_ble_gatts_create_service(gatts_if, &gatts_service[param->reg.app_id].service_id, gatts_service[param->reg.app_id].num_handles);
 		break;
 	case ESP_GATTS_READ_EVT: {
@@ -488,6 +492,7 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 
 		esp_ble_gatts_start_service(gatts_service[ble_add_service_pos].service_handle);
 		gatts_add_char();
+
 		break;
 	case ESP_GATTS_ADD_INCL_SRVC_EVT:
 		break;

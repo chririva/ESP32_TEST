@@ -402,18 +402,23 @@ void ble_init(){
         ESP_LOGE(GATTS_TAG, "gap register error, error code = %x", ret);
         return;
     }
-    /*ret = esp_ble_gatts_app_register(0);
-    if (ret){
-        ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
-        return;
-    }*/
-    printf("\nREGISTRO APP 2\n");
-    ret = esp_ble_gatts_app_register(0x55);
+
+    gaps_init();
+
+    ret = esp_ble_gatts_app_register(0);
     if (ret){
         ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
         return;
     }
-    printf("\nFINE REGISTRAZIONE APP 2\n");
+
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    printf("\nREGISTRO APP 1\n");
+    ret = esp_ble_gatts_app_register(1);
+    if (ret){
+        ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
+        return;
+    }
+    printf("\nFINE REGISTRAZIONE APP 1\n");
     esp_err_t local_mtu_ret = esp_ble_gatt_set_local_mtu(500);
     if (local_mtu_ret){
         ESP_LOGE(GATTS_TAG, "set local  MTU failed, error code = %x", local_mtu_ret);
