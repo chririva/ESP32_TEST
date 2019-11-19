@@ -96,13 +96,6 @@ struct options4
     int permissive;             /* permissive parsing                   */
 } optt4;
 
-/*static void my_debug( void *ctx, int level, const char *file, int line, const char *str )
-{
-    ((void) level);
-
-    mbedtls_fprintf( (FILE *) ctx, "%s:%04d: %s", file, line, str );
-    fflush(  (FILE *) ctx  );
-}*/
 
 static int my_verify( void *data, mbedtls_x509_crt *crt, int depth, uint32_t *flags )
 {
@@ -156,30 +149,22 @@ void cert_app_slave_certificate(void *param){
 
 static int cert_app(mbedtls_x509_crt *certificate_to_validate, mbedtls_x509_crt *certificate_CA)
 {
-
     int ret = 1;
     int exit_code = MBEDTLS_EXIT_FAILURE;
-    mbedtls_net_context server_fd;
     unsigned char buf[1024];
     mbedtls_entropy_context entropy;
     mbedtls_ctr_drbg_context ctr_drbg;
-    mbedtls_ssl_context ssl;
-    mbedtls_ssl_config conf;
     mbedtls_x509_crt cacert=*certificate_CA;
     mbedtls_x509_crt crt=*certificate_to_validate;
     mbedtls_x509_crt *cur = certificate_to_validate;
     mbedtls_x509_crl cacrl;
     uint32_t flags;
     int verify = 1;
-    //const char *pers = "cert_app";
 
     /*
      * Set to sane values
      */
-    mbedtls_net_init( &server_fd );
     mbedtls_ctr_drbg_init( &ctr_drbg );
-    mbedtls_ssl_init( &ssl );
-    mbedtls_ssl_config_init( &conf );
     //mbedtls_x509_crt_init( &cacert );
 #if defined(MBEDTLS_X509_CRL_PARSE_C)
     mbedtls_x509_crl_init( &cacrl );
@@ -202,8 +187,6 @@ static int cert_app(mbedtls_x509_crt *certificate_to_validate, mbedtls_x509_crt 
 
     if( optt4.mode == MODE_FILE )
     {
-        //mbedtls_x509_crt_init( &crt );
-
         /*
          * 1.2 Print the certificate(s)
          */
@@ -214,7 +197,6 @@ static int cert_app(mbedtls_x509_crt *certificate_to_validate, mbedtls_x509_crt 
             if( ret == -1 )
             {
                 mbedtls_printf( " failed\n  !  mbedtls_x509_crt_info returned %d\n\n", ret );
-                //mbedtls_x509_crt_free( &crt );
                 goto exit;
             }
 
@@ -245,122 +227,12 @@ static int cert_app(mbedtls_x509_crt *certificate_to_validate, mbedtls_x509_crt 
                 mbedtls_printf( " ok\n" );
         }
 
-        //mbedtls_x509_crt_free( &crt );
     }
-    /*else if( optt4.mode == MODE_SSL )
-    {*/
-        /*
-         * 1. Initialize the RNG and the session data
-         */
-       /* mbedtls_printf( "\n  . Seeding the random number generator..." );
-        fflush( stdout );
-
-        mbedtls_entropy_init( &entropy );
-        if( ( ret = mbedtls_ctr_drbg_seed( &ctr_drbg, mbedtls_entropy_func, &entropy,
-                                   (const unsigned char *) pers,
-                                   strlen( pers ) ) ) != 0 )
-        {
-            mbedtls_printf( " failed\n  ! mbedtls_ctr_drbg_seed returned %d\n", ret );
-            goto ssl_exit;
-        }
-
-        mbedtls_printf( " ok\n" );*/
-/*
-#if defined(MBEDTLS_DEBUG_C)
-        mbedtls_debug_set_threshold( optt4.debug_level );
-#endif
-*/
-        /*
-         * 2. Start the connection
-         */
-        /*mbedtls_printf( "  . SSL connection to tcp/%s/%s...", optt4.server_name, optt4.server_port );
-        fflush( stdout );
-
-        if( ( ret = mbedtls_net_connect( &server_fd, optt4.server_name,
-                                 optt4.server_port, MBEDTLS_NET_PROTO_TCP ) ) != 0 )
-        {
-            mbedtls_printf( " failed\n  ! mbedtls_net_connect returned %d\n\n", ret );
-            goto ssl_exit;
-        }*/
-
-        /*
-         * 3. Setup stuff
-         */
-        /*if( ( ret = mbedtls_ssl_config_defaults( &conf,
-                        MBEDTLS_SSL_IS_CLIENT,
-                        MBEDTLS_SSL_TRANSPORT_STREAM,
-                        MBEDTLS_SSL_PRESET_DEFAULT ) ) != 0 )
-        {
-            mbedtls_printf( " failed\n  ! mbedtls_ssl_config_defaults returned %d\n\n", ret );
-            goto exit;
-        }
-
-        if( verify )
-        {
-            mbedtls_ssl_conf_authmode( &conf, MBEDTLS_SSL_VERIFY_REQUIRED );
-            mbedtls_ssl_conf_ca_chain( &conf, &cacert, NULL );
-            mbedtls_ssl_conf_verify( &conf, my_verify, NULL );
-        }
-        else
-            mbedtls_ssl_conf_authmode( &conf, MBEDTLS_SSL_VERIFY_NONE );
-
-        mbedtls_ssl_conf_rng( &conf, mbedtls_ctr_drbg_random, &ctr_drbg );
-        mbedtls_ssl_conf_dbg( &conf, my_debug, stdout );
-
-        if( ( ret = mbedtls_ssl_setup( &ssl, &conf ) ) != 0 )
-        {
-            mbedtls_printf( " failed\n  ! mbedtls_ssl_setup returned %d\n\n", ret );
-            goto ssl_exit;
-        }
-
-        if( ( ret = mbedtls_ssl_set_hostname( &ssl, optt4.server_name ) ) != 0 )
-        {
-            mbedtls_printf( " failed\n  ! mbedtls_ssl_set_hostname returned %d\n\n", ret );
-            goto ssl_exit;
-        }
-
-        mbedtls_ssl_set_bio( &ssl, &server_fd, mbedtls_net_send, mbedtls_net_recv, NULL );*/
-
-        /*
-         * 4. Handshake
-         */
-        /*while( ( ret = mbedtls_ssl_handshake( &ssl ) ) != 0 )
-        {
-            if( ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE )
-            {
-                mbedtls_printf( " failed\n  ! mbedtls_ssl_handshake returned %d\n\n", ret );
-                goto ssl_exit;
-            }
-        }
-
-        mbedtls_printf( " ok\n" );*/
-
-        /*
-         * 5. Print the certificate
-         */
-
-        /*mbedtls_printf( "  . Peer certificate information    ...\n" );
-        ret = mbedtls_x509_crt_info( (char *) buf, sizeof( buf ) - 1, "      ",ssl.session->peer_cert );
-        if( ret == -1 )
-        {
-            mbedtls_printf( " failed\n  !  mbedtls_x509_crt_info returned %d\n\n", ret );
-            goto ssl_exit;
-        }
-
-        mbedtls_printf( "%s\n", buf );
-
-        mbedtls_ssl_close_notify( &ssl );
-
-ssl_exit:
-        mbedtls_ssl_free( &ssl );
-        mbedtls_ssl_config_free( &conf );
-    }*/
 
     exit_code = MBEDTLS_EXIT_SUCCESS;
 
 exit:
 
-    mbedtls_net_free( &server_fd );
     //mbedtls_x509_crt_free( &cacert );
 #if defined(MBEDTLS_X509_CRL_PARSE_C)
     mbedtls_x509_crl_free( &cacrl );

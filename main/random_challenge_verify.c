@@ -61,17 +61,15 @@ int random_challenge_verify()
     unsigned char hash[32];
     //unsigned char buf[MBEDTLS_MPI_MAX_SIZE];
 
-    //mbedtls_pk_init( &pk );
-
     //DEBUG
-    int rett;
+    /*int rett;
     unsigned char output_buf[4000];
     memset(output_buf, 0, 4000);
 	if( ( rett = mbedtls_pk_write_pubkey_pem( pk, output_buf, 4000 ) ) != 0 )
 		printf("\nPROBLEMONEE");
 	printf("\n La chiave pubblica: %s",output_buf);
 	// Print the signature
-	printf("\n    . Il testo firmato: [%u]", (unsigned)rand_challenge_firmato);
+	printf("\n    . Il testo firmato: [%u]", (unsigned)rand_challenge_firmato);*/
     //DEBUG
 
 
