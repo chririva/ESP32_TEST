@@ -9,5 +9,7 @@
 #define MAIN_RANDOM_GEN_H_
 
 
+void random_string_generator();
+
 
 #endif /* MAIN_RANDOM_GEN_H_ */

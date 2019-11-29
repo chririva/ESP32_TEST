@@ -46,10 +46,11 @@
 #include "esp_bt_main.h"
 #include "esp_gatt_common_api.h"
 #include "ble_server.h"
+#include "ble_config.h"
 
 #include "sdkconfig.h"
 
-bool MASTER_MODE = true;
+bool MASTER_MODE = false;
 
 //CHIAVI DEL DISPOSITIVO
 //mbedtls_mpi N_key, P_key, Q_key, D_key, E_key, DP_key, DQ_key, QP_key; //Forse non verranno mai utilizzate
@@ -134,7 +135,7 @@ unsigned char slave_priv_key_string[] =  "-----BEGIN RSA PRIVATE KEY-----\n"\
 								"Eu90pcvHiqpfvpbf2950NP0eyUlUvjCeRewspt5buxwo4jKWfVEjbA==\n"\
 								"-----END RSA PRIVATE KEY-----";
 
-char rand_challenge_str[] =  "una stringa da generare random";
+char rand_challenge_str[GATTS_CHAR_RND_LEN_MAX] =  "una stringa da generare random";
 unsigned char rand_challenge_firmato[MBEDTLS_MPI_MAX_SIZE];
 
 bool wait_key_gen;
@@ -314,28 +315,7 @@ void print_all_certificates(){
     printf( "\nSLAVE CERT:\n%s\n", buf );
 }
 
-bool verifica_certificati(){
-	master_cert_validity = false;
-	slave_cert_validity = false;
 
-	//print_all_certificates();
-	wait_cert_app_master=true;
-	xTaskCreate(cert_app_master_certificate,"CertAppMaster",8000,NULL,3,NULL);
-	printf("\n -> Attendi, verifica del Master Certificate..\n");
-	while(wait_cert_app_master){
-		vTaskDelay(100 / portTICK_PERIOD_MS);
-	}
-
-	vTaskDelay(100 / portTICK_PERIOD_MS);
-	//print_all_certificates();
-	wait_cert_app_slave=true;
-	xTaskCreate(cert_app_slave_certificate,"CertAppSlave",8000,NULL,3,NULL);
-	printf("\n -> Attendi, verifica dello Slave Certificate..\n");
-	while(wait_cert_app_slave){
-		vTaskDelay(100 / portTICK_PERIOD_MS);
-	}
-	return master_cert_validity & slave_cert_validity; //TODO: sistemare
-}
 
 void ble_init(){
     esp_err_t ret;

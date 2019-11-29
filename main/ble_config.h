@@ -16,7 +16,7 @@
 #define GATTS_CHAR_INFO32_LEN_MAX 32 //32 bit per info
 #define GATTS_CHAR_PUBKEY_LEN_MAX 520 //520 bit per chiavi pubbliche
 #define GATTS_CHAR_CERTIFICATE_LEN_MAX 600 //600 bit per certificati
-#define GATTS_CHAR_RND_LEN_MAX 100 //100 bit per random, random signed
+#define GATTS_CHAR_RND_LEN_MAX 256 //256 bit per random, random signed
 
 #define GATTS_SERVICE_NUM 2
 #define GATTS_CHAR_NUM 16 //numero di tutte le caratteristiche
