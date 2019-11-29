@@ -16,14 +16,28 @@
 #include "nvs_flash.h"
 #include <time.h>
 #include <sys/time.h>
+//mbedtls
+#include "mbedtls/platform.h"
+#include "mbedtls/error.h"
+#include "mbedtls/pk.h"
+#include "mbedtls/ecdsa.h"
+#include "mbedtls/rsa.h"
+#include "mbedtls/error.h"
+#include "mbedtls/entropy.h"
+#include "mbedtls/ctr_drbg.h"
+#include "mbedtls/x509.h"
+#include "mbedtls/x509_crt.h"
+#include "mbedtls/rsa.h"
+#include "mbedtls/bignum.h"
 
-#include "genera_chiave.c"
+#include "genera_chiave.h"
 #include "selfsigned_cert_write.h"
 #include "master_cert_write.h"
 #include "slave_cert_write_DEBUG_TEST.h"
 #include "random_challenge_sign_TEST.h"
 #include "random_challenge_verify.h"
 #include "cert_app.h"
+#include "ble_state_machine.h"
 
 #include "esp_bt.h"
 #include "esp_gap_ble_api.h"
@@ -32,8 +46,6 @@
 #include "esp_bt_main.h"
 #include "esp_gatt_common_api.h"
 #include "ble_server.h"
-//#include "ble.c"
-
 
 #include "sdkconfig.h"
 
@@ -129,7 +141,7 @@ unsigned char rand_challenge_firmato[MBEDTLS_MPI_MAX_SIZE];
 bool wait_cert_app_master;
 bool wait_cert_app_slave;
 bool master_cert_validity, slave_cert_validity;
-
+bool charateristic_flags[10];
 
 void ritardo(int secondi){
 	for(;secondi>0;secondi--){
@@ -560,7 +572,11 @@ void app_main()
 	printf("\n\t --- AVVIO IL BLUETOOTH E TUTTI I SERVIZI ASSOCIATI --- \n");
 	ble_init();
 	fflush(stdout);
-	printf("\nFINE DEL MAIN.");
+	state_machine_init();
+	listener(); //TODO: da lanciare in un task a parte
+	printf("\nFINE DEL MAIN.\n");
+	print_available_ram();
+	fflush(stdout);
     //printf("\nHO LANCIATO TUTTI I SERVIZI, PRESTO SARANNO DISPONIBILI");
     return;
 }

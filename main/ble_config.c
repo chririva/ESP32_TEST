@@ -26,18 +26,17 @@
 
 //CARATTERISTICHE
 //SERVICE 1
-uint8_t service1_master_pubkey_str[512] = {0x11,0x22,0x33};
-uint8_t service1_master_certificate_str[520] = "Certificato Master";
-//uint8_t service1_master_certificate_str[] = {0x12,0x22,0x33,0x33,0xAA,0x43,0x55};
-uint8_t service1_info_str[32] = "Informazione";
+uint8_t service1_master_pubkey_str[GATTS_CHAR_PUBKEY_LEN_MAX] = {0};
+uint8_t service1_master_certificate_str[GATTS_CHAR_PUBKEY_LEN_MAX] = "Certificato Master";
+uint8_t service1_info_str[GATTS_CHAR_INFO32_LEN_MAX] = "Informazione";
 //SERVICE 2
-uint8_t service2_master_pubkey_str[] = {0x11,0x22,0x55};
-uint8_t service2_master_certificate_str[] = {0x12,0x22,0x33,0x33,0xAA,0x43,0x55};
-uint8_t service2_slave_pubkey_str[] = {0x11,0x22,0x33};
-uint8_t service2_slave_certificate_str[] = {0x12,0x22,0x33,0x33,0xFF,0x33,0x53};
-uint8_t service2_random_str[] = "randomstring";
-uint8_t service2_random_signed_str[] = {0x11,0x22,0x33};
-uint8_t service2_info_str[32] = "Informazione";
+uint8_t service2_master_pubkey_str[GATTS_CHAR_PUBKEY_LEN_MAX] = {0x11,0x22,0x55};
+uint8_t service2_master_certificate_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = {0x12,0x22,0x33,0x33,0xAA,0x43,0x55};
+uint8_t service2_slave_pubkey_str[GATTS_CHAR_PUBKEY_LEN_MAX] = {0x11,0x22,0x33};
+uint8_t service2_slave_certificate_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = {0x12,0x22,0x33,0x33,0xFF,0x33,0x53};
+uint8_t service2_random_str[GATTS_CHAR_RND_LEN_MAX] = "randomstring";
+uint8_t service2_random_signed_str[GATTS_CHAR_RND_LEN_MAX] = {0x11,0x22,0x33};
+uint8_t service2_info_str[GATTS_CHAR_INFO32_LEN_MAX] = "Informazione";
 
 //DESCRITTORI
 //SERVICE 1
@@ -57,7 +56,7 @@ uint8_t service2_info_descr_user_str[5] = "Info";
 //SERVICE 1
 esp_attr_value_t gatts_service1_master_pubkey_val =
 {
-    .attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
+    .attr_max_len = GATTS_CHAR_PUBKEY_LEN_MAX,
     .attr_len     = sizeof(service1_master_pubkey_str),
     .attr_value   = service1_master_pubkey_str,
 };
@@ -70,7 +69,7 @@ esp_attr_value_t gatts_service1_master_pubkey_descr_user_val =
 
 esp_attr_value_t gatts_service1_master_certificate_val =
 {
-    .attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
+    .attr_max_len = GATTS_CHAR_PUBKEY_LEN_MAX,
     .attr_len     = sizeof(service1_master_certificate_str),
     .attr_value   = service1_master_certificate_str,
 };
@@ -83,7 +82,7 @@ esp_attr_value_t gatts_service1_master_certificate_descr_user_val =
 
 esp_attr_value_t gatts_service1_info_val =
 {
-    .attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
+    .attr_max_len = GATTS_CHAR_INFO32_LEN_MAX, //crea define
     .attr_len     = sizeof(service1_info_str),
     .attr_value   = service1_info_str,
 };
@@ -97,7 +96,7 @@ esp_attr_value_t gatts_service1_info_descr_user_val =
 //SERVICE 2
 esp_attr_value_t gatts_service2_master_pubkey_val =
 {
-    .attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
+    .attr_max_len = GATTS_CHAR_PUBKEY_LEN_MAX,
     .attr_len     = sizeof(service2_master_pubkey_str),
     .attr_value   = service2_master_pubkey_str,
 };
@@ -110,7 +109,7 @@ esp_attr_value_t gatts_service2_master_pubkey_descr_user_val =
 
 esp_attr_value_t gatts_service2_master_certificate_val =
 {
-    .attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
+    .attr_max_len = GATTS_CHAR_CERTIFICATE_LEN_MAX,
     .attr_len     = sizeof(service2_master_certificate_str),
     .attr_value   = service2_master_certificate_str,
 };
@@ -123,7 +122,7 @@ esp_attr_value_t gatts_service2_master_certificate_descr_user_val =
 
 esp_attr_value_t gatts_service2_slave_pubkey_val =
 {
-    .attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
+    .attr_max_len = GATTS_CHAR_PUBKEY_LEN_MAX,
     .attr_len     = sizeof(service2_slave_pubkey_str),
     .attr_value   = service2_slave_pubkey_str,
 };
@@ -136,7 +135,7 @@ esp_attr_value_t gatts_service2_slave_pubkey_descr_user_val =
 
 esp_attr_value_t gatts_service2_slave_certificate_val =
 {
-    .attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
+    .attr_max_len = GATTS_CHAR_CERTIFICATE_LEN_MAX,
     .attr_len     = sizeof(service2_slave_certificate_str),
     .attr_value   = service2_slave_certificate_str,
 };
@@ -149,7 +148,7 @@ esp_attr_value_t gatts_service2_slave_certificate_descr_user_val =
 
 esp_attr_value_t gatts_service2_random_val =
 {
-    .attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
+    .attr_max_len = GATTS_CHAR_RND_LEN_MAX,
     .attr_len     = sizeof(service2_random_str),
     .attr_value   = service2_random_str,
 };
@@ -162,7 +161,7 @@ esp_attr_value_t gatts_service2_random_descr_user_val =
 
 esp_attr_value_t gatts_service2_random_signed_val =
 {
-    .attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
+    .attr_max_len = GATTS_CHAR_RND_LEN_MAX,
     .attr_len     = sizeof(service2_random_signed_str),
     .attr_value   = service2_random_signed_str,
 };
@@ -175,7 +174,7 @@ esp_attr_value_t gatts_service2_random_signed_descr_user_val =
 
 esp_attr_value_t gatts_service2_info_val =
 {
-    .attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
+    .attr_max_len = GATTS_CHAR_INFO32_LEN_MAX,
     .attr_len     = sizeof(service2_info_str),
     .attr_value   = service2_info_str,
 };

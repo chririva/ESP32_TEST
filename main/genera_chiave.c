@@ -53,8 +53,7 @@ bool wait_key_gen;
 #include <unistd.h>
 #define DEV_RANDOM_THRESHOLD        32
 
-int dev_random_entropy_poll( void *data, unsigned char *output,
-                             size_t len, size_t *olen )
+static int dev_random_entropy_poll( void *data, unsigned char *output, size_t len, size_t *olen )
 {
     FILE *file;
     size_t ret, left = len;
@@ -160,7 +159,7 @@ struct options
     int use_dev_random;         /* use /dev/random as entropy source    */
 } opt;
 
-bool salva_chiavi_key(mbedtls_pk_context *key, const mbedtls_mpi *N, const mbedtls_mpi *P, const mbedtls_mpi *Q,
+static bool salva_chiavi_key(mbedtls_pk_context *key, const mbedtls_mpi *N, const mbedtls_mpi *P, const mbedtls_mpi *Q,
 				  const mbedtls_mpi *D, const mbedtls_mpi *E, const mbedtls_mpi *DP,
 				  const mbedtls_mpi *DQ, const mbedtls_mpi *QP){
 

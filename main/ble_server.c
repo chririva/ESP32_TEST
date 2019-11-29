@@ -43,6 +43,9 @@
 
 #include "sdkconfig.h"
 
+extern uint8_t service1_master_pubkey_str[GATTS_CHAR_PUBKEY_LEN_MAX]; //TODO: TOGLIERE, solo per debug
+extern bool charateristic_flags[10];
+
 /* ************************************************************ */
 /* *************************** GAP **************************** */
 /* ************************************************************ */
@@ -214,6 +217,85 @@ static uint16_t ble_add_service_pos;
 static uint32_t ble_add_char_pos;
 static uint32_t ble_add_descr_pos;
 
+static prepare_type_env_t buff_prepare_write_env;
+
+//per scrivere una lunga caratteristica
+void example_write_event_env(esp_gatt_if_t gatts_if, prepare_type_env_t *prepare_write_env, esp_ble_gatts_cb_param_t *param){
+    esp_gatt_status_t status = ESP_GATT_OK;
+    if (param->write.need_rsp){
+        if (param->write.is_prep){
+            if (prepare_write_env->prepare_buf == NULL) {
+                prepare_write_env->prepare_buf = (uint8_t *)malloc(PREPARE_BUF_MAX_SIZE*sizeof(uint8_t));
+                prepare_write_env->prepare_len = 0;
+                if (prepare_write_env->prepare_buf == NULL) {
+                    ESP_LOGE(GATTS_TAG, "Gatt_server prep no mem\n");
+                    status = ESP_GATT_NO_RESOURCES;
+                }
+            } else {
+                if(param->write.offset > PREPARE_BUF_MAX_SIZE) {
+                    status = ESP_GATT_INVALID_OFFSET;
+                } else if ((param->write.offset + param->write.len) > PREPARE_BUF_MAX_SIZE) {
+                    status = ESP_GATT_INVALID_ATTR_LEN;
+                }
+            }
+
+            esp_gatt_rsp_t *gatt_rsp = (esp_gatt_rsp_t *)malloc(sizeof(esp_gatt_rsp_t));
+            gatt_rsp->attr_value.len = param->write.len;
+            gatt_rsp->attr_value.handle = param->write.handle;
+            gatt_rsp->attr_value.offset = param->write.offset;
+            gatt_rsp->attr_value.auth_req = ESP_GATT_AUTH_REQ_NONE;
+            memcpy(gatt_rsp->attr_value.value, param->write.value, param->write.len);
+            esp_err_t response_err = esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, status, gatt_rsp);
+            if (response_err != ESP_OK){
+               ESP_LOGE(GATTS_TAG, "Send response error\n");
+            }
+            free(gatt_rsp);
+            if (status != ESP_GATT_OK){
+                return;
+            }
+            memcpy(prepare_write_env->prepare_buf + param->write.offset,
+                   param->write.value,
+                   param->write.len);
+            prepare_write_env->prepare_len += param->write.len;
+
+        }else{
+            esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, status, NULL);
+        }
+    }
+}
+
+void example_exec_write_event_env(prepare_type_env_t *prepare_write_env, esp_ble_gatts_cb_param_t *param){
+    if (param->exec_write.exec_write_flag == ESP_GATT_PREP_WRITE_EXEC){
+        esp_log_buffer_hex(GATTS_TAG, prepare_write_env->prepare_buf, prepare_write_env->prepare_len);
+        printf("\nLUNGHEZZA: %d\n",prepare_write_env->prepare_len);
+        printf("\nCARATTERISTICA NUMERO: %d\n",prepare_write_env->char_position);
+
+        //copio in memoria
+		gatts_char[prepare_write_env->char_position].char_val->attr_len = prepare_write_env->prepare_len;
+		for (uint32_t valpos=0; valpos<prepare_write_env->prepare_len;valpos++) {
+			gatts_char[prepare_write_env->char_position].char_val->attr_value[valpos]=prepare_write_env->prepare_buf[valpos];
+		}
+		//Aggiungo il terminatore
+		gatts_char[prepare_write_env->char_position].char_val->attr_value[prepare_write_env->prepare_len]=0;
+		charateristic_flags[prepare_write_env->char_position]=true; //flaggo la char scritta
+
+    }else{
+        ESP_LOGI(GATTS_TAG,"ESP_GATT_PREP_WRITE_CANCEL");
+    }
+    //service1_master_pubkey_str
+    //TODO: TOGLIERE
+    //PROVO A STAMPARE QELLO CHE HO SALVATO
+    printf("\n\nHO STORATO NELLA ARATTERISTICA NUMERO [%d]:\n[",prepare_write_env->char_position);
+	printf("%s]\n\n",(char *)service1_master_pubkey_str);
+
+    if (prepare_write_env->prepare_buf) {
+        free(prepare_write_env->prepare_buf);
+        prepare_write_env->prepare_buf = NULL;
+    }
+    prepare_write_env->prepare_len = 0;
+}
+
+
 /* This function is called by gatts_event_handler() in case of an
  * ESP_GATTS_READ_EVT:
  * It walks through all of the gatts_char and gatts_descr arrays until the
@@ -283,20 +365,29 @@ static void gatts_write_value_handler(esp_gatts_cb_event_t event, esp_gatt_if_t 
 	for (uint32_t pos=0;pos<GATTS_CHAR_NUM;pos++) {
 		if (gatts_char[pos].char_handle==param->write.handle) {
 			ESP_LOGI(GATTS_TAG, "gatts_write_value_handler: found requested handle at char pos %d\n", pos);
+			// If the write is a long write, then (param->write.is_prep) will be set,
+			//if it is a short write then (param->write.is_prep) will not be set
+			if (param->write.is_prep){ // se write.
+				//VA SCRITTA UNA LUNGA CARATTERISTICA
+				buff_prepare_write_env.char_position = pos;
+				example_write_event_env(gatts_if, &buff_prepare_write_env, param);
+			}else{
+				//VA SCRITTA UNA CORTA CARATTERISTICA
+				if (gatts_char[pos].char_val!=NULL) {
+					ESP_LOGI(GATTS_TAG, "gatts_write_value_handler: char_val length %d\n", param->write.len);
+					gatts_char[pos].char_val->attr_len = param->write.len;
+					for (uint32_t valpos=0; valpos<param->write.len && valpos<gatts_char[pos].char_val->attr_max_len;valpos++) {
+						gatts_char[pos].char_val->attr_value[valpos]=param->write.value[valpos];
+					}
+					//Aggiungo il terminatore
+					gatts_char[pos].char_val->attr_value[param->write.len]=0;
 
-			// set the attribute value:
-			if (gatts_char[pos].char_val!=NULL) {
-				ESP_LOGI(GATTS_TAG, "gatts_write_value_handler: char_val length %d\n", param->write.len);
-				gatts_char[pos].char_val->attr_len = param->write.len;
-				for (uint32_t valpos=0; valpos<param->write.len && valpos<gatts_char[pos].char_val->attr_max_len;valpos++) {
-					gatts_char[pos].char_val->attr_value[valpos]=param->write.value[valpos];
+					ESP_LOGI(TAG, "gatts_write_value_handler %.*s", gatts_char[pos].char_val->attr_len, (char*)gatts_char[pos].char_val->attr_value);
+
+					esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, ESP_GATT_OK, NULL);
+					// TODO: notify?
+					break;
 				}
-
-				ESP_LOGI(TAG, "gatts_write_value_handler %.*s", gatts_char[pos].char_val->attr_len, (char*)gatts_char[pos].char_val->attr_value);
-
-				esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, ESP_GATT_OK, NULL);
-				// TODO: notify?
-				break;
 			}
 		}
 	}
@@ -311,6 +402,9 @@ static void gatts_write_value_handler(esp_gatts_cb_event_t event, esp_gatt_if_t 
 				for (uint32_t valpos=0; valpos<param->write.len && valpos<gatts_descr[pos].descr_val->attr_max_len;valpos++) {
 					gatts_descr[pos].descr_val->attr_value[valpos]=param->write.value[valpos];
 				}
+				//Aggiungo il terminatore
+				gatts_descr[pos].descr_val->attr_value[param->write.len]=0;
+
 				ESP_LOGI(TAG, "gatts_write_value_handler: wrote: %.*s", gatts_descr[pos].descr_val->attr_len, (char*)gatts_descr[pos].descr_val->attr_value);
 
 				esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, ESP_GATT_OK, NULL);
@@ -319,7 +413,7 @@ static void gatts_write_value_handler(esp_gatts_cb_event_t event, esp_gatt_if_t 
 			}
 		}
 	}
-	printf("prova");
+	printf("\nFINE: gatts_write_value_handler \n");
 }
 
 
@@ -481,8 +575,12 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 		break;
 	}
 	case ESP_GATTS_EXEC_WRITE_EVT:{
-		printf("\nESEGUI SCRITTURA\n");
-		break;
+        printf("\nEXECUTE WRITE REQUEST:\n");
+		ESP_LOGI(GATTS_TAG,"ESP_GATTS_EXEC_WRITE_EVT");
+        esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, ESP_GATT_OK, NULL);
+
+        example_exec_write_event_env(&buff_prepare_write_env, param);
+        break;
 	}
 	case ESP_GATTS_MTU_EVT:
 	case ESP_GATTS_CONF_EVT:

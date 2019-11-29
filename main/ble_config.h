@@ -12,6 +12,12 @@
 #define DEVICE_NAME "TEST_ESP32"
 
 #define GATTS_CHAR_VAL_LEN_MAX 0x400
+
+#define GATTS_CHAR_INFO32_LEN_MAX 32 //32 bit per info
+#define GATTS_CHAR_PUBKEY_LEN_MAX 520 //520 bit per chiavi pubbliche
+#define GATTS_CHAR_CERTIFICATE_LEN_MAX 550 //550 bit per certificati
+#define GATTS_CHAR_RND_LEN_MAX 100 //100 bit per random, random signed
+
 #define GATTS_SERVICE_NUM 2
 #define GATTS_CHAR_NUM 10 //numero di tutte le caratteristiche
 #define GATTS_DESCR_NUM	10 //numero di tutti i descrittori
