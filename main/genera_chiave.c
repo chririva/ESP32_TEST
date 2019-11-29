@@ -174,42 +174,42 @@ static bool salva_chiavi_key(mbedtls_pk_context *key, const mbedtls_mpi *N, cons
     }
     ESP_ERROR_CHECK( err );
     // Open
-    printf("\nOpening Non-Volatile Storage (NVS) handle... ");
+    printf("\n -> Opening Non-Volatile Storage (NVS) handle... ");
     nvs_handle my_handle;
     err = nvs_open("stored_keys", NVS_READWRITE, &my_handle);
     if (err != ESP_OK) {
-        printf("\nError (%s) opening NVS handle!\n", esp_err_to_name(err));
+        printf("\n -> Error (%s) opening NVS handle!", esp_err_to_name(err));
     } else{
-        printf("\nFile Aperto con successo.\n");
+        printf("\n -> File Aperto con successo.");
 
 		//CONVERTO TUTTI I mbedtls_mpi IN STRINGHE PER IL SALVATAGGIO SU FILE.
-		size_t n_N,n_E,n_D,n_P,n_Q,n_DP,n_DQ,n_QP,n_key;
-		static char N_string[520],E_string[10],D_string[520],P_string[500],
-					Q_string[500],DP_string[500],DQ_string[500],QP_string[500];
+		size_t n_key;
+		/*static char N_string[520],E_string[10],D_string[520],P_string[500],
+					Q_string[500],DP_string[500],DQ_string[500],QP_string[500];*/
 		unsigned char key_string[1700];
-		memset(N_string, 0, sizeof(N_string));
+		/*memset(N_string, 0, sizeof(N_string));
 		memset(E_string, 0, sizeof(E_string));
 		memset(D_string, 0, sizeof(D_string));
 		memset(P_string, 0, sizeof(P_string));
 		memset(Q_string, 0, sizeof(Q_string));
 		memset(DP_string, 0, sizeof(DP_string));
 		memset(DQ_string, 0, sizeof(DQ_string));
-		memset(QP_string, 0, sizeof(QP_string));
+		memset(QP_string, 0, sizeof(QP_string));*/
 		memset(key_string, 0, sizeof(key_string));
-		mbedtls_mpi_write_string(N, 16, N_string, sizeof(N_string)-1, &n_N);
+		/*mbedtls_mpi_write_string(N, 16, N_string, sizeof(N_string)-1, &n_N);
 		mbedtls_mpi_write_string(E, 16, E_string, sizeof(E_string)-1, &n_E);
 		mbedtls_mpi_write_string(D, 16, D_string, sizeof(D_string)-1, &n_D);
 		mbedtls_mpi_write_string(P, 16, P_string, sizeof(P_string)-1, &n_P);
 		mbedtls_mpi_write_string(Q, 16, Q_string, sizeof(Q_string)-1, &n_Q);
 		mbedtls_mpi_write_string(DP, 16, DP_string, sizeof(DP_string)-1, &n_DP);
 		mbedtls_mpi_write_string(DQ, 16, DQ_string, sizeof(DQ_string)-1, &n_DQ);
-		mbedtls_mpi_write_string(QP, 16, QP_string, sizeof(QP_string)-1, &n_QP);
+		mbedtls_mpi_write_string(QP, 16, QP_string, sizeof(QP_string)-1, &n_QP);*/
 		if(mbedtls_pk_write_key_pem( key, key_string, sizeof(key_string) ) != 0 )
-		     printf("\nPROBLEMONE");
+		     printf("\n -> PROBLEMONE");
 		n_key = strlen( (char *) key_string );
 
 		//STAMPE
-		printf("\nN_lenght: %d",n_N);
+		/*printf("\nN_lenght: %d",n_N);
 		printf("\nN_value: %s \n",N_string);
 		printf("\nE_lenght: %d",n_E);
 		printf("\nE_value: %s \n",E_string);
@@ -224,32 +224,31 @@ static bool salva_chiavi_key(mbedtls_pk_context *key, const mbedtls_mpi *N, cons
 		printf("\nDQ_lenght: %d",n_DQ);
 		printf("\nDQ_value: %s \n",DQ_string);
 		printf("\nQP_lenght: %d",n_QP);
-		printf("\nQP_value: %s \n",QP_string);
+		printf("\nQP_value: %s \n",QP_string);*/
         printf("\nkey_length: %d",n_key);
         printf("\nkey_value: %s",key_string);
 		// Write
-		printf("Writing values in NVS ... ");
-		err = nvs_set_str(my_handle, "N", N_string); printf((err != ESP_OK) ? "N:Failed!\n" : "N:Done\n");
+		printf("\n -> Writing values in NVS ... ");
+		/*err = nvs_set_str(my_handle, "N", N_string); printf((err != ESP_OK) ? "N:Failed!\n" : "N:Done\n");
 		err = nvs_set_str(my_handle, "E", E_string); printf((err != ESP_OK) ? "E:Failed!\n" : "E:Done\n");
 		err = nvs_set_str(my_handle, "D", D_string); printf((err != ESP_OK) ? "D:Failed!\n" : "D:Done\n");
 		err = nvs_set_str(my_handle, "P", P_string); printf((err != ESP_OK) ? "P:Failed!\n" : "P:Done\n");
 		err = nvs_set_str(my_handle, "Q", Q_string); printf((err != ESP_OK) ? "Q:Failed!\n" : "Q:Done\n");
 		err = nvs_set_str(my_handle, "DP", DP_string); printf((err != ESP_OK) ? "DP:Failed!\n" : "DP:Done\n");
 		err = nvs_set_str(my_handle, "DQ", DQ_string); printf((err != ESP_OK) ? "DQ:Failed!\n" : "DQ:Done\n");
-		err = nvs_set_str(my_handle, "QP", QP_string); printf((err != ESP_OK) ? "QP:Failed!\n" : "QP:Done\n");
-		err = nvs_set_str(my_handle, "KEY", (char*)key_string); printf((err != ESP_OK) ? "KEY:Failed!\n" : "KEY:Done\n");
+		err = nvs_set_str(my_handle, "QP", QP_string); printf((err != ESP_OK) ? "QP:Failed!\n" : "QP:Done\n");*/
+		err = nvs_set_str(my_handle, "KEY", (char*)key_string); printf((err != ESP_OK) ? "\n   -> KEY: Failed!" : "\n   -> KEY:Done");
 		// Commit written value.
 		// After setting any values, nvs_commit() must be called to ensure changes are written
 		// to flash storage. Implementations may write to storage at other times,
 		// but this is not guaranteed.
-		printf("Committing updates in NVS ... ");
+		printf("\n -> Committing updates in NVS ... ");
 		err = nvs_commit(my_handle);
-		printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+		printf((err != ESP_OK) ? "\n   -> Failed!" : "\n   -> Done");
 		// Close
 		nvs_close(my_handle);
-		printf("file chiuso.\n");
+		printf("\n -> file chiuso.");
     }
-
 	return true;
 }
 

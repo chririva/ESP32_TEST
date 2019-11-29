@@ -52,7 +52,9 @@ bool wait_master_cert_write;
 extern mbedtls_pk_context key_key, master_pub_key;
 extern mbedtls_x509_crt self_certificate;
 extern mbedtls_x509_crt master_certificate;
-extern esp_attr_value_t gatts_service1_master_certificate_val;
+extern esp_attr_value_t gatts_service1_master_certificate1_val;
+extern esp_attr_value_t gatts_service1_master_certificate2_val;
+extern esp_attr_value_t gatts_service1_master_certificate3_val;
 
 
 #define DFL_ISSUER_CRT_D         ""
@@ -121,15 +123,41 @@ int write_certificate2( mbedtls_x509write_cert *crt, int (*f_rng)(void *, unsign
 
     printf("\nDIMENSIONE DEL MASTER_CERTIFICATE: %d",len);
     printf("\nMASTER_CERTIFICATE: %s",output_buf);
-    //scrito il certificato nella caratteristica
-    gatts_service1_master_certificate_val.attr_len = len;
+    //DIVIDO IL CERTIFICATO IN 3 PARTI! A CAUSA DEL LIMITE DI 600BYTE (512?) DEL GATTS
+
+    //scrivo il certificato nella caratteristica1
+    printf("\nScrivo Master Cert in Characteristic P1\n");
+    gatts_service1_master_certificate1_val.attr_len = 400;
+    for(int valpos=0 ; valpos<400 ; valpos++ ){
+    	//printf("\n%d - ",valpos);
+    	gatts_service1_master_certificate1_val.attr_value[valpos]=(uint8_t)output_buf[valpos];
+    }
+    gatts_service1_master_certificate1_val.attr_value[400]=0; //terminatore stringa
+
+    printf("\nScrivo Master Cert in Characteristic P2\n");
+    gatts_service1_master_certificate2_val.attr_len = 400;
+    for(int valpos=0 ; valpos<400 ; valpos++ ){
+    	//printf("\n%d - ",valpos);
+    	gatts_service1_master_certificate2_val.attr_value[valpos]=(uint8_t)output_buf[valpos+400];
+    }
+    gatts_service1_master_certificate2_val.attr_value[400]=0; //terminatore stringa
+
+    printf("\nScrivo Master Cert in Characteristic P3\n");
+    gatts_service1_master_certificate3_val.attr_len = len-800;
+    for(int valpos=0 ; valpos<len-800 ; valpos++ ){
+    	//printf("\n%d - ",valpos);
+    	gatts_service1_master_certificate3_val.attr_value[valpos]=(uint8_t)output_buf[valpos+800];
+    }
+    gatts_service1_master_certificate3_val.attr_value[len-800]=0; //terminatore stringa
+
+    /*gatts_service1_master_certificate_val.attr_len = len;
     printf("\nDEBUG1\n");
     for(int valpos=0 ; valpos<len ; valpos++ ){
     	//printf("\n%d - ",valpos);
     	gatts_service1_master_certificate_val.attr_value[valpos]=(uint8_t)output_buf[valpos];
     }
     printf("\nDEBUG2\n");
-    gatts_service1_master_certificate_val.attr_value[len]=0; //terminatore stringa
+    gatts_service1_master_certificate_val.attr_value[len]=0; //terminatore stringa*/
 
     //LO CARICO DIRETTAMENTE NELLA RAM IN FORMATO mbedtls_x509_crt TODO: mi serve ??
     /*if( ( ret = mbedtls_x509_crt_parse(&master_certificate, output_buf, sizeof(output_buf)) ) != 0 ){

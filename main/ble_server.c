@@ -381,6 +381,7 @@ static void gatts_write_value_handler(esp_gatts_cb_event_t event, esp_gatt_if_t 
 					}
 					//Aggiungo il terminatore
 					gatts_char[pos].char_val->attr_value[param->write.len]=0;
+					charateristic_flags[pos]=true; //flaggo la char scritta
 
 					ESP_LOGI(TAG, "gatts_write_value_handler %.*s", gatts_char[pos].char_val->attr_len, (char*)gatts_char[pos].char_val->attr_value);
 

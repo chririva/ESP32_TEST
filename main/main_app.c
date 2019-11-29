@@ -4,7 +4,6 @@
  * Entry Point
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,6 +29,7 @@
 #include "mbedtls/rsa.h"
 #include "mbedtls/bignum.h"
 
+#include "main_app.h"
 #include "genera_chiave.h"
 #include "selfsigned_cert_write.h"
 #include "master_cert_write.h"
@@ -49,11 +49,10 @@
 
 #include "sdkconfig.h"
 
-#define GATTS_TAG "GATTS_DEMO"
-
+bool MASTER_MODE = true;
 
 //CHIAVI DEL DISPOSITIVO
-mbedtls_mpi N_key, P_key, Q_key, D_key, E_key, DP_key, DQ_key, QP_key; //Forse non verranno mai utilizzate
+//mbedtls_mpi N_key, P_key, Q_key, D_key, E_key, DP_key, DQ_key, QP_key; //Forse non verranno mai utilizzate
 mbedtls_pk_context key_key, master_pub_key,slave_pub_key; //key_key è la chiave della esp. device_pub_key dello smartphone master
 mbedtls_pk_context master_priv_key, slave_priv_key; //TODO: DA TOGLIERE, MI SERVE SOLO PER SIMULARLE LA CATENA DI CERTIFICATI
 mbedtls_x509_crt self_certificate; //Self certificate della esp
@@ -95,7 +94,7 @@ unsigned char master_priv_key_string[] =  "-----BEGIN RSA PRIVATE KEY-----\n"\
 								"u/wWKmECgYBOEyb6gggg8pzO0m76v1jFdGgFWTeWiGVyvqn680BaTkl8m9Y8VSCr\n"\
 								"vbBDrQdxyXybY1xDVcp5baTTCqBt5ADLHyoipDvT/4SM+jdYp2kM/xgHhupVKYwL\n"\
 								"3BONrGy2mLSWFlyF+4C2CdJZM594bBmsrO3bsZni8Z5UhPRkfPkh1g==\n"\
-								"-----END RSA PRIVATE KEY-----"; //TODO: Ricevere la vera chiave
+								"-----END RSA PRIVATE KEY-----";
 
 unsigned char slave_pub_key_string[] =  "-----BEGIN PUBLIC KEY-----\n"\
 							    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhGCqrEfcr4mdhJKqYqDb\n"\
@@ -133,7 +132,7 @@ unsigned char slave_priv_key_string[] =  "-----BEGIN RSA PRIVATE KEY-----\n"\
 								"MFcd5gECgYADC1PZEnGuGDssFFoLL6fC6QdY7BGQbkiffmHRXqM0kzZioc/od5kX\n"\
 							    "MWgsI/f1pwoDydVGEegldWHdY/X6EeGB1n9JFPO7XJR/VdOuWUeSUiVIaJW9ROmG\n"\
 								"Eu90pcvHiqpfvpbf2950NP0eyUlUvjCeRewspt5buxwo4jKWfVEjbA==\n"\
-								"-----END RSA PRIVATE KEY-----"; //TODO: Ricevere la vera chiave
+								"-----END RSA PRIVATE KEY-----";
 
 char rand_challenge_str[] =  "una stringa da generare random";
 unsigned char rand_challenge_firmato[MBEDTLS_MPI_MAX_SIZE];
@@ -143,7 +142,7 @@ bool wait_self_cert_generation;
 bool wait_cert_app_master;
 bool wait_cert_app_slave;
 bool master_cert_validity, slave_cert_validity;
-bool charateristic_flags[10];
+bool charateristic_flags[16];
 
 void ritardo(int secondi){
 	for(;secondi>0;secondi--){
@@ -160,6 +159,7 @@ void print_available_ram(){
 }
 
 bool carica_chiavi(){
+	bool exit_code=true;
     // Initialize NVS
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
@@ -180,87 +180,53 @@ bool carica_chiavi(){
     } else {
         printf("\n   -> File Aperto con successo.");
         // Read
-        size_t n_N,n_E,n_D,n_P,n_Q,n_DP,n_DQ,n_QP,n_key;
+        size_t n_key;
         //Mi interessa solo la dimensione per poter creare array dinamici //TODO: sistemare il return, se fallisce qualcosa deve ritornare false
         printf("\n -> Verifico che tutte le chiavi siano in memoria..");
-        err = nvs_get_str(my_handle, "N", NULL, &n_N); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "E", NULL, &n_E); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "D", NULL, &n_D); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "P", NULL, &n_P); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "Q", NULL, &n_Q); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "DP", NULL, &n_DP); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "DQ", NULL, &n_DQ); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "QP", NULL, &n_QP); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "KEY", NULL, &n_key); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-        char* N_string=pvPortMalloc(n_N);
-        char* E_string=pvPortMalloc(n_E);
-		char* D_string=pvPortMalloc(n_D);
-		char* P_string=pvPortMalloc(n_P);
-		char* Q_string=pvPortMalloc(n_Q);
-		char* DP_string=pvPortMalloc(n_DP);
-		char* DQ_string=pvPortMalloc(n_DQ);
-		char* QP_string=pvPortMalloc(n_QP);
+        if(nvs_get_str(my_handle, "KEY", NULL, &n_key)!=ESP_OK){
+        	printf("\n     -> Failed!");
+        	return false;
+        }
+        printf("\n     -> Done");
 		char* key_string=pvPortMalloc(n_key);
 		//Leggo effettivamente il valore
 		printf("\n -> Carico le chiavi in formato string");
-		err = nvs_get_str(my_handle, "N", N_string, &n_N); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "E", E_string, &n_E); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "D", D_string, &n_D); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "P", P_string, &n_P); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "Q", Q_string, &n_Q); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "DP", DP_string, &n_DP); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "DQ", DQ_string, &n_DQ); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "QP", QP_string, &n_QP); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-		err = nvs_get_str(my_handle, "KEY", key_string, &n_key); printf((err != ESP_OK) ? "\n     -> Failed!" : "\n     -> Done");
-
-		//Stampo le chiavi a video
-		printf("\n\n\t ----- STAMPO LE CHIAVI -----\n");
-		printf("\nLA N CARICATA VALE (string): %s\n",N_string);
-		printf("\nLA E CARICATA VALE (string) : %s\n",E_string);
-		printf("\nLA D CARICATA VALE (string) : %s\n",D_string);
-		printf("\nLA P CARICATA VALE (string) : %s\n",P_string);
-		printf("\nLA Q CARICATA VALE (string) : %s\n",Q_string);
-		printf("\nLA DP CARICATA VALE (string) : %s\n",DP_string);
-		printf("\nLA DQ CARICATA VALE (string) : %s\n",DQ_string);
-		printf("\nLA QP CARICATA VALE (string) : %s\n",QP_string);
-		printf("\n----- CHIAVE PRIVATA DELLA ESP32 -----\n%s\n",key_string);
-        // Close
+        if(nvs_get_str(my_handle, "KEY", key_string, &n_key)!=ESP_OK){
+        	printf("\n     -> Failed!");
+        	exit_code = false;
+        	goto exit;
+        }
+		// Close
         nvs_close(my_handle);
         printf("\n -> File chiuso.");
-        printf("\n -> Converto le chiavi da STRING a MPI.");
-        //Converto da STRINGA ad MPI
-        //N_key, P_key, Q_key, D_key, E_key, DP_key, DQ_key, QP_key;
-        int error;
-        error = mbedtls_mpi_read_string(&N_key,16,N_string); printf((error != 0) ? "\n   -> Conversion to MPI Failed!" : "\n   -> Conversion to MPI Done");
-        error = mbedtls_mpi_read_string(&E_key,16,E_string); printf((error != 0) ? "\n   -> Conversion to MPI Failed!" : "\n   -> Conversion to MPI Done");
-        error = mbedtls_mpi_read_string(&D_key,16,D_string); printf((error != 0) ? "\n   -> Conversion to MPI Failed!" : "\n   -> Conversion to MPI Done");
-        error = mbedtls_mpi_read_string(&P_key,16,P_string); printf((error != 0) ? "\n   -> Conversion to MPI Failed!" : "\n   -> Conversion to MPI Done");
-        error = mbedtls_mpi_read_string(&Q_key,16,Q_string); printf((error != 0) ? "\n   -> Conversion to MPI Failed!" : "\n   -> Conversion to MPI Done");
-        error = mbedtls_mpi_read_string(&DP_key,16,DP_string); printf((error != 0) ? "\n   -> Conversion to MPI Failed!" : "\n   -> Conversion to MPI Done");
-        error = mbedtls_mpi_read_string(&DQ_key,16,DQ_string); printf((error != 0) ? "\n   -> Conversion to MPI Failed!" : "\n   -> Conversion to MPI Done");
-        error = mbedtls_mpi_read_string(&QP_key,16,QP_string); printf((error != 0) ? "\n   -> Conversion to MPI Failed!" : "\n   -> Conversion to MPI Done");
+
         mbedtls_pk_init(&key_key);
         printf("\n -> Converto le chiavi da STRING a PK.");
-        error = mbedtls_pk_parse_key( &key_key, (unsigned char*)key_string, n_key,NULL,0);
-        if(error!=0){
+        if(mbedtls_pk_parse_key( &key_key, (unsigned char*)key_string, n_key,NULL,0)!=0){
         	printf("\n   -> Conversion to PK Failed!");
-        	return false;
+			exit_code=false;
+			goto exit;
         }
         else{
         	printf("\n   -> Conversion to PK Done");
-            printf("\n\n\t ----- ESTRAGGO LA CHIAVE PUBBLICA DA QUELLA PRIVATA -----\n");
+            printf("\n -> Estraggo la chiave pubblica da quella privata..");
             unsigned char output_buf[1800];
             //size_t len = 0;
             memset(output_buf, 0, 1800);
     		if( mbedtls_pk_write_pubkey_pem( &key_key, output_buf, 1800 ) != 0 ){
-    			printf("\n -> Estrazione fallita.");
-    			return false;
+    			printf("\n   -> Estrazione fallita.");
+    			exit_code=false;
+    			goto exit;
     		}
+    		else
+    			printf("\n   -> Estrazione completata.");
             //len = strlen( (char *) output_buf );
             //printf("\n\nLunghezza Chiave Pubblica: %d",len);
-            printf("\n----- CHIAVE PUBBLICA DELLA ESP32 -----\n%s",output_buf);
+    		//Stampo le chiavi a video
+    		printf("\n\n\t ----- STAMPO LE CHIAVI -----\n");
+    		printf("\n\t\t----- CHIAVE PRIVATA DELLA ESP32 -----\n%s\n",key_string);
+            printf("\n\t\t----- CHIAVE PUBBLICA DELLA ESP32 -----\n%s",output_buf);
         }
-
 
         //TODO: DA TOGLIERE: EMULO LE CHIAVI PRIVATE E PUBBLICHE! begin
     	/*
@@ -284,14 +250,12 @@ bool carica_chiavi(){
         */
         //TODO: DA TOGLIERE: EMULO LE CHIAVI PRIVATE E PUBBLICHE! end
 
-
+        exit:
         //LIBERO LA MEMORIA
-        vPortFree(N_string); vPortFree(E_string); vPortFree(D_string);
-        vPortFree(P_string); vPortFree(Q_string); vPortFree(DP_string);
-        vPortFree(DQ_string); vPortFree(QP_string); vPortFree(key_string);
+        vPortFree(key_string);
 
     }
-    return true;
+    return exit_code;
 }
 
 bool cancella_tutto(){
@@ -470,10 +434,13 @@ void app_main()
 	printf("\n\n------------------------------------------------------------------------------------------\n");
 
 	printf("\n\t ----- TENTO DI CARICARE LE CHIAVI DALLA NVS -----\n");
-	if(carica_chiavi())
+	if(carica_chiavi()){
 		printf("\n -> Chiavi caricate con successo \n");
+		printf("\n\n------------------------------------------------------------------------------------------\n");
+	}
 	else{
 		printf("\n -> Chiavi non trovate.\n");
+		printf("\n\n------------------------------------------------------------------------------------------\n");
 		printf("\n\t ----- GENERO LA COPPIA CHIAVE PUBBLICA E PRIVATA ----- \n");
 		wait_key_gen=true;
 		xTaskCreate(genera_chiave,"GeneraChiave",64768,NULL,2,NULL);
@@ -583,8 +550,6 @@ void app_main()
 	printf("\n\t --- AVVIO IL BLUETOOTH E TUTTI I SERVIZI ASSOCIATI --- \n");
 	ble_init();
 	fflush(stdout);
-	//state_machine_init();
-	//listener(); //TODO: da lanciare in un task a parte
 	printf("\nFINE DEL MAIN.\n");
 	print_available_ram();
 	fflush(stdout);

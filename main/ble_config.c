@@ -27,13 +27,19 @@
 //CARATTERISTICHE
 //SERVICE 1
 uint8_t service1_master_pubkey_str[GATTS_CHAR_PUBKEY_LEN_MAX] = {0x22};
-uint8_t service1_master_certificate_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = "Certificato Master";
+uint8_t service1_master_certificate1_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = "CertM1";
+uint8_t service1_master_certificate2_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = "CertM2";
+uint8_t service1_master_certificate3_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = "CertM3";
 uint8_t service1_info_str[GATTS_CHAR_INFO32_LEN_MAX] = "No info";
 //SERVICE 2
 uint8_t service2_master_pubkey_str[GATTS_CHAR_PUBKEY_LEN_MAX] = {0x11,0x22,0x55};
-uint8_t service2_master_certificate_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = {0x12,0x22,0x33,0x33,0xAA,0x43,0x55};
+uint8_t service2_master_certificate1_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = {0x01};
+uint8_t service2_master_certificate2_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = {0x02};
+uint8_t service2_master_certificate3_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = {0x03};
 uint8_t service2_slave_pubkey_str[GATTS_CHAR_PUBKEY_LEN_MAX] = {0x11,0x22,0x33};
-uint8_t service2_slave_certificate_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = {0x12,0x22,0x33,0x33,0xFF,0x33,0x53};
+uint8_t service2_slave_certificate1_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = {0x01};
+uint8_t service2_slave_certificate2_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = {0x01};
+uint8_t service2_slave_certificate3_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = {0x01};
 uint8_t service2_random_str[GATTS_CHAR_RND_LEN_MAX] = "randomstring";
 uint8_t service2_random_signed_str[GATTS_CHAR_RND_LEN_MAX] = {0x11,0x22,0x33};
 uint8_t service2_info_str[GATTS_CHAR_INFO32_LEN_MAX] = "Informazione";
@@ -67,17 +73,31 @@ esp_attr_value_t gatts_service1_master_pubkey_descr_user_val =
     .attr_value   = service1_master_pubkey_descr_user_str,
 };
 
-esp_attr_value_t gatts_service1_master_certificate_val =
+esp_attr_value_t gatts_service1_master_certificate1_val =
 {
     .attr_max_len = GATTS_CHAR_CERTIFICATE_LEN_MAX,
-    .attr_len     = sizeof(service1_master_certificate_str),
-    .attr_value   = service1_master_certificate_str,
+    .attr_len     = sizeof(service1_master_certificate1_str),
+    .attr_value   = service1_master_certificate1_str,
 };
 esp_attr_value_t gatts_service1_master_certificate_descr_user_val =
 {
     .attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
     .attr_len     = sizeof(service1_master_certificate_descr_user_str),
     .attr_value   = service1_master_certificate_descr_user_str,
+};
+
+esp_attr_value_t gatts_service1_master_certificate2_val =
+{
+    .attr_max_len = GATTS_CHAR_CERTIFICATE_LEN_MAX,
+    .attr_len     = sizeof(service1_master_certificate2_str),
+    .attr_value   = service1_master_certificate2_str,
+};
+
+esp_attr_value_t gatts_service1_master_certificate3_val =
+{
+    .attr_max_len = GATTS_CHAR_CERTIFICATE_LEN_MAX,
+    .attr_len     = sizeof(service1_master_certificate3_str),
+    .attr_value   = service1_master_certificate3_str,
 };
 
 esp_attr_value_t gatts_service1_info_val =
@@ -107,17 +127,31 @@ esp_attr_value_t gatts_service2_master_pubkey_descr_user_val =
     .attr_value   = service2_master_pubkey_descr_user_str,
 };
 
-esp_attr_value_t gatts_service2_master_certificate_val =
+esp_attr_value_t gatts_service2_master_certificate1_val =
 {
     .attr_max_len = GATTS_CHAR_CERTIFICATE_LEN_MAX,
-    .attr_len     = sizeof(service2_master_certificate_str),
-    .attr_value   = service2_master_certificate_str,
+    .attr_len     = sizeof(service2_master_certificate1_str),
+    .attr_value   = service2_master_certificate1_str,
 };
 esp_attr_value_t gatts_service2_master_certificate_descr_user_val =
 {
     .attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
     .attr_len     = sizeof(service2_master_certificate_descr_user_str),
     .attr_value   = service2_master_certificate_descr_user_str,
+};
+
+esp_attr_value_t gatts_service2_master_certificate2_val =
+{
+    .attr_max_len = GATTS_CHAR_CERTIFICATE_LEN_MAX,
+    .attr_len     = sizeof(service2_master_certificate2_str),
+    .attr_value   = service2_master_certificate2_str,
+};
+
+esp_attr_value_t gatts_service2_master_certificate3_val =
+{
+    .attr_max_len = GATTS_CHAR_CERTIFICATE_LEN_MAX,
+    .attr_len     = sizeof(service2_master_certificate3_str),
+    .attr_value   = service2_master_certificate3_str,
 };
 
 esp_attr_value_t gatts_service2_slave_pubkey_val =
@@ -133,17 +167,31 @@ esp_attr_value_t gatts_service2_slave_pubkey_descr_user_val =
     .attr_value   = service2_slave_pubkey_descr_user_str,
 };
 
-esp_attr_value_t gatts_service2_slave_certificate_val =
+esp_attr_value_t gatts_service2_slave_certificate1_val =
 {
     .attr_max_len = GATTS_CHAR_CERTIFICATE_LEN_MAX,
-    .attr_len     = sizeof(service2_slave_certificate_str),
-    .attr_value   = service2_slave_certificate_str,
+    .attr_len     = sizeof(service2_slave_certificate1_str),
+    .attr_value   = service2_slave_certificate1_str,
 };
 esp_attr_value_t gatts_service2_slave_certificate_descr_user_val =
 {
     .attr_max_len = GATTS_CHAR_VAL_LEN_MAX,
     .attr_len     = sizeof(service2_slave_certificate_descr_user_str),
     .attr_value   = service2_slave_certificate_descr_user_str,
+};
+
+esp_attr_value_t gatts_service2_slave_certificate2_val =
+{
+    .attr_max_len = GATTS_CHAR_CERTIFICATE_LEN_MAX,
+    .attr_len     = sizeof(service2_slave_certificate2_str),
+    .attr_value   = service2_slave_certificate2_str,
+};
+
+esp_attr_value_t gatts_service2_slave_certificate3_val =
+{
+    .attr_max_len = GATTS_CHAR_CERTIFICATE_LEN_MAX,
+    .attr_len     = sizeof(service2_slave_certificate3_str),
+    .attr_value   = service2_slave_certificate3_str,
 };
 
 esp_attr_value_t gatts_service2_random_val =
@@ -240,13 +288,37 @@ struct gatts_char_inst gatts_char[GATTS_CHAR_NUM] = {
 				.char_nvs = ""
 		},
 		{
-				/* Service1 -> Master certificate */
+				/* Service1 -> Master certificate PART1 */
 				.service_pos = 0, // Service1
 				.char_uuid.len = ESP_UUID_LEN_128, // Custom characteristic -> 128bit UUID
-				.char_uuid.uuid.uuid128 = GATTS_SERVICE1_MASTER_CERTIFICATE_CHAR_UUID,
+				.char_uuid.uuid.uuid128 = GATTS_SERVICE1_MASTER_CERTIFICATE1_CHAR_UUID,
 				.char_perm = ESP_GATT_PERM_READ,
 				.char_property = ESP_GATT_CHAR_PROP_BIT_READ,
-				.char_val = &gatts_service1_master_certificate_val,
+				.char_val = &gatts_service1_master_certificate1_val,
+				.char_control = NULL,
+				.char_handle = 0,
+				.char_nvs = ""
+		},
+		{
+				/* Service1 -> Master certificate PART2 */
+				.service_pos = 0, // Service1
+				.char_uuid.len = ESP_UUID_LEN_128, // Custom characteristic -> 128bit UUID
+				.char_uuid.uuid.uuid128 = GATTS_SERVICE1_MASTER_CERTIFICATE2_CHAR_UUID,
+				.char_perm = ESP_GATT_PERM_READ,
+				.char_property = ESP_GATT_CHAR_PROP_BIT_READ,
+				.char_val = &gatts_service1_master_certificate2_val,
+				.char_control = NULL,
+				.char_handle = 0,
+				.char_nvs = ""
+		},
+		{
+				/* Service1 -> Master certificate PART3 */
+				.service_pos = 0, // Service1
+				.char_uuid.len = ESP_UUID_LEN_128, // Custom characteristic -> 128bit UUID
+				.char_uuid.uuid.uuid128 = GATTS_SERVICE1_MASTER_CERTIFICATE3_CHAR_UUID,
+				.char_perm = ESP_GATT_PERM_READ,
+				.char_property = ESP_GATT_CHAR_PROP_BIT_READ,
+				.char_val = &gatts_service1_master_certificate3_val,
 				.char_control = NULL,
 				.char_handle = 0,
 				.char_nvs = ""
@@ -277,13 +349,37 @@ struct gatts_char_inst gatts_char[GATTS_CHAR_NUM] = {
 				.char_nvs = ""
 		},
 		{
-				/* Service2 -> Master certificate */
+				/* Service2 -> Master certificate PART1*/
 				.service_pos = 1, // Service2
 				.char_uuid.len = ESP_UUID_LEN_128, // Custom characteristic -> 128bit UUID
-				.char_uuid.uuid.uuid128 = GATTS_SERVICE2_MASTER_CERTIFICATE_CHAR_UUID,
+				.char_uuid.uuid.uuid128 = GATTS_SERVICE2_MASTER_CERTIFICATE1_CHAR_UUID,
 				.char_perm = ESP_GATT_PERM_WRITE,
 				.char_property = ESP_GATT_CHAR_PROP_BIT_WRITE,
-				.char_val = &gatts_service2_master_certificate_val,
+				.char_val = &gatts_service2_master_certificate1_val,
+				.char_control = NULL,
+				.char_handle = 0,
+				.char_nvs = ""
+		},
+		{
+				/* Service2 -> Master certificate PART2*/
+				.service_pos = 1, // Service2
+				.char_uuid.len = ESP_UUID_LEN_128, // Custom characteristic -> 128bit UUID
+				.char_uuid.uuid.uuid128 = GATTS_SERVICE2_MASTER_CERTIFICATE2_CHAR_UUID,
+				.char_perm = ESP_GATT_PERM_WRITE,
+				.char_property = ESP_GATT_CHAR_PROP_BIT_WRITE,
+				.char_val = &gatts_service2_master_certificate2_val,
+				.char_control = NULL,
+				.char_handle = 0,
+				.char_nvs = ""
+		},
+		{
+				/* Service2 -> Master certificate PART3*/
+				.service_pos = 1, // Service2
+				.char_uuid.len = ESP_UUID_LEN_128, // Custom characteristic -> 128bit UUID
+				.char_uuid.uuid.uuid128 = GATTS_SERVICE2_MASTER_CERTIFICATE3_CHAR_UUID,
+				.char_perm = ESP_GATT_PERM_WRITE,
+				.char_property = ESP_GATT_CHAR_PROP_BIT_WRITE,
+				.char_val = &gatts_service2_master_certificate3_val,
 				.char_control = NULL,
 				.char_handle = 0,
 				.char_nvs = ""
@@ -300,13 +396,37 @@ struct gatts_char_inst gatts_char[GATTS_CHAR_NUM] = {
 				.char_nvs = ""
 		},
 		{
-				/* Service1 -> Slave certificate */
+				/* Service1 -> Slave certificate PART1*/
 				.service_pos = 1, // Service2
 				.char_uuid.len = ESP_UUID_LEN_128, // Custom characteristic -> 128bit UUID
-				.char_uuid.uuid.uuid128 = GATTS_SERVICE2_SLAVE_CERTIFICATE_CHAR_UUID,
+				.char_uuid.uuid.uuid128 = GATTS_SERVICE2_SLAVE_CERTIFICATE1_CHAR_UUID,
 				.char_perm = ESP_GATT_PERM_WRITE,
 				.char_property = ESP_GATT_CHAR_PROP_BIT_WRITE,
-				.char_val = &gatts_service2_slave_certificate_val,
+				.char_val = &gatts_service2_slave_certificate1_val,
+				.char_control = NULL,
+				.char_handle = 0,
+				.char_nvs = ""
+		},
+		{
+				/* Service1 -> Slave certificate PART2*/
+				.service_pos = 1, // Service2
+				.char_uuid.len = ESP_UUID_LEN_128, // Custom characteristic -> 128bit UUID
+				.char_uuid.uuid.uuid128 = GATTS_SERVICE2_SLAVE_CERTIFICATE2_CHAR_UUID,
+				.char_perm = ESP_GATT_PERM_WRITE,
+				.char_property = ESP_GATT_CHAR_PROP_BIT_WRITE,
+				.char_val = &gatts_service2_slave_certificate2_val,
+				.char_control = NULL,
+				.char_handle = 0,
+				.char_nvs = ""
+		},
+		{
+				/* Service1 -> Slave certificate PART3*/
+				.service_pos = 1, // Service2
+				.char_uuid.len = ESP_UUID_LEN_128, // Custom characteristic -> 128bit UUID
+				.char_uuid.uuid.uuid128 = GATTS_SERVICE2_SLAVE_CERTIFICATE3_CHAR_UUID,
+				.char_perm = ESP_GATT_PERM_WRITE,
+				.char_property = ESP_GATT_CHAR_PROP_BIT_WRITE,
+				.char_val = &gatts_service2_slave_certificate3_val,
 				.char_control = NULL,
 				.char_handle = 0,
 				.char_nvs = ""
@@ -383,7 +503,7 @@ struct gatts_descr_inst gatts_descr[GATTS_DESCR_NUM] = {
 		},
 		{
 				/* Service1 -> Info */
-				.char_pos=2,
+				.char_pos=4,
 				.descr_uuid.len = ESP_UUID_LEN_16,
 				.descr_uuid.uuid.uuid16 = ESP_GATT_UUID_CHAR_DESCRIPTION,
 				.descr_perm=ESP_GATT_PERM_READ,
@@ -395,7 +515,7 @@ struct gatts_descr_inst gatts_descr[GATTS_DESCR_NUM] = {
 		//SERVICE 2
 		{
 				/* Service2 -> Master puclic key */
-				.char_pos=3,
+				.char_pos=5,
 				.descr_uuid.len = ESP_UUID_LEN_16,
 				.descr_uuid.uuid.uuid16 = ESP_GATT_UUID_CHAR_DESCRIPTION,
 				.descr_perm=ESP_GATT_PERM_READ,
@@ -405,7 +525,7 @@ struct gatts_descr_inst gatts_descr[GATTS_DESCR_NUM] = {
 		},
 		{
 				/* Service2 -> Master certificate */
-				.char_pos=4,
+				.char_pos=6,
 				.descr_uuid.len = ESP_UUID_LEN_16,
 				.descr_uuid.uuid.uuid16 = ESP_GATT_UUID_CHAR_DESCRIPTION,
 				.descr_perm=ESP_GATT_PERM_READ,
@@ -415,7 +535,7 @@ struct gatts_descr_inst gatts_descr[GATTS_DESCR_NUM] = {
 		},
 		{
 				/* Service2 -> Slave puclic key */
-				.char_pos=5,
+				.char_pos=9,
 				.descr_uuid.len = ESP_UUID_LEN_16,
 				.descr_uuid.uuid.uuid16 = ESP_GATT_UUID_CHAR_DESCRIPTION,
 				.descr_perm=ESP_GATT_PERM_READ,
@@ -425,7 +545,7 @@ struct gatts_descr_inst gatts_descr[GATTS_DESCR_NUM] = {
 		},
 		{
 				/* Service2 -> Slave certificate */
-				.char_pos=6,
+				.char_pos=10,
 				.descr_uuid.len = ESP_UUID_LEN_16,
 				.descr_uuid.uuid.uuid16 = ESP_GATT_UUID_CHAR_DESCRIPTION,
 				.descr_perm=ESP_GATT_PERM_READ,
@@ -435,7 +555,7 @@ struct gatts_descr_inst gatts_descr[GATTS_DESCR_NUM] = {
 		},
 		{
 				/* Service2 -> Random */
-				.char_pos=7,
+				.char_pos=13,
 				.descr_uuid.len = ESP_UUID_LEN_16,
 				.descr_uuid.uuid.uuid16 = ESP_GATT_UUID_CHAR_DESCRIPTION,
 				.descr_perm=ESP_GATT_PERM_READ,
@@ -445,7 +565,7 @@ struct gatts_descr_inst gatts_descr[GATTS_DESCR_NUM] = {
 		},
 		{
 				/* Service2 -> Random signed */
-				.char_pos=8,
+				.char_pos=14,
 				.descr_uuid.len = ESP_UUID_LEN_16,
 				.descr_uuid.uuid.uuid16 = ESP_GATT_UUID_CHAR_DESCRIPTION,
 				.descr_perm=ESP_GATT_PERM_READ,
@@ -455,7 +575,7 @@ struct gatts_descr_inst gatts_descr[GATTS_DESCR_NUM] = {
 		},
 		{
 				/* Service2 -> Info */
-				.char_pos=9,
+				.char_pos=15,
 				.descr_uuid.len = ESP_UUID_LEN_16,
 				.descr_uuid.uuid.uuid16 = ESP_GATT_UUID_CHAR_DESCRIPTION,
 				.descr_perm=ESP_GATT_PERM_READ,
