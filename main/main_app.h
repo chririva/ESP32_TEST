@@ -8,8 +8,5 @@
 #ifndef MAIN_MAIN_APP_H_
 #define MAIN_MAIN_APP_H_
 
-#define GATTS_TAG "GATTS_DEMO"
-
-
 
 #endif /* MAIN_MAIN_APP_H_ */

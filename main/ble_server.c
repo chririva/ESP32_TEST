@@ -43,7 +43,7 @@
 
 #include "sdkconfig.h"
 
-extern uint8_t service1_master_pubkey_str[GATTS_CHAR_PUBKEY_LEN_MAX]; //TODO: TOGLIERE, solo per debug
+//extern uint8_t service1_master_pubkey_str[GATTS_CHAR_PUBKEY_LEN_MAX]; //TODO: TOGLIERE, solo per debug
 extern bool charateristic_flags[10];
 
 /* ************************************************************ */
@@ -140,6 +140,45 @@ void gaps_init() {
 
 }
 
+static char *esp_key_type_to_str(esp_ble_key_type_t key_type)
+{
+   char *key_str = NULL;
+   switch(key_type) {
+    case ESP_LE_KEY_NONE:
+        key_str = "ESP_LE_KEY_NONE";
+        break;
+    case ESP_LE_KEY_PENC:
+        key_str = "ESP_LE_KEY_PENC";
+        break;
+    case ESP_LE_KEY_PID:
+        key_str = "ESP_LE_KEY_PID";
+        break;
+    case ESP_LE_KEY_PCSRK:
+        key_str = "ESP_LE_KEY_PCSRK";
+        break;
+    case ESP_LE_KEY_PLK:
+        key_str = "ESP_LE_KEY_PLK";
+        break;
+    case ESP_LE_KEY_LLK:
+        key_str = "ESP_LE_KEY_LLK";
+        break;
+    case ESP_LE_KEY_LENC:
+        key_str = "ESP_LE_KEY_LENC";
+        break;
+    case ESP_LE_KEY_LID:
+        key_str = "ESP_LE_KEY_LID";
+        break;
+    case ESP_LE_KEY_LCSRK:
+        key_str = "ESP_LE_KEY_LCSRK";
+        break;
+    default:
+        key_str = "INVALID BLE KEY TYPE";
+        break;
+
+   }
+   return key_str;
+}
+
 /* In server (config) mode, this function is called whenever the ESP32
  * bluetooth stack generates a GAP event.
  */
@@ -196,6 +235,36 @@ void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
                   param->update_conn_params.latency,
                   param->update_conn_params.timeout);
         break;
+    ////SECURITY LAYER
+    case ESP_GAP_BLE_PASSKEY_NOTIF_EVT:
+         ///the app will receive this evt when the IO  has Output capability and the peer device IO has Input capability.
+         ///show the passkey number to the user to input it in the peer device.
+         ESP_LOGE(GATTS_TAG, "The passkey Notify number:%d", param->ble_security.key_notif.passkey);
+         break;
+    case ESP_GAP_BLE_KEY_EVT:
+         //shows the ble key info share with peer device to the user.
+         ESP_LOGI(GATTS_TAG, "key type = %s", esp_key_type_to_str(param->ble_security.ble_key.key_type));
+         break;
+    case ESP_GAP_BLE_AUTH_CMPL_EVT: {
+         esp_bd_addr_t bd_addr;
+         memcpy(bd_addr, param->ble_security.auth_cmpl.bd_addr,
+                sizeof(esp_bd_addr_t));
+         ESP_LOGI(GATTS_TAG, "remote BD_ADDR: %08x%04x",\
+                  (bd_addr[0] << 24) + (bd_addr[1] << 16) + (bd_addr[2] << 8) +
+                  bd_addr[3],
+                  (bd_addr[4] << 8) + bd_addr[5]);
+         ESP_LOGI(GATTS_TAG, "address type = %d",
+                  param->ble_security.auth_cmpl.addr_type);
+                  ESP_LOGI(GATTS_TAG, "pair status = %s",
+                  param->ble_security.auth_cmpl.success ? "success" : "fail");
+         break;
+    }
+    case ESP_GAP_BLE_SEC_REQ_EVT:
+         /* send the positive (true) security response to the peer device to accept the security request.
+         If not accept the security request, should send the security response with negative(false) accept value*/
+         esp_ble_gap_security_rsp(param->ble_security.ble_req.bd_addr, true);
+         break;
+    ////SECURITY LAYER
     default:
         break;
     }
@@ -283,10 +352,9 @@ void example_exec_write_event_env(prepare_type_env_t *prepare_write_env, esp_ble
         ESP_LOGI(GATTS_TAG,"ESP_GATT_PREP_WRITE_CANCEL");
     }
     //service1_master_pubkey_str
-    //TODO: TOGLIERE
-    //PROVO A STAMPARE QELLO CHE HO SALVATO
-    printf("\n\nHO STORATO NELLA ARATTERISTICA NUMERO [%d]:\n[",prepare_write_env->char_position);
-	printf("%s]\n\n",(char *)service1_master_pubkey_str);
+    //STAMPO QELLO CHE HO SALVATO
+    //printf("\n\nHO STORATO NELLA CARATTERISTICA NUMERO [%d]:\n[",prepare_write_env->char_position);
+	//printf("%s]\n\n",(char *)service1_master_pubkey_str);
 
     if (prepare_write_env->prepare_buf) {
         free(prepare_write_env->prepare_buf);
@@ -647,6 +715,10 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 		gatts_service[ble_add_service_pos].conn_id = param->connect.conn_id;
 		//start send the update connection parameters to the peer device.
 		esp_ble_gap_update_conn_params(&conn_params);
+		////SECURITY LAYER
+	     //start security connect with peer device when receive the connect event sent by the master.
+	    esp_ble_set_encryption(param->connect.remote_bda, ESP_BLE_SEC_ENCRYPT_MITM);
+	    ////SECURITY LAYER
 		break;
 	}
 	case ESP_GATTS_DISCONNECT_EVT:

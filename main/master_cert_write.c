@@ -41,6 +41,8 @@ int main( void )
 #include "freertos/task.h"
 #include "freertos/event_groups.h"
 #include "nvs.h"
+#include "nvs_flash.h"
+#include "esp_system.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -51,7 +53,7 @@ int main( void )
 bool wait_master_cert_write;
 extern mbedtls_pk_context key_key, master_pub_key;
 extern mbedtls_x509_crt self_certificate;
-extern mbedtls_x509_crt master_certificate;
+//extern mbedtls_x509_crt master_certificate;
 extern esp_attr_value_t gatts_service1_master_certificate1_val;
 extern esp_attr_value_t gatts_service1_master_certificate2_val;
 extern esp_attr_value_t gatts_service1_master_certificate3_val;
@@ -168,6 +170,54 @@ int write_certificate2( mbedtls_x509write_cert *crt, int (*f_rng)(void *, unsign
     	printf("\nCRT caricato in RAM!");
     	return( ret );
     }*/
+
+    //preparo la pub key master in stringa
+	unsigned char key_string[1700];
+	memset(key_string, 0, sizeof(key_string));
+	if(mbedtls_pk_write_pubkey_pem( &master_pub_key, key_string, sizeof(key_string) ) != 0 ){
+	     printf("\n -> PROBLEMONE");
+	     fflush(stdout);
+	     return -1;
+	}
+
+    //LO SALVO IN MEMORIA
+
+    //SALVATAGGIO SU FILE! /////////////////////////////////////////////////////////////////
+    // Initialize NVS
+    esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        // NVS partition was truncated and needs to be erased
+        // Retry nvs_flash_init
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        err = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK( err );
+    // Open
+    printf("\n -> Opening Non-Volatile Storage (NVS) handle... ");
+    nvs_handle my_handle;
+    err = nvs_open("stored_master", NVS_READWRITE, &my_handle);
+    if (err != ESP_OK) {
+        printf("\n -> Error (%s) opening NVS handle!", esp_err_to_name(err));
+    } else{
+        printf("\n -> File Aperto con successo.");
+
+		// Write
+		printf("\n -> Writing values in NVS ... ");
+
+		err = nvs_set_str(my_handle, "MPKey", (char*)key_string); printf((err != ESP_OK) ? "\n   -> MPKey: Failed!" : "\n   -> MPKey: Done");
+		err = nvs_set_str(my_handle, "MCert", (char*)output_buf); printf((err != ESP_OK) ? "\n   -> MCert: Failed!" : "\n   -> MCert: Done");
+		// Commit written value.
+		// After setting any values, nvs_commit() must be called to ensure changes are written
+		// to flash storage. Implementations may write to storage at other times,
+		// but this is not guaranteed.
+		printf("\n -> Committing updates in NVS ... ");
+		err = nvs_commit(my_handle);
+		printf((err != ESP_OK) ? "\n   -> Failed!" : "\n   -> Done");
+		// Close
+		nvs_close(my_handle);
+		printf("\n -> file chiuso.");
+    }
+
     printf("\nDEBUG3\n");
     return( 0 );
 }

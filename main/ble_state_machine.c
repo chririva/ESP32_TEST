@@ -83,10 +83,13 @@ void flags_reset(){
 
 void state_machine_init(){
 	flags_reset();
-	if(MASTER_MODE)
+	if(MASTER_MODE){
 		state = SERVICE_1_STATE_WAIT_MASTER_KEY; //stato iniziale per il master mode
-	else
+		printf("\n\n\tAvvio in MASTER MODE\n");
+	}else{
 		state = SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES; //stato inizialle lo slave mode
+		printf("\n\n\tAvvio in SLAVE MODE\n");
+	}
 }
 
 void listener(){
@@ -137,9 +140,10 @@ void listener(){
 				while(!charateristic_flags[0]){
 					vTaskDelay(100 / portTICK_PERIOD_MS);
 				}
-				//RIAVVIO LA ESP IN SLAVE MODE
+
+				//RIAVVIO LA ESP?
 				state = SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES; //TODO: deciedere se va tolto o riavviato???
-				MASTER_MODE = false; //TODO: va salvato in memoria???
+				MASTER_MODE = false;
 				flags_reset();
 				break;
 
@@ -190,6 +194,7 @@ void listener(){
 				memcpy(cert_slave_buff+len4+len5, gatts_service2_slave_certificate3_val.attr_value, len6+1);
 				printf("\n\nHO RICEVUTO IL CERT MASTER:\n\n%s",cert_master_buff);
 				printf("\n\nHO RICEVUTO IL CERT SLAVE:\n\n%s",cert_slave_buff);
+				mbedtls_x509_crt_init(&master_certificate);
 				if(mbedtls_x509_crt_parse(&master_certificate, (unsigned char*)cert_master_buff, len1+len2+len3+1)== 0 ){
 					printf("\n   -> Certificato master ricevuto.");
 				}else{
@@ -197,6 +202,7 @@ void listener(){
 					service2_info_write((unsigned char*)"error3");
 					state=SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES; //qualcosa è andato storto, rimane in questo stato!
 				 }
+				mbedtls_x509_crt_init(&slave_certificate);
 				if(mbedtls_x509_crt_parse(&slave_certificate, (unsigned char*)cert_slave_buff, len4+len5+len6+1)== 0 ){
 					printf("\n   -> Certificato slave ricevuto.");
 				}else{
@@ -251,6 +257,9 @@ void listener(){
 				}
 				//in ogni caso...
 				//TODO: aggiorno il rnd challenge.
+				random_string_generator();
+				mbedtls_x509_crt_free(&master_certificate); // libero la memoria dei certificati
+				mbedtls_x509_crt_free(&slave_certificate);
 				state = SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES;
 				//flags_reset(); //per essere certi che i flag siano bassi.. magari qualcuno li ha flaggati con un altro client
 				break;
@@ -273,7 +282,7 @@ bool verifica_certificati(){
 		vTaskDelay(100 / portTICK_PERIOD_MS);
 	}
 
-	vTaskDelay(100 / portTICK_PERIOD_MS);
+	vTaskDelay(150 / portTICK_PERIOD_MS);
 	//print_all_certificates();
 	wait_cert_app_slave=true;
 	xTaskCreate(cert_app_slave_certificate,"CertAppSlave",8000,NULL,3,NULL);
