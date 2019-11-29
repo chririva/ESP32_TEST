@@ -47,7 +47,7 @@ void selfsigned_cert_write( void )
 #include "selfsigned_cert_write.h"
 
 
-bool wait_self_cert_generation;
+extern bool wait_self_cert_generation;
 extern mbedtls_pk_context key_key;
 extern mbedtls_x509_crt self_certificate;
 

@@ -7,7 +7,7 @@
 #ifndef MAIN_BLE_SERVER_H_
 #define MAIN_BLE_SERVER_H_
 
-#define PREPARE_BUF_MAX_SIZE 1024
+#define PREPARE_BUF_MAX_SIZE 2048
 
 typedef struct {
     uint8_t		*prepare_buf;

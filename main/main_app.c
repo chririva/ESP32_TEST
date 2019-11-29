@@ -138,6 +138,8 @@ unsigned char slave_priv_key_string[] =  "-----BEGIN RSA PRIVATE KEY-----\n"\
 char rand_challenge_str[] =  "una stringa da generare random";
 unsigned char rand_challenge_firmato[MBEDTLS_MPI_MAX_SIZE];
 
+bool wait_key_gen;
+bool wait_self_cert_generation;
 bool wait_cert_app_master;
 bool wait_cert_app_slave;
 bool master_cert_validity, slave_cert_validity;
@@ -261,6 +263,7 @@ bool carica_chiavi(){
 
 
         //TODO: DA TOGLIERE: EMULO LE CHIAVI PRIVATE E PUBBLICHE! begin
+    	/*
     	printf("\n\n------------------------------------------------------------------------------------------\n");
     	printf("\n\t ----- MI INVENTO DELLE CHIAVI PRIVATE E PUBBLICHE PER MASTER E SLAVE -----\n");
         mbedtls_pk_init(&master_pub_key);
@@ -278,6 +281,7 @@ bool carica_chiavi(){
         printf("\n -> Verifico la coppia chiave pubblica/privata di master e slave");
         error = mbedtls_pk_check_pair(&master_pub_key, &master_priv_key); printf((error != 0) ? "\n   -> Coppia chiave privata/pubblica NON VALIDA" : "\n   -> Coppia chiave privata/pubblica OK");
         error = mbedtls_pk_check_pair(&slave_pub_key, &slave_priv_key); printf((error != 0) ? "\n   -> Coppia chiave privata/pubblica NON VALIDA" : "\n   -> Coppia chiave privata/pubblica OK");
+        */
         //TODO: DA TOGLIERE: EMULO LE CHIAVI PRIVATE E PUBBLICHE! end
 
 
@@ -441,7 +445,7 @@ void app_main()
 {
 	print_available_ram();
 	print_date_time();
-	fgetc(stdin);
+	//fgetc(stdin);
 	ritardo(5); //TODO: debug. da cancellare
 	/*if(cancella_tutto()){
 		printf("\n\t\t --- HO CANCELLATO TUTTO --- \n");
@@ -465,7 +469,7 @@ void app_main()
 
 	printf("\n\n------------------------------------------------------------------------------------------\n");
 
-	/*printf("\n\t ----- TENTO DI CARICARE LE CHIAVI DALLA NVS -----\n");
+	printf("\n\t ----- TENTO DI CARICARE LE CHIAVI DALLA NVS -----\n");
 	if(carica_chiavi())
 		printf("\n -> Chiavi caricate con successo \n");
 	else{
@@ -507,6 +511,9 @@ void app_main()
 	}while(wait_self_cert_generation);
 
 	printf("\n\n----------------------------------------------------------------------\n");
+
+
+	/*p
 	print_available_ram();
 	//MASTER CERT WRITE
 	printf("\n\n\t --- GENERA MASTER CERT WRITE --- \n\n");
@@ -569,11 +576,15 @@ void app_main()
 
 	printf("\n\n----------------------------------------------------------------------\n");
 	print_available_ram();
+
+	xTaskCreate(listener,"StateMachine",4096,NULL,2,NULL);
+
+
 	printf("\n\t --- AVVIO IL BLUETOOTH E TUTTI I SERVIZI ASSOCIATI --- \n");
 	ble_init();
 	fflush(stdout);
-	state_machine_init();
-	listener(); //TODO: da lanciare in un task a parte
+	//state_machine_init();
+	//listener(); //TODO: da lanciare in un task a parte
 	printf("\nFINE DEL MAIN.\n");
 	print_available_ram();
 	fflush(stdout);

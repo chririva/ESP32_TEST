@@ -45,20 +45,15 @@ int main( void )
 #include <stdlib.h>
 #include <string.h>
 #include "master_cert_write.h"
+#include "esp_gatts_api.h"
+#include "esp_bt_defs.h"
 
 bool wait_master_cert_write;
 extern mbedtls_pk_context key_key, master_pub_key;
 extern mbedtls_x509_crt self_certificate;
 extern mbedtls_x509_crt master_certificate;
+extern esp_attr_value_t gatts_service1_master_certificate_val;
 
-#if defined(MBEDTLS_X509_CSR_PARSE_C)
-#define USAGE_CSR                                                           \
-    "    request_file=%%s         default: (empty)\n"                           \
-    "                            If request_file is specified, subject_key,\n"  \
-    "                            subject_pwd and subject_name are ignored!\n"
-#else
-#define USAGE_CSR ""
-#endif /* MBEDTLS_X509_CSR_PARSE_C */
 
 #define DFL_ISSUER_CRT_D         ""
 #define DFL_REQUEST_FILE_D        ""
@@ -116,29 +111,36 @@ struct opttions2
 int write_certificate2( mbedtls_x509write_cert *crt, int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
 {
     int ret;
-    //FILE *f;
-    unsigned char output_buf[4096];
-    size_t len = 0;
+    unsigned char output_buf[1200];
+    uint16_t len = 0;
 
-    memset( output_buf, 0, 4096 );
-    if( ( ret = mbedtls_x509write_crt_pem( crt, output_buf, 4096, f_rng, p_rng ) ) < 0 )
+    memset( output_buf, 0, 1200 );
+    if( ( ret = mbedtls_x509write_crt_pem( crt, output_buf, 1200, f_rng, p_rng ) ) < 0 )
         return( ret );
-
     len = strlen( (char *) output_buf );
 
     printf("\nDIMENSIONE DEL MASTER_CERTIFICATE: %d",len);
     printf("\nMASTER_CERTIFICATE: %s",output_buf);
+    //scrito il certificato nella caratteristica
+    gatts_service1_master_certificate_val.attr_len = len;
+    printf("\nDEBUG1\n");
+    for(int valpos=0 ; valpos<len ; valpos++ ){
+    	//printf("\n%d - ",valpos);
+    	gatts_service1_master_certificate_val.attr_value[valpos]=(uint8_t)output_buf[valpos];
+    }
+    printf("\nDEBUG2\n");
+    gatts_service1_master_certificate_val.attr_value[len]=0; //terminatore stringa
 
-    //LO CARICO DIRETTAMENTE NELLA RAM IN FORMATO mbedtls_x509_crt
-    if( ( ret = mbedtls_x509_crt_parse(&master_certificate, output_buf, sizeof(output_buf)) ) != 0 ){
+    //LO CARICO DIRETTAMENTE NELLA RAM IN FORMATO mbedtls_x509_crt TODO: mi serve ??
+    /*if( ( ret = mbedtls_x509_crt_parse(&master_certificate, output_buf, sizeof(output_buf)) ) != 0 ){
         printf("\nNon sono riuscito a caricare il CRT nella RAM");
         return( ret );
     }
     else{
     	printf("\nCRT caricato in RAM!");
     	return( ret );
-    }
-
+    }*/
+    printf("\nDEBUG3\n");
     return( 0 );
 }
 

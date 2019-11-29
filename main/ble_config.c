@@ -26,9 +26,9 @@
 
 //CARATTERISTICHE
 //SERVICE 1
-uint8_t service1_master_pubkey_str[GATTS_CHAR_PUBKEY_LEN_MAX] = {0};
-uint8_t service1_master_certificate_str[GATTS_CHAR_PUBKEY_LEN_MAX] = "Certificato Master";
-uint8_t service1_info_str[GATTS_CHAR_INFO32_LEN_MAX] = "Informazione";
+uint8_t service1_master_pubkey_str[GATTS_CHAR_PUBKEY_LEN_MAX] = {0x22};
+uint8_t service1_master_certificate_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = "Certificato Master";
+uint8_t service1_info_str[GATTS_CHAR_INFO32_LEN_MAX] = "No info";
 //SERVICE 2
 uint8_t service2_master_pubkey_str[GATTS_CHAR_PUBKEY_LEN_MAX] = {0x11,0x22,0x55};
 uint8_t service2_master_certificate_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = {0x12,0x22,0x33,0x33,0xAA,0x43,0x55};
@@ -69,7 +69,7 @@ esp_attr_value_t gatts_service1_master_pubkey_descr_user_val =
 
 esp_attr_value_t gatts_service1_master_certificate_val =
 {
-    .attr_max_len = GATTS_CHAR_PUBKEY_LEN_MAX,
+    .attr_max_len = GATTS_CHAR_CERTIFICATE_LEN_MAX,
     .attr_len     = sizeof(service1_master_certificate_str),
     .attr_value   = service1_master_certificate_str,
 };
@@ -259,6 +259,7 @@ struct gatts_char_inst gatts_char[GATTS_CHAR_NUM] = {
 				.char_perm = ESP_GATT_PERM_READ,
 				.char_property = ESP_GATT_CHAR_PROP_BIT_READ,
 				.char_val = &gatts_service1_info_val,
+				.char_control = NULL,
 				.char_handle = 0,
 				.char_nvs = ""
 		},

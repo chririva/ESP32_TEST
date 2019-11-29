@@ -47,7 +47,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-bool wait_key_gen;
+extern bool wait_key_gen;
 
 #if !defined(_WIN32)
 #include <unistd.h>

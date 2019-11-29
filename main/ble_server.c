@@ -413,7 +413,7 @@ static void gatts_write_value_handler(esp_gatts_cb_event_t event, esp_gatt_if_t 
 			}
 		}
 	}
-	printf("\nFINE: gatts_write_value_handler \n");
+	//printf("\nFINE: gatts_write_value_handler \n");
 }
 
 
@@ -530,6 +530,12 @@ static void gatts_check_add_descr(esp_bt_uuid_t descr_uuid, uint16_t attr_handle
 }
 
 
+static void gatts_update_char_len(){
+	for (uint32_t pos=0;pos<GATTS_CHAR_NUM;pos++) {
+		gatts_char[pos].char_val->attr_len = strlen((const char*)(gatts_char[pos].char_val->attr_value));
+	}
+}
+
 
 /* This function is called whenever the ESP32 bluetooth stack generates a GATT
  * event.
@@ -549,7 +555,7 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 		}
 
 		ble_add_service_pos = param->reg.app_id;
-		printf("\nPOSIZIONE: %d\n",ble_add_service_pos);
+		//printf("\nPOSIZIONE: %d\n",ble_add_service_pos);
 		gatts_service[param->reg.app_id].service_id.is_primary = true;
 		gatts_service[param->reg.app_id].service_id.id.inst_id = 0x00;
 		gatts_service[param->reg.app_id].service_id.id.uuid.len = ESP_UUID_LEN_128;
@@ -594,6 +600,8 @@ void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 
 		esp_ble_gatts_start_service(gatts_service[ble_add_service_pos].service_handle);
 		gatts_add_char();
+
+		gatts_update_char_len(); //messo io per aggiornare il campo length delle caratteristiche
 
 		break;
 	case ESP_GATTS_ADD_INCL_SRVC_EVT:

@@ -41,7 +41,16 @@ extern mbedtls_x509_crt self_certificate;
 extern mbedtls_x509_crt master_certificate;
 extern uint8_t service1_master_pubkey_str[];
 extern esp_attr_value_t gatts_service1_master_pubkey_val;
+extern esp_attr_value_t gatts_service1_master_certificate_val;
+extern esp_attr_value_t gatts_service1_info_val;
 extern unsigned char master_pub_key_string[];
+
+static void service1_info_write(unsigned char info[]){
+	gatts_service1_info_val.attr_len = strlen((const char*)info);
+    for(int valpos=0 ; valpos<strlen((const char*)info) ; valpos++ )
+    	gatts_service1_info_val.attr_value[valpos]=info[valpos];
+    gatts_service1_info_val.attr_value[strlen((const char*)info)] = 0; //terminatore stringa
+}
 
 void state_machine_init(){
 	for(int i=0;i<10;i++){
@@ -51,8 +60,9 @@ void state_machine_init(){
 }
 
 void listener(){
+	state_machine_init();
 	while(state!=-1){
-		printf("\n\nSTATE MACHINE STATUS: %d",state);
+		printf("\n\nSTATE MACHINE STATUS: %d\n",state);
 		switch (state){
 			case 0:
 				//master deve mandare la chiave pubblica
@@ -62,23 +72,63 @@ void listener(){
 				charateristic_flags[0]=false;
 				//Ho la chiave pubblica
 				mbedtls_pk_init(&master_pub_key);
-				esp_log_buffer_hex("CIAO", master_pub_key_string, strlen((const char*)master_pub_key_string));
+				//esp_log_buffer_hex("CIAO", master_pub_key_string, strlen((const char*)master_pub_key_string));
 				if(mbedtls_pk_parse_public_key( &master_pub_key, (unsigned char*)gatts_service1_master_pubkey_val.attr_value, gatts_service1_master_pubkey_val.attr_len + 1)==0){
 					printf("\n   -> Chiave pubblica master accettata.");
-
-					//GENERO IL CERTIFICATO
-
+					service1_info_write((unsigned char*)"wait");
+					//devo generare il certificato
+					state=1;
 				}else{
 					printf("\n   -> Chiave pubblica master non accettata.");
+					service1_info_write((unsigned char*)"error");
+					//state=3; //informo il master tramite campo info
+					//TODO: informo il master tramite campo info
 				}
+				break;
+			case 1:
+				printf("\n -> ATTENDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO..\n");
+				vTaskDelay(10000 / portTICK_PERIOD_MS);
+				//genero il certificato master e lo scrito nella caratteristica
+				//MASTER CERT WRITE
+				printf("\n\n\t --- GENERA MASTER CERT WRITE --- \n\n");
+				wait_master_cert_write=true;
+				xTaskCreate(master_cert_write,"MasterCertWrite",32768,NULL,3,NULL);
+				printf("\n -> Attendo..\n");
+				do{
+					vTaskDelay(100 / portTICK_PERIOD_MS);
+				}while(wait_master_cert_write);
+				printf("\n\n----------------------------------------------------------------------\n");
+				//aggiorno il campo info:
+			    //scrito il certificato nella caratteristica
+				service1_info_write((unsigned char*)"ready");
+				/*unsigned char info[32]= "ready";
+				gatts_service1_info_val.attr_len = strlen((const char*)info);
+			    for(int valpos=0 ; valpos<strlen((const char*)info) ; valpos++ )
+			    	gatts_service1_master_certificate_val.attr_value[valpos]=info[valpos];
+			    gatts_service1_master_certificate_val.attr_value[strlen((const char*)info)] = 0; //terminatore stringa*/
+
+				state = 2;
+				break;
+			case 2:
+				printf("\n\nFATTO TUTTO, CONTROLLA\n\n");
+				while(1){
+					vTaskDelay(100 / portTICK_PERIOD_MS);
+				}
+				break;
+			case 100:
+				//per convertire da string a crt
+			    /*if( ( ret = mbedtls_x509_crt_parse(&master_certificate, output_buf, sizeof(output_buf)) ) != 0 ){
+			        printf("\nNon sono riuscito a caricare il CRT nella RAM");
+			        return( ret );
+			    }
+			    else{
+			    	printf("\nCRT caricato in RAM!");
+			    	return( ret );
+			    }*/
 				break;
 		}
 	}
-
-
-
-
-
+	printf("\n\nERRORE CRITICO. LA MACCHINA A STATI SI E' BLOCCATA.");
 
 }
 
