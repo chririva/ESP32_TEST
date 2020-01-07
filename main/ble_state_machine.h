@@ -1,8 +1,6 @@
 /*
  * ble_state_machine.h
  *
- *  Created on: 19 nov 2019
- *      Author: gaetano
  */
 
 #ifndef MAIN_BLE_STATE_MACHINE_H_

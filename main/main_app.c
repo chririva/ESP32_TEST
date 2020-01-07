@@ -53,87 +53,11 @@
 bool MASTER_MODE = false;
 
 //CHIAVI DEL DISPOSITIVO
-//mbedtls_mpi N_key, P_key, Q_key, D_key, E_key, DP_key, DQ_key, QP_key; //Forse non verranno mai utilizzate
 mbedtls_pk_context key_key, master_pub_key,slave_pub_key; //key_key è la chiave della esp. device_pub_key dello smartphone master
-//mbedtls_pk_context master_priv_key, slave_priv_key;
 mbedtls_x509_crt self_certificate; //Self certificate della esp
 mbedtls_x509_crt master_certificate; //Certificate dello smartphone master
 mbedtls_x509_crt slave_certificate; //Certificate dello smartphone slave
-/*unsigned char master_pub_key_string[] =  "-----BEGIN PUBLIC KEY-----\n"\
-							    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0/ulB5uTYevMNjbPQNX0\n"\
-								"k1GXNvFQDtScRDQA8StKZQ4ZBdpJKiIrlWMtRgpvmx7BJtshSHIzjAOx7EcOegCj\n"\
-								"lpgG2KI/dvwaQak9PkZbyR47Uiwx+x4FOa8pM/UWurs/rkyrxXhPvUBftn8j1PQT\n"\
-								"R3afl9PE0eKPTwYTEO1WbZbOCMiO3SKaNsaopuHTRcdQpjaT/nSqPGiBCEpfuw2D\n"\
-								"snEkuLyh+LAALCLFvO4pXtcaXNzXz+G9h3rcb588Ebolns+ia5xVWM9oRbdXV8d+\n"\
-								"uKk7HrG+t/Pk740dwfHa/cHwGqowXSxME6m7W7xfgA7HCG3OsjIY/yYDAIHu/QQM\n"\
-								"hQIDAQAB\n"\
-								"-----END PUBLIC KEY-----";
-
-unsigned char master_priv_key_string[] =  "-----BEGIN RSA PRIVATE KEY-----\n"\
-							    "MIIEpAIBAAKCAQEA0/ulB5uTYevMNjbPQNX0k1GXNvFQDtScRDQA8StKZQ4ZBdpJ\n"\
-								"KiIrlWMtRgpvmx7BJtshSHIzjAOx7EcOegCjlpgG2KI/dvwaQak9PkZbyR47Uiwx\n"\
-								"+x4FOa8pM/UWurs/rkyrxXhPvUBftn8j1PQTR3afl9PE0eKPTwYTEO1WbZbOCMiO\n"\
-								"3SKaNsaopuHTRcdQpjaT/nSqPGiBCEpfuw2DsnEkuLyh+LAALCLFvO4pXtcaXNzX\n"\
-								"z+G9h3rcb588Ebolns+ia5xVWM9oRbdXV8d+uKk7HrG+t/Pk740dwfHa/cHwGqow\n"\
-								"XSxME6m7W7xfgA7HCG3OsjIY/yYDAIHu/QQMhQIDAQABAoIBAQCN/LswWlOgvikd\n"\
-								"kx7FJcpZNshbY80k8eHtiQusfjupboTyN6DUGOkqebCkfm787t+fYB1uAhhmyz7M\n"\
-								"rVeT/oOUZiYHyr1JvFj17B76bHQkRRyk0Ld1pUkItzuY8qwTzUI9RFu1u/1lHQ4/\n"\
-								"Fe/xPr7/GgSR1KW7k847tyzkJKTEZ4pZSuKH/1OVRc34F9YMUxGLWxRHcwMvfU6/\n"\
-								"udDi4hSV5YLUYe5YlpKBPIeOfJPd16j5/GOrd4haF3zdecrxUOFTCsTc+zRc1s42\n"\
-								"np9OE27RP9ELnfVWhJau2/za6RY9tQlUuO6Tq9hGZ6H4tQkjyZQFTWunN+sPTDvt\n"\
-								"RdofLYmNAoGBAP0ih+xPvChwZpHKpRoMbEErOYNhP/Y7b5M9t3cHkXSmJWVXTD2W\n"\
-								"KL5JvF8Qem/j3MYXjjyeKziLU+AVxpyXGBStzg7XPOFv7xkZFUE4+Sri4qsl8j58\n"\
-								"9eJcij1Ru3es11Pd3O2Bz0OoHh/GqTtZs+dTNPD7bPvSEd0MVHzHv6NzAoGBANZh\n"\
-								"39Pa+GB5ZJQSA4AxkE5N5iRgBbxVpdFp1QVay1WApu4NrAYynszIQvNX3EsHYcr0\n"\
-								"2VR+5uVFTshNU8V3ixFJNM3J36thvu10I2JqBUmMr/lWteVo9A3PQYkc8KZmnvQl\n"\
-								"4ZPYi08NxpyuvBuZ9Im33INu9ZMrmf5M25Cb98InAoGAMNNVRmaG04ICtsJQoDqf\n"\
-								"Mt7EhCvg63zBY7Q2zBXAn7BgbDCvev2YtEOCuw9xnl1kOy1V+SlFCu4M6p8opRGb\n"\
-								"ynlP0pr/mjg99Shaai80GGqU8BAsrpLp1pSk8XjvYQEMs5eKwqEUOmeWD+kAwXrm\n"\
-								"8YqiHo1Qky4M1gdH0J2ywDMCgYEAxa7axnBUOCG4LRGvSLZraslKPqCMqW4QyVnd\n"\
-								"pGJkvSM0yq6wwcZLyGmh0uJhsI3OD2hYPyIFp8SRMQKdDKl/AyGOH3TXWyF2/V7q\n"\
-								"ggVhesDQRAtBD5oH8fP7aoPVJJvcVyXXLI2xZ+Q8EJ7PtmPwqk1weYIH0P2TsnsM\n"\
-								"u/wWKmECgYBOEyb6gggg8pzO0m76v1jFdGgFWTeWiGVyvqn680BaTkl8m9Y8VSCr\n"\
-								"vbBDrQdxyXybY1xDVcp5baTTCqBt5ADLHyoipDvT/4SM+jdYp2kM/xgHhupVKYwL\n"\
-								"3BONrGy2mLSWFlyF+4C2CdJZM594bBmsrO3bsZni8Z5UhPRkfPkh1g==\n"\
-								"-----END RSA PRIVATE KEY-----";
-
-unsigned char slave_pub_key_string[] =  "-----BEGIN PUBLIC KEY-----\n"\
-							    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhGCqrEfcr4mdhJKqYqDb\n"\
-								"Ele6K2hAzShC4NQQb0HTbprIRnQ/5b2FPcU0Rwu+EE6ntuKUvttRCPmdXFR3yrg3\n"\
-							    "uPBedwDnBIOaQbH0CEliDu2I1hqsZTCfasdcwtRwNeqtljjQ4Zdn9HQXHJxs/ST9\n"\
-								"1k9r2LGWwg8mZJ9CtF+rplFHCH0OhnCIWqqj0XWxh9EsplskfjWwo0vRnyZl9Bp2\n"\
-							    "XVBtUhIhgZeeKMoPNodzCXhCZgcZKZB2wMkwJiPbfH/B1PApUvo8YQcUDrDOhwGp\n"\
-								"jJfjR9GwQ1ehQgNb2Wk/Fk1GY3Zl363EzDMd79Xaofm2fwW6vG8dZm7agHJrg6km\n"\
-							    "4QIDAQAB\n"\
-								"-----END PUBLIC KEY-----";
-
-unsigned char slave_priv_key_string[] =  "-----BEGIN RSA PRIVATE KEY-----\n"\
-							    "MIIEpAIBAAKCAQEAhGCqrEfcr4mdhJKqYqDbEle6K2hAzShC4NQQb0HTbprIRnQ/\n"\
-							    "5b2FPcU0Rwu+EE6ntuKUvttRCPmdXFR3yrg3uPBedwDnBIOaQbH0CEliDu2I1hqs\n"\
-								"ZTCfasdcwtRwNeqtljjQ4Zdn9HQXHJxs/ST91k9r2LGWwg8mZJ9CtF+rplFHCH0O\n"\
-							    "hnCIWqqj0XWxh9EsplskfjWwo0vRnyZl9Bp2XVBtUhIhgZeeKMoPNodzCXhCZgcZ\n"\
-								"KZB2wMkwJiPbfH/B1PApUvo8YQcUDrDOhwGpjJfjR9GwQ1ehQgNb2Wk/Fk1GY3Zl\n"\
-							    "363EzDMd79Xaofm2fwW6vG8dZm7agHJrg6km4QIDAQABAoIBAAbRs/kL+qJQRHz/\n"\
-								"0ScjgiV/v2ddB3mKCWfrhK02ht27u3Vlp6T+Dk8QSZEfWbsdUiZppZ/vTE1aDnEj\n"\
-							    "KMiYlMZCG5ulwEDLRrb7o8aJgTOjqNjepuLPjmbBvlWK+/zLCgYjBx+X3RMKp+Yh\n"\
-								"aLvhm/HeRX/0Jf/5J9EnIxiHlSAMHLPSRyISERHUl0zoDRDLrL2iPvL7GcH9JXcr\n"\
-							    "8dLeCkdQ97ey8TRPgJcSK9P919547s7KeeUkgPQpDHY47FQWqq7rm/MijtBH229j\n"\
-								"osaPqtCA1FCA8cftMGPrPvlny+LbaTzH8C3CaZf3CWPTOdL8y6Y+RRlabrsLjgtn\n"\
-							    "5T3jcAECgYEAzwMh0x84qbxWVCdpkERB+rtA14m6u/BTIiGQ6MTPMYCJ/zSFMOrs\n"\
-								"JcJcw1F/KD5VjT074P8+OTAoR24ViXsqNojCD754PYxgh0ZEvFstaEGDNPMu7PtA\n"\
-							    "km5Gj+upMKjQnVq9mnxzPcOfHb+ln+QFWkqTxrS2OS5Db+eXLlsvfVECgYEAo7Ql\n"\
-								"BHnu1dR/S+kvxZkJ7A5dSiHSjwFPecd8ip7s2bA+nf0ye5CMxFZx7gFq4YS0gZ3G\n"\
-							    "68IZ98Bmn/pgoRgovwtmTKH3iO2fmF25jl1jUQ2IyiJ+MQQ5nLIYySZCsDKyVx+v\n"\
-								"UaDorkjVaiHiwig4aBttdA8JkU06f+h7V2lVbJECgYEAsvTjNc7kvh85hhB4OqY3\n"\
-							    "X5inKm0/R58vTu8zhXY2I3YaVcvCZJKByPaoGJWIVnLkpG/OJuigkvGlsHJjHfGi\n"\
-								"gXhiQxgGfDaxb9/4JdiwfVM9KPYdl/JwVOYOC/bO0Wjux0kdZcK2ISvOjvoRJRMK\n"\
-							    "6Y5VB89LRE1RMRlE4Wcku7ECgYEAggy627OCaZ1HA6dcrD3IBB/lPN9hxvnjiXtR\n"\
-								"FU7sGoRJOnnLgR50tgV2vP2jS0WBoPcW8HRi7M+Mt8rQuSnYNO15d6e0XrNn9kN/\n"\
-							    "BfpqzBlUckC0v3v7yOAzkJk0oYWk6FHjlZWfQ9XYtVf2LQiGxy4C5hCMKUKRFsw6\n"\
-								"MFcd5gECgYADC1PZEnGuGDssFFoLL6fC6QdY7BGQbkiffmHRXqM0kzZioc/od5kX\n"\
-							    "MWgsI/f1pwoDydVGEegldWHdY/X6EeGB1n9JFPO7XJR/VdOuWUeSUiVIaJW9ROmG\n"\
-								"Eu90pcvHiqpfvpbf2950NP0eyUlUvjCeRewspt5buxwo4jKWfVEjbA==\n"\
-								"-----END RSA PRIVATE KEY-----";*/
+char esp_mac[13];
 
 char rand_challenge_str[GATTS_CHAR_RND_LEN_MAX] =  "una stringa da generare random";
 unsigned char rand_challenge_firmato[MBEDTLS_MPI_MAX_SIZE];
@@ -228,28 +152,6 @@ bool carica_chiavi(){
     		printf("\n\t\t----- CHIAVE PRIVATA DELLA ESP32 -----\n%s\n",key_string);
             printf("\n\t\t----- CHIAVE PUBBLICA DELLA ESP32 -----\n%s",output_buf);
         }
-
-        //TODO: DA TOGLIERE: EMULO LE CHIAVI PRIVATE E PUBBLICHE! begin
-    	/*
-    	printf("\n\n------------------------------------------------------------------------------------------\n");
-    	printf("\n\t ----- MI INVENTO DELLE CHIAVI PRIVATE E PUBBLICHE PER MASTER E SLAVE -----\n");
-        mbedtls_pk_init(&master_pub_key);
-        mbedtls_pk_init(&master_priv_key);
-        mbedtls_pk_init(&slave_pub_key);
-        mbedtls_pk_init(&slave_priv_key);
-        //printf("\n La pub_key pem vale: %s",master_pub_key_string);
-        //printf("\n La sua lunghezza vale: %d\n",lung);
-        fflush( stdout );
-        printf("\n -> Converto le chiavi da STRING a PK.");
-        error = mbedtls_pk_parse_public_key( &master_pub_key, (unsigned char*)master_pub_key_string, sizeof(master_pub_key_string)); printf((error != 0) ? "\n   -> Conversion to PK Failed!" : "\n   -> Conversion to PK Done");
-        error = mbedtls_pk_parse_key( &master_priv_key, (unsigned char*)master_priv_key_string, sizeof(master_priv_key_string),NULL,0); printf((error != 0) ? "\n   -> Conversion to PK Failed!" : "\n   -> Conversion to PK Done");
-        error = mbedtls_pk_parse_public_key( &slave_pub_key, (unsigned char*)slave_pub_key_string, sizeof(slave_pub_key_string)); printf((error != 0) ? "\n   -> Conversion to PK Failed!" : "\n   -> Conversion to PK Done");
-        error = mbedtls_pk_parse_key( &slave_priv_key, (unsigned char*)slave_priv_key_string, sizeof(slave_priv_key_string),NULL,0); printf((error != 0) ? "\n   -> Conversion to PK Failed!" : "\n   -> Conversion to PK Done");
-        printf("\n -> Verifico la coppia chiave pubblica/privata di master e slave");
-        error = mbedtls_pk_check_pair(&master_pub_key, &master_priv_key); printf((error != 0) ? "\n   -> Coppia chiave privata/pubblica NON VALIDA" : "\n   -> Coppia chiave privata/pubblica OK");
-        error = mbedtls_pk_check_pair(&slave_pub_key, &slave_priv_key); printf((error != 0) ? "\n   -> Coppia chiave privata/pubblica NON VALIDA" : "\n   -> Coppia chiave privata/pubblica OK");
-        */
-        //TODO: DA TOGLIERE: EMULO LE CHIAVI PRIVATE E PUBBLICHE! end
 
         exit:
         //LIBERO LA MEMORIA
@@ -375,7 +277,7 @@ bool cancella_tutto(){
 
 /* Per eliminare il master dalla memoria
  */
-bool elimina_master(){
+bool elimina_master(){ //TODO: potrebbe essere necessario rigenerare anche le chiavi! Ho eliminato il master ma ha ancora i poteri
     // Initialize NVS
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
@@ -549,13 +451,23 @@ void security_init(){
 
 }
 
+void print_mac_address(){
+	uint8_t mac_id[6];
+	char esp_mac[13];
+    ESP_ERROR_CHECK(esp_read_mac(mac_id, 2));  //type of MAC address, 0:wifi station, 1:wifi softap, 2:bluetooth, 3:ethernet.
+    sprintf(esp_mac, "%02x%02x%02x%02x%02x%02x", mac_id[0],mac_id[1],mac_id[2],mac_id[3], mac_id[4],mac_id[5]);
+    printf("\n\nESP_MAC - %s\n\n", esp_mac);
+}
+
 void app_main()
 {
+	//ritardo(5);
 	print_available_ram();
 	print_date_time();
-	//fgetc(stdin);
-	ritardo(5);
-	//elimina_master();
+	print_mac_address();
+	ritardo(3);
+
+	elimina_master(); //TODO: va tolto da qua
 	//ritardo(5);
 	/*if(cancella_tutto()){
 		printf("\n\t\t --- HO CANCELLATO TUTTO --- \n");
@@ -634,67 +546,6 @@ void app_main()
 		printf("\n -> Master non trovato.\n   -> Avvio in Master Mode.");
 		MASTER_MODE = true;
 	}
-	printf("\n\n------------------------------------------------------------------------------------------\n");
-	/*p
-	print_available_ram();
-	//MASTER CERT WRITE
-	printf("\n\n\t --- GENERA MASTER CERT WRITE --- \n\n");
-	wait_master_cert_write=true;
-	xTaskCreate(master_cert_write,"MasterCertWrite",32768,NULL,2,NULL);
-	printf("\n -> Attendo..\n");
-	do{
-		//printf(".");
-		vTaskDelay(100 / portTICK_PERIOD_MS);
-	}while(wait_master_cert_write);
-
-	printf("\n\n----------------------------------------------------------------------\n");
-	print_available_ram();
-	//SLAVE CERT WRITE
-	printf("\n\n\t --- GENERA SLAVE CERT WRITE --- \n\n");
-	wait_slave_cert_write=true;
-	xTaskCreate(slave_cert_write,"SlaveCertWrite",32768,NULL,2,NULL);
-	printf("\n -> Attendo..\n");
-	do{
-		//printf(".");
-		vTaskDelay(100 / portTICK_PERIOD_MS);
-	}while(wait_slave_cert_write);
-
-	printf("\n\n----------------------------------------------------------------------\n");
-	print_available_ram();
-	//VERIFICO LA CATENA.
-	//print_all_certificates();
-
-    printf("\n\n----------------------------------------------------------------------\n");
-
-	//VERIFICO LA CATENA.
-	printf("\n\n\t ----- VERIFICO CERTIFICATI ----- \n\n");
-    if(!verifica_certificati()){
-    	printf("\n -> I certificati non sono stati approvati.");
-    }
-    else{
-    	printf("\n -> I certificati sono stati approvati.");
-    	printf("\n\n----------------------------------------------------------------------\n");
-    	printf("\n\n\t ----- RANDOM CHALLENGE ----- \n\n");
-    	printf("\n -> Avvio il Random Challenge");
-    	if(random_challenge_sign()==0){
-    		printf("\n -> random firmato.");
-    		printf("\n -> Ora verifico la firma");
-    		if(random_challenge_verify()==0){
-    			printf("\n -> Firma del random challenge verificata.");
-    			printf("\n\n\n------------------------------------------------------------------------------------------------\n"\
-    					"------------------------------------------------------------------------------------------------\n"\
-						"-------------------------------------------APRO LA PORTA----------------------------------------\n"\
-						"------------------------------------------------------------------------------------------------\n"\
-						"------------------------------------------------------------------------------------------------\n\n\n");
-    		}
-    		else{
-    			printf("\n -> Firma del random non verificata.");
-    		}
-    	}
-    	else{
-    		printf("\n -> Firma del random fallita.");
-    	}
-    }*/
 
 	printf("\n\n----------------------------------------------------------------------\n");
 	print_available_ram();

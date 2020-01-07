@@ -1,8 +1,6 @@
 /*
  * ble_state_machine.c
  *
- *  Created on: 19 nov 2019
- *      Author: gaetano
  */
 
 #include <stdio.h>
@@ -85,9 +83,13 @@ void state_machine_init(){
 	flags_reset();
 	if(MASTER_MODE){
 		state = SERVICE_1_STATE_WAIT_MASTER_KEY; //stato iniziale per il master mode
+		service1_info_write((unsigned char*)"ready");
+		service2_info_write((unsigned char*)"master_mode"); //per avvisare il client che accetta solo il master, non apre la porta.
 		printf("\n\n\tAvvio in MASTER MODE\n");
 	}else{
 		state = SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES; //stato inizialle lo slave mode
+		service1_info_write((unsigned char*)"slave_mode"); //per avvisare il client che accetta solo gli slaves, non accetta nessun altro master
+		service2_info_write((unsigned char*)"ready");
 		printf("\n\n\tAvvio in SLAVE MODE\n");
 	}
 }
@@ -118,7 +120,7 @@ void listener(){
 				break;
 
 			case SERVICE_1_STATE_WRITE_CERT:
-				//printf("\n -> ATTENDOOOOOOO 10 secondi per debug..\n"); //TODO: TOGLIERE
+				//printf("\n -> ATTENDO 10 secondi per debug..\n"); //TODO: TOGLIERE (simulo l'elaborazione lunga della esp... perchè è troppo veloce)
 				//vTaskDelay(10000 / portTICK_PERIOD_MS);
 				//genero il certificato master e lo scrito nella caratteristica
 				//MASTER CERT WRITE
@@ -131,7 +133,7 @@ void listener(){
 				}while(wait_master_cert_write);
 				printf("\n\n----------------------------------------------------------------------\n");
 				//aggiorno il campo info:
-				service1_info_write((unsigned char*)"ready");
+				service1_info_write((unsigned char*)"read");
 				state = SERVICE_1_WAIT_CONFIRMATION;
 				break;
 
@@ -145,9 +147,12 @@ void listener(){
 				state = SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES; //TODO: deciedere se va tolto o riavviato???
 				MASTER_MODE = false;
 				flags_reset();
+				service1_info_write((unsigned char*)"slave_mode");
 				break;
 
 			case SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES:
+				vTaskDelay(5000 / portTICK_PERIOD_MS); //ATTENDO 5 SECONDI e aggiorno la scritta.
+				service2_info_write((unsigned char*)"ready");
 				//slave deve mandare la pkey master,pkey slave, cert master, cert slave
 				state = SERVICE_2_STATE_WAIT_SIGN_FOR_CONFIRMATION;
 				mbedtls_pk_init(&master_pub_key);

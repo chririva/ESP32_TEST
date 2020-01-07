@@ -42,7 +42,7 @@ uint8_t service2_slave_certificate2_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = {0x01}
 uint8_t service2_slave_certificate3_str[GATTS_CHAR_CERTIFICATE_LEN_MAX] = {0x01};
 uint8_t service2_random_str[GATTS_CHAR_RND_LEN_MAX] = "randomstring";
 uint8_t service2_random_signed_str[GATTS_CHAR_RND_LEN_MAX] = {0x11,0x22,0x33};
-uint8_t service2_info_str[GATTS_CHAR_INFO32_LEN_MAX] = "Informazione";
+uint8_t service2_info_str[GATTS_CHAR_INFO32_LEN_MAX] = "ready";
 
 //DESCRITTORI
 //SERVICE 1
