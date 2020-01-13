@@ -151,18 +151,19 @@ void listener(){
 				break;
 
 			case SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES:
-				vTaskDelay(5000 / portTICK_PERIOD_MS); //ATTENDO 5 SECONDI e aggiorno la scritta.
+				//vTaskDelay(1000 / portTICK_PERIOD_MS); //ATTENDO 1 SECONDO e aggiorno la scritta.
 				service2_info_write((unsigned char*)"ready");
 				//slave deve mandare la pkey master,pkey slave, cert master, cert slave
 				state = SERVICE_2_STATE_WAIT_SIGN_FOR_CONFIRMATION;
 				mbedtls_pk_init(&master_pub_key);
 				mbedtls_pk_init(&slave_pub_key);
 				while(!charateristic_flags[5] || !charateristic_flags[6] || !charateristic_flags[7] || !charateristic_flags[8]){ //MASTER PKEY,MASER CERT
-					vTaskDelay(100 / portTICK_PERIOD_MS);
+					vTaskDelay(80 / portTICK_PERIOD_MS);
 				}
 				while(!charateristic_flags[9] || !charateristic_flags[10] || !charateristic_flags[11] || !charateristic_flags[12]){ //SLAVE PKEY,SLAVE CERT
-					vTaskDelay(100 / portTICK_PERIOD_MS);
+					vTaskDelay(80 / portTICK_PERIOD_MS);
 				}
+				service2_info_write((unsigned char*)"checking_kc");
 				charateristic_flags[5]=false;
 				charateristic_flags[6]=false;
 				charateristic_flags[7]=false;
@@ -238,6 +239,7 @@ void listener(){
 				while(!charateristic_flags[14]){ //RANDOM SIGNED
 					vTaskDelay(100 / portTICK_PERIOD_MS); //TODO: Aggiungere timeout!!!
 				}
+				service2_info_write((unsigned char*)"checking_rnd");
 				charateristic_flags[14]=false;
 				//Apertura porta confermata, verifico la firma
 				memcpy(rand_challenge_firmato, gatts_service2_random_signed_val.attr_value, gatts_service2_random_signed_val.attr_len);
