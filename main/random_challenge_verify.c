@@ -80,7 +80,7 @@ int random_challenge_verify()
     mbedtls_printf( "\n    . Verifying the SHA-256 signature" );
     fflush( stdout );
 
-    if( ( ret = mbedtls_md(mbedtls_md_info_from_type( MBEDTLS_MD_SHA256 ),(const unsigned char *)&rand_challenge_str, sizeof(rand_challenge_str), hash ) ) != 0 )
+    if( ( ret = mbedtls_md(mbedtls_md_info_from_type( MBEDTLS_MD_SHA256 ),(const unsigned char *)&rand_challenge_str, 128, hash ) ) != 0 )
     {
     	mbedtls_printf( "\nfailed! Could not open or read %s\n\n", &rand_challenge_str);
         goto exit;

@@ -37,7 +37,7 @@ void random_string_generator(){
 	gatts_service2_random_val.attr_len = RND_LEN;
     for(int valpos=0 ; valpos<RND_LEN ; valpos++ )
     	gatts_service2_random_val.attr_value[valpos]=rand_challenge_str[valpos];
-    gatts_service2_random_val.attr_value[RND_LEN] = 0; //terminatore stringa
+    gatts_service2_random_val.attr_value[RND_LEN] = 0; //terminatore stringa, non serve, non è una stringa
 
 }
 

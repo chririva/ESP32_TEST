@@ -81,6 +81,7 @@ void flags_reset(){
 
 void state_machine_init(){
 	flags_reset();
+	random_string_generator();//aggiorno il rnd challenge.
 	if(MASTER_MODE){
 		state = SERVICE_1_STATE_WAIT_MASTER_KEY; //stato iniziale per il master mode
 		service1_info_write((unsigned char*)"ready");
@@ -233,6 +234,9 @@ void listener(){
 				    	//andrà nello state = SERVICE_2_STATE_WAIT_SIGN_FOR_CONFIRMATION;
 				    }
 				}
+				if(state == SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES){ //qualcosa è andato storto, rimane in questo stato, ma attende 2 secondi
+					vTaskDelay(2000 / portTICK_PERIOD_MS);
+				}
 				break;
 
 			case SERVICE_2_STATE_WAIT_SIGN_FOR_CONFIRMATION:
@@ -248,6 +252,7 @@ void listener(){
 		    	printf("\n\n----------------------------------------------------------------------\n");
 		    	printf("\n\n\t ----- RANDOM CHALLENGE ----- \n\n");
 		    	printf("\n -> Verifico la firma del Random Challenge");
+
 				if(random_challenge_verify()==0){
 					printf("\n   -> Firma del random challenge verificata.");
 
@@ -263,12 +268,13 @@ void listener(){
 					service2_info_write((unsigned char*)"signature_failed");
 				}
 				//in ogni caso...
-				//TODO: aggiorno il rnd challenge.
-				random_string_generator();
+				random_string_generator();//aggiorno il rnd challenge.
+
 				mbedtls_x509_crt_free(&master_certificate); // libero la memoria dei certificati
 				mbedtls_x509_crt_free(&slave_certificate);
 				state = SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES;
 				//flags_reset(); //per essere certi che i flag siano bassi.. magari qualcuno li ha flaggati con un altro client
+				vTaskDelay(2000 / portTICK_PERIOD_MS); //ATTENDO 2 SECONDI COSI IL CLIENT PUO' LEGGERE E SAPERE IL RISULTATO
 				break;
 
 		}
