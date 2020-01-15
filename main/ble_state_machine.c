@@ -145,36 +145,25 @@ void listener(){
 				}
 
 				//RIAVVIO LA ESP?
-				state = SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES; //TODO: deciedere se va tolto o riavviato???
+				//state = SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES; //TODO: deciedere se va tolto o riavviato???
 				MASTER_MODE = false;
-				flags_reset();
-				service1_info_write((unsigned char*)"slave_mode");
+				//flags_reset();
+				//service1_info_write((unsigned char*)"slave_mode");
+				state_machine_init();
 				break;
 
 			case SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES:
-				//vTaskDelay(1000 / portTICK_PERIOD_MS); //ATTENDO 1 SECONDO e aggiorno la scritta.
+				vTaskDelay(1000 / portTICK_PERIOD_MS); //ATTENDO 1 SECONDO e aggiorno la scritta.
 				service2_info_write((unsigned char*)"ready");
 				//slave deve mandare la pkey master,pkey slave, cert master, cert slave
 				state = SERVICE_2_STATE_WAIT_SIGN_FOR_CONFIRMATION;
 				mbedtls_pk_init(&master_pub_key);
 				mbedtls_pk_init(&slave_pub_key);
 				while(!charateristic_flags[5] || !charateristic_flags[6] || !charateristic_flags[7] || !charateristic_flags[8]){ //MASTER PKEY,MASER CERT
-					vTaskDelay(80 / portTICK_PERIOD_MS);
-				}
-				while(!charateristic_flags[9] || !charateristic_flags[10] || !charateristic_flags[11] || !charateristic_flags[12]){ //SLAVE PKEY,SLAVE CERT
-					vTaskDelay(80 / portTICK_PERIOD_MS);
+					vTaskDelay(40 / portTICK_PERIOD_MS);
 				}
 				service2_info_write((unsigned char*)"checking_kc");
-				charateristic_flags[5]=false;
-				charateristic_flags[6]=false;
-				charateristic_flags[7]=false;
-				charateristic_flags[8]=false;
-				charateristic_flags[9]=false;
-				charateristic_flags[10]=false;
-				charateristic_flags[11]=false;
-				charateristic_flags[12]=false;
-				//Ho Ricevuto qualcosa in master pkey e master cert
-				//Controllo che siano la chiave pubblica e il certificato!
+				//CONTROLLO MASTER PKEY
 				if(mbedtls_pk_parse_public_key( &master_pub_key, (unsigned char*)gatts_service2_master_pubkey_val.attr_value, gatts_service2_master_pubkey_val.attr_len + 1)==0){
 					printf("\n   -> Chiave pubblica master ricevuta.");
 				}else{
@@ -182,25 +171,13 @@ void listener(){
 					service2_info_write((unsigned char*)"error1");
 					state = SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES; //qualcosa è andato storto, rimane in questo stato!
 				}
-				if(mbedtls_pk_parse_public_key( &slave_pub_key, (unsigned char*)gatts_service2_slave_pubkey_val.attr_value, gatts_service2_slave_pubkey_val.attr_len + 1)==0){
-					printf("\n   -> Chiave pubblica slave ricevuta.");
-				}else{
-					printf("\n   -> Chiave pubblica slave non ricevuta.");
-					service2_info_write((unsigned char*)"error2");
-					state = SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES; //qualcosa è andato storto, rimane in questo stato!
-				}
+				//CONTROLLO MASTER CERTIFICATE
 				size_t len1 = gatts_service2_master_certificate1_val.attr_len, len2 = gatts_service2_master_certificate2_val.attr_len, len3 = gatts_service2_master_certificate3_val.attr_len;
-				size_t len4 = gatts_service2_slave_certificate1_val.attr_len, len5 = gatts_service2_slave_certificate2_val.attr_len, len6 = gatts_service2_slave_certificate3_val.attr_len;
 				char *cert_master_buff = (char*) malloc(len1 + len2 + len3 + 1);
-				char *cert_slave_buff = (char*) malloc(len4 + len5 + len6 + 1);
 				memcpy(cert_master_buff, gatts_service2_master_certificate1_val.attr_value, len1);
 				memcpy(cert_master_buff+len1, gatts_service2_master_certificate2_val.attr_value, len2);
 				memcpy(cert_master_buff+len1+len2, gatts_service2_master_certificate3_val.attr_value, len3+1);
-				memcpy(cert_slave_buff, gatts_service2_slave_certificate1_val.attr_value, len4);
-				memcpy(cert_slave_buff+len4, gatts_service2_slave_certificate2_val.attr_value, len5);
-				memcpy(cert_slave_buff+len4+len5, gatts_service2_slave_certificate3_val.attr_value, len6+1);
 				printf("\n\nHO RICEVUTO IL CERT MASTER:\n\n%s",cert_master_buff);
-				printf("\n\nHO RICEVUTO IL CERT SLAVE:\n\n%s",cert_slave_buff);
 				mbedtls_x509_crt_init(&master_certificate);
 				if(mbedtls_x509_crt_parse(&master_certificate, (unsigned char*)cert_master_buff, len1+len2+len3+1)== 0 ){
 					printf("\n   -> Certificato master ricevuto.");
@@ -209,16 +186,39 @@ void listener(){
 					service2_info_write((unsigned char*)"error3");
 					state=SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES; //qualcosa è andato storto, rimane in questo stato!
 				 }
-				mbedtls_x509_crt_init(&slave_certificate);
-				if(mbedtls_x509_crt_parse(&slave_certificate, (unsigned char*)cert_slave_buff, len4+len5+len6+1)== 0 ){
-					printf("\n   -> Certificato slave ricevuto.");
-				}else{
-					printf("\n   -> Certificato slave non ricevuto.");
-					service2_info_write((unsigned char*)"error4");
-					state=SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES; //qualcosa è andato storto, rimane in questo stato!
+				free(cert_master_buff); //libero buffer
+
+				if(state!=SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES){
+					while(!charateristic_flags[9] || !charateristic_flags[10] || !charateristic_flags[11] || !charateristic_flags[12]){ //SLAVE PKEY,SLAVE CERT
+						vTaskDelay(40 / portTICK_PERIOD_MS);
+					}
+
+					//CONTROLLO SLAVE PKEY
+					if(mbedtls_pk_parse_public_key( &slave_pub_key, (unsigned char*)gatts_service2_slave_pubkey_val.attr_value, gatts_service2_slave_pubkey_val.attr_len + 1)==0){
+						printf("\n   -> Chiave pubblica slave ricevuta.");
+					}else{
+						printf("\n   -> Chiave pubblica slave non ricevuta.");
+						service2_info_write((unsigned char*)"error2");
+						state = SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES; //qualcosa è andato storto, rimane in questo stato!
+					}
+
+					//CONTROLLO SLAVE CERTIFICATE
+					size_t len4 = gatts_service2_slave_certificate1_val.attr_len, len5 = gatts_service2_slave_certificate2_val.attr_len, len6 = gatts_service2_slave_certificate3_val.attr_len;
+					char *cert_slave_buff = (char*) malloc(len4 + len5 + len6 + 1);
+					memcpy(cert_slave_buff, gatts_service2_slave_certificate1_val.attr_value, len4);
+					memcpy(cert_slave_buff+len4, gatts_service2_slave_certificate2_val.attr_value, len5);
+					memcpy(cert_slave_buff+len4+len5, gatts_service2_slave_certificate3_val.attr_value, len6+1);
+					printf("\n\nHO RICEVUTO IL CERT SLAVE:\n\n%s",cert_slave_buff);
+					mbedtls_x509_crt_init(&slave_certificate);
+					if(mbedtls_x509_crt_parse(&slave_certificate, (unsigned char*)cert_slave_buff, len4+len5+len6+1)== 0 ){
+						printf("\n   -> Certificato slave ricevuto.");
+					}else{
+						printf("\n   -> Certificato slave non ricevuto.");
+						service2_info_write((unsigned char*)"error4");
+						state=SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES; //qualcosa è andato storto, rimane in questo stato!
+					}
+					free(cert_slave_buff); //libero buffer
 				}
-				free(cert_master_buff); //libero i 2 buffer di stringhe
-				free(cert_slave_buff);
 				if(state!=SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES){
 					//Ho tutto, controllo che vadano bene
 					printf("\n\n----------------------------------------------------------------------\n");
@@ -236,12 +236,22 @@ void listener(){
 				}
 				if(state == SERVICE_2_STATE_WAIT_KEYS_AND_CERTIFICATES){ //qualcosa è andato storto, rimane in questo stato, ma attende 2 secondi
 					vTaskDelay(2000 / portTICK_PERIOD_MS);
+
 				}
+				charateristic_flags[5]=false;
+				charateristic_flags[6]=false;
+				charateristic_flags[7]=false;
+				charateristic_flags[8]=false;
+				charateristic_flags[9]=false;
+				charateristic_flags[10]=false;
+				charateristic_flags[11]=false;
+				charateristic_flags[12]=false;
+
 				break;
 
 			case SERVICE_2_STATE_WAIT_SIGN_FOR_CONFIRMATION:
 				while(!charateristic_flags[14]){ //RANDOM SIGNED
-					vTaskDelay(100 / portTICK_PERIOD_MS); //TODO: Aggiungere timeout!!!
+					vTaskDelay(40 / portTICK_PERIOD_MS); //TODO: Aggiungere timeout!!!
 				}
 				service2_info_write((unsigned char*)"checking_rnd");
 				charateristic_flags[14]=false;
@@ -254,18 +264,18 @@ void listener(){
 		    	printf("\n -> Verifico la firma del Random Challenge");
 
 				if(random_challenge_verify()==0){
+					service2_info_write((unsigned char*)"door_opened");
 					printf("\n   -> Firma del random challenge verificata.");
-
 					printf("\n\n\n------------------------------------------------------------------------------------------------\n"\
 							"------------------------------------------------------------------------------------------------\n"\
 							"-------------------------------------------APRO LA PORTA----------------------------------------\n"\
 							"------------------------------------------------------------------------------------------------\n"\
 							"------------------------------------------------------------------------------------------------\n\n\n");
-					service2_info_write((unsigned char*)"door_opened");
+
 				}
 				else{
-					printf("\n   -> Firma del random non verificata.");
 					service2_info_write((unsigned char*)"signature_failed");
+					printf("\n   -> Firma del random non verificata.");
 				}
 				//in ogni caso...
 				random_string_generator();//aggiorno il rnd challenge.
